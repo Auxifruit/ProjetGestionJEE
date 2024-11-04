@@ -1,6 +1,6 @@
 # PROJET JEE ING2
 
-![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/blob/ressources/jpg)
+![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/banner.jpg)
 
 
 ## Table des matières

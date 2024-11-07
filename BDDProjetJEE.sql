@@ -1,16 +1,17 @@
 CREATE DATABASE CYDataBase;
 
-/*
+
 # Suppression des tables dans l'ordre
+/*
 DROP TABLE administrateur;
 DROP TABLE note;
-DROP TABLE étudiant;
+DROP TABLE etudiant;
 DROP TABLE classe;
-DROP TABLE datecours;
 DROP TABLE coursdateprof;
+DROP TABLE datecours;
 DROP TABLE cours;
 DROP TABLE enseignant;
-DROP TABLE matière;
+DROP TABLE matiere;
 DROP TABLE utilisateur;
 */
 
@@ -18,13 +19,13 @@ CREATE TABLE Utilisateur (
 	idUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
     identifiantUtilisateur VARCHAR(50),
     motDePasseUtilisateur VARCHAR(50),
-    rôle VARCHAR(50)
+    roleUtilisateur VARCHAR(50)
 );
 
 CREATE TABLE Administrateur (
     emailAdmin VARCHAR(50) PRIMARY KEY,
     nomAdministrateur VARCHAR(50),
-    prénomAdministrateur VARCHAR(50),
+    prenomAdministrateur VARCHAR(50),
     idUtilisateur INT,
     
     FOREIGN KEY  (idUtilisateur) REFERENCES Utilisateur(idUtilisateur)
@@ -33,7 +34,7 @@ CREATE TABLE Administrateur (
 CREATE TABLE Enseignant (
 	emailEnseignant VARCHAR(50) PRIMARY KEY,
     nomEnseignant VARCHAR(50),
-    prénomEnseignant VARCHAR(50),
+    prenomEnseignant VARCHAR(50),
     dateDENaissanceEnseignant VARCHAR(50),
     idUtilisateur INT,
     
@@ -46,16 +47,16 @@ CREATE TABLE Classe(
     nomClasse VARCHAR(50)
 );
 
-CREATE TABLE Matière(
-	idMatière INT PRIMARY KEY,
+CREATE TABLE Matiere(
+	idMatiere INT PRIMARY KEY,
     nomMatière VARCHAR(50)
 );
 
-CREATE TABLE Étudiant (
-	emailÉtudiant VARCHAR(50) PRIMARY KEY,
-    nomÉtudiant VARCHAR(50),
-    prénomÉtudiant VARCHAR(50),
-    dateDENaissanceÉtudiant VARCHAR(50),
+CREATE TABLE Etudiant (
+	emailEtudiant VARCHAR(50) PRIMARY KEY,
+    nomEtudiant VARCHAR(50),
+    prenomEtudiant VARCHAR(50),
+    dateDeNaissanceEtudiant VARCHAR(50),
     idUtilisateur INT,
     idClasse INT, 
     
@@ -67,21 +68,21 @@ CREATE TABLE Note (
 	idNote INT PRIMARY KEY,
     valeurNote DOUBLE,
     coefficientNote INT,
-    emailÉtudiant VARCHAR(50),
-    idMatière INT,
+    emailEtudiant VARCHAR(50),
+    idMatiere INT,
     emailEnseignant VARCHAR(50),
     
-    FOREIGN KEY (emailÉtudiant) REFERENCES Étudiant(emailÉtudiant),
-    FOREIGN KEY (idMatière) REFERENCES Matière(idMatière),
+    FOREIGN KEY (emailEtudiant) REFERENCES Etudiant(emailEtudiant),
+    FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere),
     FOREIGN KEY (emailEnseignant) REFERENCES Enseignant(emailEnseignant)
 );
 
 CREATE TABLE Cours(
 	idCours INT PRIMARY KEY,
     nomCours VARCHAR(50),
-    idMatière INT,
+    idMatiere INT,
     
-    FOREIGN KEY (idMatière) REFERENCES Matière(idMatière)
+    FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere)
 );
 
 CREATE TABLE DateCours (
@@ -106,18 +107,18 @@ SELECT * FROM cours;
 SELECT * FROM coursdateprof;
 SELECT * FROM datecours;
 SELECT * FROM enseignant;
-SELECT * FROM matière;
+SELECT * FROM matiere;
 SELECT * FROM note;
 SELECT * FROM utilisateur;
-SELECT * FROM étudiant;
+SELECT * FROM etudiant;
 
 # Jeu de données pour test
 INSERT INTO classe VALUES (1, "GSI1");
 INSERT INTO classe VALUES (2, "GSI2");
 INSERT INTO classe VALUES (3, "GSI3");
 
-INSERT INTO matière VALUES (1, "Mathématiques");
-INSERT INTO matière VALUES (2, "Informatique");
+INSERT INTO matiere VALUES (1, "Mathématiques");
+INSERT INTO matiere VALUES (2, "Informatique");
 
 INSERT INTO utilisateur VALUES (1, "mark@gmail.com", "password", "ETUDIANT");
 INSERT INTO utilisateur VALUES (2, "axel@gmail.com", "password", "ETUDIANT");
@@ -127,9 +128,9 @@ INSERT INTO utilisateur VALUES (5, "pierre@gmail.com", "password", "ENSEIGNANT")
 INSERT INTO utilisateur VALUES (6, "bege@gmail.com", "password", "ADMINISTRATEUR");
 INSERT INTO utilisateur VALUES (7, "newgate@gmail.com", "password", "ADMINISTRATEUR");
 
-INSERT INTO étudiant VALUES ("mark@gmail.com", "Evans", "Mark", "01/02/2000", 1, 3);
-INSERT INTO étudiant VALUES ("axel@gmail.com", "Blaze", "Axel", "03/04/2001", 2, 1);
-INSERT INTO étudiant VALUES ("jude@gmail.com", "Sharp", "Jude", "05/06/2002", 3, 2);
+INSERT INTO etudiant VALUES ("mark@gmail.com", "Evans", "Mark", "01/02/2000", 1, 3);
+INSERT INTO etudiant VALUES ("axel@gmail.com", "Blaze", "Axel", "03/04/2001", 2, 1);
+INSERT INTO etudiant VALUES ("jude@gmail.com", "Sharp", "Jude", "05/06/2002", 3, 2);
 
 INSERT INTO enseignant VALUES("ondine@gmail.com", "Eau", "Ondie", "07/08/1982", 4);
 INSERT INTO enseignant VALUES("pierre@gmail.com", "Roche", "Pierre", "09/10/1978", 5);
@@ -161,7 +162,7 @@ INSERT INTO coursdateprof VALUES ("2024-11-23 16:30:00", 4, "ondine@gmail.com");
 
 # Exemple de query
 
-SELECT * FROM étudiant WHERE idClasse = 2;
+SELECT * FROM etudiant WHERE idClasse = 2;
 
 SELECT * FROM coursdateprof WHERE emailEnseignant = (
 	SELECT identifiantUtilisateur FROM utilisateur WHERE idUtilisateur = 5
@@ -170,8 +171,8 @@ SELECT * FROM coursdateprof WHERE emailEnseignant = (
 SELECT * FROM coursdateprof WHERE dateCours LIKE("%-10-%");
 SELECT * FROM coursdateprof WHERE dateCours LIKE("%-%-% %:30:%");
 
-SELECT COUNT(*) as NombreÉlèves, idClasse FROM étudiant
+SELECT COUNT(*) as NombreEleves, idClasse FROM étudiant
 GROUP BY idClasse;
 
-SELECT * FROM note WHERE emailÉtudiant = (
-SELECT emailÉtudiant FROM étudiant where idClasse = 1);
+SELECT * FROM note WHERE emailEtudiant = (
+SELECT emailEtudiant FROM etudiant where idClasse = 1);

@@ -1,0 +1,23 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Recherche d'Étudiants</title>
+</head>
+<body>
+<h2>Recherche d'Étudiants</h2>
+
+<form action="rechercheEtudiants" method="get">
+    <label for="nom">Nom:</label>
+    <input type="text" id="nom" name="nom">
+    <br>
+    <label for="prenom">Prénom:</label>
+    <input type="text" id="prenom" name="prenom">
+    <br>
+    <label for="cours">Cours:</label>
+    <input type="text" id="cours" name="cours">
+    <br>
+    <button type="submit">Rechercher</button>
+</form>
+</body>
+</html>
+

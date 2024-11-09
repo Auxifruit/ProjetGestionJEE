@@ -1,23 +1,23 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Etudiant;
+import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/cydatabase";
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASSWORD = "";
+    private static final String STUDENT_TABLE = "etudiant";
+    private static final String STUDENT_ID = "idEtudiant";
+    private static final String ID_CLASSE = "idClasse";
 
     public List<Etudiant> getAllStudents() {
         List<Etudiant> students = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // Register the driver (optional)
-            Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+            Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM etudiant");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + STUDENT_TABLE);
 
             while (resultSet.next()) {
                 Etudiant student = new Etudiant();
@@ -26,9 +26,41 @@ public class StudentDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
         return students;
     }
+
+    public static void deleteStudentById(int studentID) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM " + STUDENT_TABLE + " WHERE " + STUDENT_ID + " = " + studentID);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addStudentInTable(int studentID, int classID) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("INSERT INTO " + STUDENT_TABLE + " VALUES (" + studentID + ", " + classID + ")");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addStudentById(int studentID) {
+        try {
+            Connection connection = DatabaseManager.getConnection();;
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("INSERT INTO " + STUDENT_TABLE + " VALUES (" + studentID + ", null)");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

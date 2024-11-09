@@ -28,7 +28,7 @@
 } else {
 %>
 <span><b>Filtrer par : </b></span>
-<form method="GET" action="user-servlet">
+<form action="user-servlet" method="post" >
     <select name="roleFilter">
         <option value="">Tous</option>
         <option value="1">Étudiants</option>
@@ -36,7 +36,9 @@
         <option value="3">Administrateurs</option>
     </select>
     <button type="submit">Valider</button>
-</form></br></br>
+</form>
+</br></br>
+<form action="changeRole-servlet" method="post">
 <table border="1px">
     <tr>
         <th>Id utilisateur</th>
@@ -50,25 +52,38 @@
         for (Utilisateur user : userList) {
     %>
     <tr>
-        <td><%= user.getIdUtilisateur() %></td>
-        <td><%= user.getNomUtilisateur() %></td>
-        <td><%= user.getPrénomUtilisateur() %></td>
-        <td><%= user.getEmailUtilisateur() %></td>
-        <td><%= RoleDAO.getRoleNameById(user.getIdRole()) %></td>
-        <td><input type="radio" name="user" value=user.getIdUtilisateur()></td>
+        <td><%= user.getIdUtilisateur() %>
+        </td>
+        <td><%= user.getNomUtilisateur() %>
+        </td>
+        <td><%= user.getPrénomUtilisateur() %>
+        </td>
+        <td><%= user.getEmailUtilisateur() %>
+        </td>
+        <td><%= RoleDAO.getRoleNameById(user.getIdRole()) %>
+        </td>
+        <td><input type="radio" name="user" value="<%= user.getIdUtilisateur() %>"></td>
     </tr>
     <%
         }
     %>
-</table></br>
+</table>
+</br>
 <span><b>Nouveau rôle : </b></span>
-<select id="new_role">
-    <option value="student">Étudiant</option>
-    <option value="teacher">Enseignant</option>
-    <option value="admin">Administrateur</option>
-</select>
-<button>Valider</button></br></br>
+    <select name="newRoleID">
+        <option value="1">Étudiant</option>
+        <option value="2">Enseignant</option>
+        <option value="3">Administrateur</option>
+    </select>
+    <button type="submit">Valider</button>
+    </br></br>
+</form>
+<% String messageErreur = (String) request.getAttribute("erreur");
+    if(messageErreur != null && !messageErreur.isEmpty()) {
+%>
+<p style='color: red'><%= messageErreur %></p></br>
 <%
+    }
     }
 %>
 </body>

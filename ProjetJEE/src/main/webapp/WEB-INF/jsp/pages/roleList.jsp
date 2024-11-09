@@ -62,7 +62,7 @@
     <option value="teacher">Enseignant</option>
     <option value="admin">Administrateur</option>
 </select>
-<button>Valider</button></br></br>
+<button>Valider hsfiu</button></br></br>
 <%
     }
 %>

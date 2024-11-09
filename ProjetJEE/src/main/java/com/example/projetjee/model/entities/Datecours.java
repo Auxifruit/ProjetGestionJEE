@@ -1,15 +1,17 @@
 package com.example.projetjee.model.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 public class Datecours {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "dateCours")
+    @jakarta.persistence.Column(name = "dateCours")
     private Timestamp dateCours;
 
     public Timestamp getDateCours() {
@@ -27,7 +29,9 @@ public class Datecours {
 
         Datecours datecours = (Datecours) o;
 
-        return Objects.equals(dateCours, datecours.dateCours);
+        if (dateCours != null ? !dateCours.equals(datecours.dateCours) : datecours.dateCours != null) return false;
+
+        return true;
     }
 
     @Override

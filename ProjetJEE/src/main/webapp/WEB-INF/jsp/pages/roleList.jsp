@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Utilisateur" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <html>
 <head>
     <title>Liste utilisateurs</title>
@@ -30,15 +31,17 @@
 <form method="GET" action="user-servlet">
     <select name="roleFilter">
         <option value="">Tous</option>
-        <option value="ETUDIANT">Étudiants</option>
-        <option value="ENSEIGNANT">Enseignants</option>
-        <option value="ADMINISTRATEUR">Administrateurs</option>
+        <option value="1">Étudiants</option>
+        <option value="2">Enseignants</option>
+        <option value="3">Administrateurs</option>
     </select>
     <button type="submit">Valider</button>
 </form></br></br>
 <table border="1px">
     <tr>
         <th>Id utilisateur</th>
+        <th>Nom utilisateur</th>
+        <th>Prenom utilisateur</th>
         <th>Email utilisateur</th>
         <th>Rôle utilisateur</th>
         <th>Selection</th>
@@ -48,8 +51,10 @@
     %>
     <tr>
         <td><%= user.getIdUtilisateur() %></td>
-        <td><%= user.getIdentifiantUtilisateur() %></td>
-        <td><%= user.getRoleUtilisateur() %></td>
+        <td><%= user.getNomUtilisateur() %></td>
+        <td><%= user.getPrénomUtilisateur() %></td>
+        <td><%= user.getEmailUtilisateur() %></td>
+        <td><%= RoleDAO.getRoleNameById(user.getIdRole()) %></td>
         <td><input type="radio" name="user" value=user.getIdUtilisateur()></td>
     </tr>
     <%
@@ -62,7 +67,7 @@
     <option value="teacher">Enseignant</option>
     <option value="admin">Administrateur</option>
 </select>
-<button>Valider hsfiu</button></br></br>
+<button>Valider</button></br></br>
 <%
     }
 %>

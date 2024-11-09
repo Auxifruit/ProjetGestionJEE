@@ -21,9 +21,6 @@ public class StudentDAO {
 
             while (resultSet.next()) {
                 Etudiant student = new Etudiant();
-                student.setEmailEtudiant(resultSet.getString("emailEtudiant"));
-                student.setNomEtudiant(resultSet.getString("nomEtudiant"));
-                student.setPrénomEtudiant(resultSet.getString("prenomEtudiant"));
                 // Add more fields as per your table structure
                 students.add(student);
             }

@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/cydatabase";
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASSWORD = "";
-
     private static final String USER_TABLE = "utilisateur";
 
     public List<Utilisateur> getAllUsers(String roleFilter) {
@@ -22,18 +18,18 @@ public class UserDAO {
             String query = "SELECT * FROM " + USER_TABLE;
 
             if (roleFilter != null && roleFilter != "") {
-                query += " WHERE roleUtilisateur = '" + roleFilter + "'";
+                query += " WHERE idRole = " + roleFilter;
             }
-
-            System.out.println(query);
 
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 Utilisateur user = new Utilisateur();
                 user.setIdUtilisateur(resultSet.getInt("idUtilisateur"));
-                user.setIdentifiantUtilisateur(resultSet.getString("identifiantUtilisateur"));
-                user.setRoleUtilisateur(resultSet.getString("roleUtilisateur"));
+                user.setNomUtilisateur(resultSet.getString("nomUtilisateur"));
+                user.setPrénomUtilisateur(resultSet.getString("prénomUtilisateur"));
+                user.setEmailUtilisateur(resultSet.getString("emailUtilisateur"));
+                user.setIdRole(resultSet.getInt("idRole"));
 
                 userList.add(user);
             }

@@ -2,8 +2,6 @@ package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 public class Utilisateur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,14 +9,23 @@ public class Utilisateur {
     @Column(name = "idUtilisateur")
     private int idUtilisateur;
     @Basic
-    @Column(name = "identifiantUtilisateur")
-    private String identifiantUtilisateur;
-    @Basic
     @Column(name = "motDePasseUtilisateur")
     private String motDePasseUtilisateur;
     @Basic
-    @Column(name = "roleUtilisateur")
-    private String roleUtilisateur;
+    @Column(name = "nomUtilisateur")
+    private String nomUtilisateur;
+    @Basic
+    @Column(name = "prénomUtilisateur")
+    private String prénomUtilisateur;
+    @Basic
+    @Column(name = "emailUtilisateur")
+    private String emailUtilisateur;
+    @Basic
+    @Column(name = "dateDeNaissanceUtilisateur")
+    private String dateDeNaissanceUtilisateur;
+    @Basic
+    @Column(name = "idRole")
+    private Integer idRole;
 
     public int getIdUtilisateur() {
         return idUtilisateur;
@@ -26,14 +33,6 @@ public class Utilisateur {
 
     public void setIdUtilisateur(int idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
-    }
-
-    public String getIdentifiantUtilisateur() {
-        return identifiantUtilisateur;
-    }
-
-    public void setIdentifiantUtilisateur(String identifiantUtilisateur) {
-        this.identifiantUtilisateur = identifiantUtilisateur;
     }
 
     public String getMotDePasseUtilisateur() {
@@ -44,12 +43,44 @@ public class Utilisateur {
         this.motDePasseUtilisateur = motDePasseUtilisateur;
     }
 
-    public String getRoleUtilisateur() {
-        return roleUtilisateur;
+    public String getNomUtilisateur() {
+        return nomUtilisateur;
     }
 
-    public void setRoleUtilisateur(String roleUtilisateur) {
-        this.roleUtilisateur = roleUtilisateur;
+    public void setNomUtilisateur(String nomUtilisateur) {
+        this.nomUtilisateur = nomUtilisateur;
+    }
+
+    public String getPrénomUtilisateur() {
+        return prénomUtilisateur;
+    }
+
+    public void setPrénomUtilisateur(String prénomUtilisateur) {
+        this.prénomUtilisateur = prénomUtilisateur;
+    }
+
+    public String getEmailUtilisateur() {
+        return emailUtilisateur;
+    }
+
+    public void setEmailUtilisateur(String emailUtilisateur) {
+        this.emailUtilisateur = emailUtilisateur;
+    }
+
+    public String getDateDeNaissanceUtilisateur() {
+        return dateDeNaissanceUtilisateur;
+    }
+
+    public void setDateDeNaissanceUtilisateur(String dateDeNaissanceUtilisateur) {
+        this.dateDeNaissanceUtilisateur = dateDeNaissanceUtilisateur;
+    }
+
+    public Integer getIdRole() {
+        return idRole;
+    }
+
+    public void setIdRole(Integer idRole) {
+        this.idRole = idRole;
     }
 
     @Override
@@ -60,19 +91,30 @@ public class Utilisateur {
         Utilisateur that = (Utilisateur) o;
 
         if (idUtilisateur != that.idUtilisateur) return false;
-        if (!Objects.equals(identifiantUtilisateur, that.identifiantUtilisateur))
+        if (motDePasseUtilisateur != null ? !motDePasseUtilisateur.equals(that.motDePasseUtilisateur) : that.motDePasseUtilisateur != null)
             return false;
-        if (!Objects.equals(motDePasseUtilisateur, that.motDePasseUtilisateur))
+        if (nomUtilisateur != null ? !nomUtilisateur.equals(that.nomUtilisateur) : that.nomUtilisateur != null)
             return false;
-        return Objects.equals(roleUtilisateur, that.roleUtilisateur);
+        if (prénomUtilisateur != null ? !prénomUtilisateur.equals(that.prénomUtilisateur) : that.prénomUtilisateur != null)
+            return false;
+        if (emailUtilisateur != null ? !emailUtilisateur.equals(that.emailUtilisateur) : that.emailUtilisateur != null)
+            return false;
+        if (dateDeNaissanceUtilisateur != null ? !dateDeNaissanceUtilisateur.equals(that.dateDeNaissanceUtilisateur) : that.dateDeNaissanceUtilisateur != null)
+            return false;
+        if (idRole != null ? !idRole.equals(that.idRole) : that.idRole != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = idUtilisateur;
-        result = 31 * result + (identifiantUtilisateur != null ? identifiantUtilisateur.hashCode() : 0);
         result = 31 * result + (motDePasseUtilisateur != null ? motDePasseUtilisateur.hashCode() : 0);
-        result = 31 * result + (roleUtilisateur != null ? roleUtilisateur.hashCode() : 0);
+        result = 31 * result + (nomUtilisateur != null ? nomUtilisateur.hashCode() : 0);
+        result = 31 * result + (prénomUtilisateur != null ? prénomUtilisateur.hashCode() : 0);
+        result = 31 * result + (emailUtilisateur != null ? emailUtilisateur.hashCode() : 0);
+        result = 31 * result + (dateDeNaissanceUtilisateur != null ? dateDeNaissanceUtilisateur.hashCode() : 0);
+        result = 31 * result + (idRole != null ? idRole.hashCode() : 0);
         return result;
     }
 }

@@ -2,8 +2,6 @@ package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 public class Cours {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,8 +49,10 @@ public class Cours {
         Cours cours = (Cours) o;
 
         if (idCours != cours.idCours) return false;
-        if (!Objects.equals(nomCours, cours.nomCours)) return false;
-        return Objects.equals(idMatiere, cours.idMatiere);
+        if (nomCours != null ? !nomCours.equals(cours.nomCours) : cours.nomCours != null) return false;
+        if (idMatiere != null ? !idMatiere.equals(cours.idMatiere) : cours.idMatiere != null) return false;
+
+        return true;
     }
 
     @Override

@@ -6,10 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
-@jakarta.persistence.IdClass(models.CoursdateprofPK.class)
+@jakarta.persistence.IdClass(com.example.projetjee.model.entities.CoursdateprofPK.class)
 public class Coursdateprof {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -39,15 +38,15 @@ public class Coursdateprof {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "emailEnseignant")
-    private String emailEnseignant;
+    @jakarta.persistence.Column(name = "idEnseignant")
+    private int idEnseignant;
 
-    public String getEmailEnseignant() {
-        return emailEnseignant;
+    public int getIdEnseignant() {
+        return idEnseignant;
     }
 
-    public void setEmailEnseignant(String emailEnseignant) {
-        this.emailEnseignant = emailEnseignant;
+    public void setIdEnseignant(int idEnseignant) {
+        this.idEnseignant = idEnseignant;
     }
 
     @Override
@@ -58,15 +57,17 @@ public class Coursdateprof {
         Coursdateprof that = (Coursdateprof) o;
 
         if (idCours != that.idCours) return false;
-        if (!Objects.equals(dateCours, that.dateCours)) return false;
-        return Objects.equals(emailEnseignant, that.emailEnseignant);
+        if (idEnseignant != that.idEnseignant) return false;
+        if (dateCours != null ? !dateCours.equals(that.dateCours) : that.dateCours != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = dateCours != null ? dateCours.hashCode() : 0;
         result = 31 * result + idCours;
-        result = 31 * result + (emailEnseignant != null ? emailEnseignant.hashCode() : 0);
+        result = 31 * result + idEnseignant;
         return result;
     }
 }

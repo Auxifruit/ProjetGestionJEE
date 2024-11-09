@@ -1,76 +1,36 @@
 package com.example.projetjee.model.entities;
 
-import jakarta.persistence.*;
-
-import java.util.Objects;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-public class    Etudiant {
+@jakarta.persistence.IdClass(com.example.projetjee.model.entities.EtudiantPK.class)
+public class Etudiant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "emailEtudiant")
-    private String emailEtudiant;
-    @Basic
-    @Column(name = "nomEtudiant")
-    private String nomEtudiant;
-    @Basic
-    @Column(name = "prénomEtudiant")
-    private String prénomEtudiant;
-    @Basic
-    @Column(name = "dateDeNaissanceEtudiant")
-    private String dateDeNaissanceEtudiant;
-    @Basic
-    @Column(name = "idUtilisateur")
-    private Integer idUtilisateur;
-    @Basic
-    @Column(name = "idClasse")
-    private Integer idClasse;
+    @jakarta.persistence.Column(name = "idEtudiant")
+    private int idEtudiant;
 
-    public String getEmailEtudiant() {
-        return emailEtudiant;
+    public int getIdEtudiant() {
+        return idEtudiant;
     }
 
-    public void setEmailEtudiant(String emailEtudiant) {
-        this.emailEtudiant = emailEtudiant;
+    public void setIdEtudiant(int idEtudiant) {
+        this.idEtudiant = idEtudiant;
     }
 
-    public String getNomEtudiant() {
-        return nomEtudiant;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @jakarta.persistence.Column(name = "idClasse")
+    private int idClasse;
 
-    public void setNomEtudiant(String nomEtudiant) {
-        this.nomEtudiant = nomEtudiant;
-    }
-
-    public String getPrénomEtudiant() {
-        return prénomEtudiant;
-    }
-
-    public void setPrénomEtudiant(String prénomEtudiant) {
-        this.prénomEtudiant = prénomEtudiant;
-    }
-
-    public String getDateDeNaissanceEtudiant() {
-        return dateDeNaissanceEtudiant;
-    }
-
-    public void setDateDeNaissanceEtudiant(String dateDeNaissanceEtudiant) {
-        this.dateDeNaissanceEtudiant = dateDeNaissanceEtudiant;
-    }
-
-    public Integer getIdUtilisateur() {
-        return idUtilisateur;
-    }
-
-    public void setIdUtilisateur(Integer idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
-    }
-
-    public Integer getIdClasse() {
+    public int getIdClasse() {
         return idClasse;
     }
 
-    public void setIdClasse(Integer idClasse) {
+    public void setIdClasse(int idClasse) {
         this.idClasse = idClasse;
     }
 
@@ -81,27 +41,16 @@ public class    Etudiant {
 
         Etudiant etudiant = (Etudiant) o;
 
-        if (!Objects.equals(emailEtudiant, etudiant.emailEtudiant))
-            return false;
-        if (!Objects.equals(nomEtudiant, etudiant.nomEtudiant))
-            return false;
-        if (!Objects.equals(prénomEtudiant, etudiant.prénomEtudiant))
-            return false;
-        if (!Objects.equals(dateDeNaissanceEtudiant, etudiant.dateDeNaissanceEtudiant))
-            return false;
-        if (!Objects.equals(idUtilisateur, etudiant.idUtilisateur))
-            return false;
-        return Objects.equals(idClasse, etudiant.idClasse);
+        if (idEtudiant != etudiant.idEtudiant) return false;
+        if (idClasse != etudiant.idClasse) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = emailEtudiant != null ? emailEtudiant.hashCode() : 0;
-        result = 31 * result + (nomEtudiant != null ? nomEtudiant.hashCode() : 0);
-        result = 31 * result + (prénomEtudiant != null ? prénomEtudiant.hashCode() : 0);
-        result = 31 * result + (dateDeNaissanceEtudiant != null ? dateDeNaissanceEtudiant.hashCode() : 0);
-        result = 31 * result + (idUtilisateur != null ? idUtilisateur.hashCode() : 0);
-        result = 31 * result + (idClasse != null ? idClasse.hashCode() : 0);
+        int result = idEtudiant;
+        result = 31 * result + idClasse;
         return result;
     }
 }

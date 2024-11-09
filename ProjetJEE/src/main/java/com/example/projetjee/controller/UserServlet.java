@@ -4,7 +4,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import models.Utilisateur;
+import com.example.projetjee.model.entities.Utilisateur;
 import com.example.projetjee.model.dao.UtilisateurBDD;
 
 import java.io.IOException;

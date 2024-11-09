@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import models.Etudiant;
+import com.example.projetjee.model.entities.Etudiant;
 
 import java.sql.*;
 import java.util.ArrayList;

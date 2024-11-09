@@ -1,7 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import models.Etudiant;
-import models.Utilisateur;
+import com.example.projetjee.model.entities.Utilisateur;
 
 import java.sql.*;
 import java.util.ArrayList;

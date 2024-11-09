@@ -1,23 +1,25 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Utilisateur;
+import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtilisateurBDD {
+public class UserDAO {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/cydatabase";
     private static final String JDBC_USER = "root";
     private static final String JDBC_PASSWORD = "";
 
+    private static final String USER_TABLE = "utilisateur";
+
     public List<Utilisateur> getAllUsers(String roleFilter) {
         List<Utilisateur> userList = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+            Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM utilisateur";
+            String query = "SELECT * FROM " + USER_TABLE;
 
             if (roleFilter != null && roleFilter != "") {
                 query += " WHERE roleUtilisateur = '" + roleFilter + "'";
@@ -37,9 +39,8 @@ public class UtilisateurBDD {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
+
         return userList;
     }
 }

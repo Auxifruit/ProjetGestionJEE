@@ -1,4 +1,4 @@
-package com.example.projetjee;
+package com.example.projetjee.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

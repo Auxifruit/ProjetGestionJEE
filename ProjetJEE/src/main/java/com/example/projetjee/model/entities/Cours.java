@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Cours {
@@ -49,10 +51,8 @@ public class Cours {
         Cours cours = (Cours) o;
 
         if (idCours != cours.idCours) return false;
-        if (nomCours != null ? !nomCours.equals(cours.nomCours) : cours.nomCours != null) return false;
-        if (idMatiere != null ? !idMatiere.equals(cours.idMatiere) : cours.idMatiere != null) return false;
-
-        return true;
+        if (!Objects.equals(nomCours, cours.nomCours)) return false;
+        return Objects.equals(idMatiere, cours.idMatiere);
     }
 
     @Override

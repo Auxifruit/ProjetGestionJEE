@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="models.Utilisateur" %>
+<%@ page import="com.example.projetjee.model.entities.Utilisateur" %>
 <html>
 <head>
     <title>Liste utilisateurs</title>

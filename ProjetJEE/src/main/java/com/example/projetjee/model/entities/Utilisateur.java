@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Utilisateur {
@@ -58,14 +60,11 @@ public class Utilisateur {
         Utilisateur that = (Utilisateur) o;
 
         if (idUtilisateur != that.idUtilisateur) return false;
-        if (identifiantUtilisateur != null ? !identifiantUtilisateur.equals(that.identifiantUtilisateur) : that.identifiantUtilisateur != null)
+        if (!Objects.equals(identifiantUtilisateur, that.identifiantUtilisateur))
             return false;
-        if (motDePasseUtilisateur != null ? !motDePasseUtilisateur.equals(that.motDePasseUtilisateur) : that.motDePasseUtilisateur != null)
+        if (!Objects.equals(motDePasseUtilisateur, that.motDePasseUtilisateur))
             return false;
-        if (roleUtilisateur != null ? !roleUtilisateur.equals(that.roleUtilisateur) : that.roleUtilisateur != null)
-            return false;
-
-        return true;
+        return Objects.equals(roleUtilisateur, that.roleUtilisateur);
     }
 
     @Override

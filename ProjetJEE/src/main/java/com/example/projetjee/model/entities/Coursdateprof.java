@@ -1,4 +1,4 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -6,9 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
-@jakarta.persistence.IdClass(CoursdateprofPK.class)
+@jakarta.persistence.IdClass(models.CoursdateprofPK.class)
 public class Coursdateprof {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -57,11 +58,8 @@ public class Coursdateprof {
         Coursdateprof that = (Coursdateprof) o;
 
         if (idCours != that.idCours) return false;
-        if (dateCours != null ? !dateCours.equals(that.dateCours) : that.dateCours != null) return false;
-        if (emailEnseignant != null ? !emailEnseignant.equals(that.emailEnseignant) : that.emailEnseignant != null)
-            return false;
-
-        return true;
+        if (!Objects.equals(dateCours, that.dateCours)) return false;
+        return Objects.equals(emailEnseignant, that.emailEnseignant);
     }
 
     @Override

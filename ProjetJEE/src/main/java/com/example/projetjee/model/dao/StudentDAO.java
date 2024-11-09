@@ -1,4 +1,4 @@
-package com.example.projetjee;
+package com.example.projetjee.model.dao;
 
 import models.Etudiant;
 

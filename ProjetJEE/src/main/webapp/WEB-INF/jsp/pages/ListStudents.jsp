@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="models.Etudiant" %> <!-- Remplacez 'models.Etudiant' par 'com.example.projetjee.models.Etudiant' -->
+<%@ page import="com.example.projetjee.model.entities.Etudiant" %>
 <!DOCTYPE html>
 <html>
 <head>

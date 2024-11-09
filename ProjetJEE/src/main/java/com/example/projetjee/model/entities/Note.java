@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Note {
@@ -80,16 +82,13 @@ public class Note {
         Note note = (Note) o;
 
         if (idNote != note.idNote) return false;
-        if (valeurNote != null ? !valeurNote.equals(note.valeurNote) : note.valeurNote != null) return false;
-        if (coefficientNote != null ? !coefficientNote.equals(note.coefficientNote) : note.coefficientNote != null)
+        if (!Objects.equals(valeurNote, note.valeurNote)) return false;
+        if (!Objects.equals(coefficientNote, note.coefficientNote))
             return false;
-        if (emailEtudiant != null ? !emailEtudiant.equals(note.emailEtudiant) : note.emailEtudiant != null)
+        if (!Objects.equals(emailEtudiant, note.emailEtudiant))
             return false;
-        if (idMatiere != null ? !idMatiere.equals(note.idMatiere) : note.idMatiere != null) return false;
-        if (emailEnseignant != null ? !emailEnseignant.equals(note.emailEnseignant) : note.emailEnseignant != null)
-            return false;
-
-        return true;
+        if (!Objects.equals(idMatiere, note.idMatiere)) return false;
+        return Objects.equals(emailEnseignant, note.emailEnseignant);
     }
 
     @Override

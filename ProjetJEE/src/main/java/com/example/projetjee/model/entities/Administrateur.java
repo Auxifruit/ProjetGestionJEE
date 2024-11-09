@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Administrateur {
@@ -60,15 +62,12 @@ public class Administrateur {
 
         Administrateur that = (Administrateur) o;
 
-        if (emailAdmin != null ? !emailAdmin.equals(that.emailAdmin) : that.emailAdmin != null) return false;
-        if (nomAdministrateur != null ? !nomAdministrateur.equals(that.nomAdministrateur) : that.nomAdministrateur != null)
+        if (!Objects.equals(emailAdmin, that.emailAdmin)) return false;
+        if (!Objects.equals(nomAdministrateur, that.nomAdministrateur))
             return false;
-        if (prenomAdministrateur != null ? !prenomAdministrateur.equals(that.prenomAdministrateur) : that.prenomAdministrateur != null)
+        if (!Objects.equals(prenomAdministrateur, that.prenomAdministrateur))
             return false;
-        if (idUtilisateur != null ? !idUtilisateur.equals(that.idUtilisateur) : that.idUtilisateur != null)
-            return false;
-
-        return true;
+        return Objects.equals(idUtilisateur, that.idUtilisateur);
     }
 
     @Override

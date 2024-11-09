@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class    Etudiant {
@@ -79,19 +81,17 @@ public class    Etudiant {
 
         Etudiant etudiant = (Etudiant) o;
 
-        if (emailEtudiant != null ? !emailEtudiant.equals(etudiant.emailEtudiant) : etudiant.emailEtudiant != null)
+        if (!Objects.equals(emailEtudiant, etudiant.emailEtudiant))
             return false;
-        if (nomEtudiant != null ? !nomEtudiant.equals(etudiant.nomEtudiant) : etudiant.nomEtudiant != null)
+        if (!Objects.equals(nomEtudiant, etudiant.nomEtudiant))
             return false;
-        if (prénomEtudiant != null ? !prénomEtudiant.equals(etudiant.prénomEtudiant) : etudiant.prénomEtudiant != null)
+        if (!Objects.equals(prénomEtudiant, etudiant.prénomEtudiant))
             return false;
-        if (dateDeNaissanceEtudiant != null ? !dateDeNaissanceEtudiant.equals(etudiant.dateDeNaissanceEtudiant) : etudiant.dateDeNaissanceEtudiant != null)
+        if (!Objects.equals(dateDeNaissanceEtudiant, etudiant.dateDeNaissanceEtudiant))
             return false;
-        if (idUtilisateur != null ? !idUtilisateur.equals(etudiant.idUtilisateur) : etudiant.idUtilisateur != null)
+        if (!Objects.equals(idUtilisateur, etudiant.idUtilisateur))
             return false;
-        if (idClasse != null ? !idClasse.equals(etudiant.idClasse) : etudiant.idClasse != null) return false;
-
-        return true;
+        return Objects.equals(idClasse, etudiant.idClasse);
     }
 
     @Override

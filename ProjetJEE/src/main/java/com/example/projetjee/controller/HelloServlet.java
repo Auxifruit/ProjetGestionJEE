@@ -1,4 +1,4 @@
-package com.example.projetjee;
+package com.example.projetjee.controller;
 
 import java.io.*;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import models.Etudiant;
+import com.example.projetjee.model.dao.StudentDAO;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {

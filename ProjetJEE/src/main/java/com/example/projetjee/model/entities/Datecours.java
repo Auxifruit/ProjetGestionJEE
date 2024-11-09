@@ -1,8 +1,9 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 public class Datecours {
@@ -26,9 +27,7 @@ public class Datecours {
 
         Datecours datecours = (Datecours) o;
 
-        if (dateCours != null ? !dateCours.equals(datecours.dateCours) : datecours.dateCours != null) return false;
-
-        return true;
+        return Objects.equals(dateCours, datecours.dateCours);
     }
 
     @Override

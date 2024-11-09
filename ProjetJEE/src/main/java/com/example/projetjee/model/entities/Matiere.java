@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Matiere {
@@ -36,9 +38,7 @@ public class Matiere {
         Matiere matiere = (Matiere) o;
 
         if (idMatiere != matiere.idMatiere) return false;
-        if (nomMatière != null ? !nomMatière.equals(matiere.nomMatière) : matiere.nomMatière != null) return false;
-
-        return true;
+        return Objects.equals(nomMatière, matiere.nomMatière);
     }
 
     @Override

@@ -1,6 +1,8 @@
-package models;
+package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Enseignant {
@@ -68,18 +70,15 @@ public class Enseignant {
 
         Enseignant that = (Enseignant) o;
 
-        if (emailEnseignant != null ? !emailEnseignant.equals(that.emailEnseignant) : that.emailEnseignant != null)
+        if (!Objects.equals(emailEnseignant, that.emailEnseignant))
             return false;
-        if (nomEnseignant != null ? !nomEnseignant.equals(that.nomEnseignant) : that.nomEnseignant != null)
+        if (!Objects.equals(nomEnseignant, that.nomEnseignant))
             return false;
-        if (prenomEnseignant != null ? !prenomEnseignant.equals(that.prenomEnseignant) : that.prenomEnseignant != null)
+        if (!Objects.equals(prenomEnseignant, that.prenomEnseignant))
             return false;
-        if (dateDeNaissanceEnseignant != null ? !dateDeNaissanceEnseignant.equals(that.dateDeNaissanceEnseignant) : that.dateDeNaissanceEnseignant != null)
+        if (!Objects.equals(dateDeNaissanceEnseignant, that.dateDeNaissanceEnseignant))
             return false;
-        if (idUtilisateur != null ? !idUtilisateur.equals(that.idUtilisateur) : that.idUtilisateur != null)
-            return false;
-
-        return true;
+        return Objects.equals(idUtilisateur, that.idUtilisateur);
     }
 
     @Override

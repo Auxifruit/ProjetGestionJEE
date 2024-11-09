@@ -1,11 +1,11 @@
-package com.example.projetjee;
+package com.example.projetjee.controller;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import models.Etudiant;
 import models.Utilisateur;
+import com.example.projetjee.model.dao.UtilisateurBDD;
 
 import java.io.IOException;
 import java.util.List;

@@ -7,7 +7,7 @@
 <body>
 <h1><%= "Hello World!" %></h1>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
-<a href="user-servlet">User list</a>
+<a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a>
+<a href="${pageContext.request.contextPath}/user-servlet">User list</a>
 </body>
 </html>

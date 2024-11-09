@@ -25,7 +25,7 @@ public class UserServlet extends HttpServlet {
 
         // Forward the request to result.jsp
         try {
-            request.getRequestDispatcher("jsp/pages/roleList.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/pages/roleList.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }

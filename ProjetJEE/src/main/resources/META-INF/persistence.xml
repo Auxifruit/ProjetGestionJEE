@@ -5,16 +5,16 @@
              version="3.0">
   <persistence-unit name="default">
 
-    <class>models.Administrateur</class>
-    <class>models.Classe</class>
-    <class>models.Cours</class>
-    <class>models.Coursdateprof</class>
-    <class>models.Datecours</class>
-    <class>models.Enseignant</class>
-    <class>models.Etudiant</class>
-    <class>models.Matiere</class>
-    <class>models.Note</class>
-    <class>models.Utilisateur</class>
+    <class>com.example.projetjee.model.entities.Administrateur</class>
+    <class>com.example.projetjee.model.entities.Classe</class>
+    <class>com.example.projetjee.model.entities.Cours</class>
+    <class>com.example.projetjee.model.entities.Coursdateprof</class>
+    <class>com.example.projetjee.model.entities.Datecours</class>
+    <class>com.example.projetjee.model.entities.Enseignant</class>
+    <class>com.example.projetjee.model.entities.Etudiant</class>
+    <class>com.example.projetjee.model.entities.Matiere</class>
+    <class>com.example.projetjee.model.entities.Note</class>
+    <class>com.example.projetjee.model.entities.Utilisateur</class>
     <properties>
       <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/cydatabase"/>
       <property name="toplink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

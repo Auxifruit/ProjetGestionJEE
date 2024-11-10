@@ -54,7 +54,7 @@ public class StudentDAO {
 
     public static void addStudentById(int studentID) {
         try {
-            Connection connection = DatabaseManager.getConnection();;
+            Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate("INSERT INTO " + STUDENT_TABLE + " VALUES (" + studentID + ", null)");
 

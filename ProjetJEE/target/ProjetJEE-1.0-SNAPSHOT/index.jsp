@@ -8,6 +8,7 @@
 <h1><%= "Hello World!" %></h1>
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a>
-<a href="${pageContext.request.contextPath}/user-servlet">User list</a>
+<a href="${pageContext.request.contextPath}/user-servlet">Gestion des rôles</a>
+<a href="${pageContext.request.contextPath}/creatinoCours-servlet">Creation d'un cours</a>
 </body>
 </html>

@@ -25,7 +25,7 @@ CREATE TABLE Utilisateur (
 	idUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
     motDePasseUtilisateur VARCHAR(50),
     nomUtilisateur VARCHAR(50),
-    prénomUtilisateur VARCHAR(50),
+    prenomUtilisateur VARCHAR(50),
     emailUtilisateur VARCHAR(50),
     dateDeNaissanceUtilisateur VARCHAR(50),
     idRole int,
@@ -70,7 +70,7 @@ CREATE TABLE Etudiant (
 
 CREATE TABLE Matiere(
 	idMatiere INT PRIMARY KEY,
-    nomMatière VARCHAR(50)
+    nomMatiere VARCHAR(50)
 );
 
 CREATE TABLE Note (

@@ -55,6 +55,7 @@ CREATE TABLE Classe(
     nomClasse VARCHAR(50)
 );
 
+
 CREATE TABLE Etudiant (
     idEtudiant INT,
     idClasse INT, 
@@ -62,8 +63,10 @@ CREATE TABLE Etudiant (
 	FOREIGN KEY  (idEtudiant) REFERENCES Utilisateur(idUtilisateur) ON DELETE CASCADE,
     FOREIGN KEY  (idClasse) REFERENCES Classe(idClasse) ON DELETE SET NULL,
     
-    PRIMARY KEY (idEtudiant, idClasse)
+    PRIMARY KEY (idEtudiant)
 );
+
+
 
 CREATE TABLE Matiere(
 	idMatiere INT PRIMARY KEY,

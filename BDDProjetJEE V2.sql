@@ -25,7 +25,7 @@ CREATE TABLE Utilisateur (
 	idUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
     motDePasseUtilisateur VARCHAR(50),
     nomUtilisateur VARCHAR(50),
-    prénomUtilisateur VARCHAR(50),
+    prenomUtilisateur VARCHAR(50),
     emailUtilisateur VARCHAR(50),
     dateDeNaissanceUtilisateur VARCHAR(50),
     idRole int,
@@ -55,6 +55,7 @@ CREATE TABLE Classe(
     nomClasse VARCHAR(50)
 );
 
+
 CREATE TABLE Etudiant (
     idEtudiant INT,
     idClasse INT, 
@@ -62,12 +63,14 @@ CREATE TABLE Etudiant (
 	FOREIGN KEY  (idEtudiant) REFERENCES Utilisateur(idUtilisateur) ON DELETE CASCADE,
     FOREIGN KEY  (idClasse) REFERENCES Classe(idClasse) ON DELETE SET NULL,
     
-    PRIMARY KEY (idEtudiant, idClasse)
+    PRIMARY KEY (idEtudiant)
 );
+
+
 
 CREATE TABLE Matiere(
 	idMatiere INT PRIMARY KEY,
-    nomMatière VARCHAR(50)
+    nomMatiere VARCHAR(50)
 );
 
 CREATE TABLE Note (

@@ -12,6 +12,11 @@ import java.util.Map;
 public class UserDAO {
     private static final String USER_TABLE = "utilisateur";
     private static final String USER_ID = "idUtilisateur";
+    private static final String USER_PASSWORD = "motDePasseUtilisateur";
+    private static final String USER_LASTNAME = "nomUtilisateur";
+    private static final String USER_NAME = "prénomUtilisateur";
+    private static final String USER_EMAIL = "emailUtilisateur";
+    private static final String USER_BIRTHDATE = "dateDeNaissanceUtilisateur";
     private static final String ID_ROLE = "idRole";
 
     /**
@@ -34,11 +39,11 @@ public class UserDAO {
 
             while (resultSet.next()) {
                 Utilisateur user = new Utilisateur();
-                user.setIdUtilisateur(resultSet.getInt("idUtilisateur"));
-                user.setNomUtilisateur(resultSet.getString("nomUtilisateur"));
-                user.setPrénomUtilisateur(resultSet.getString("prénomUtilisateur"));
-                user.setEmailUtilisateur(resultSet.getString("emailUtilisateur"));
-                user.setIdRole(resultSet.getInt("idRole"));
+                user.setIdUtilisateur(resultSet.getInt(USER_ID));
+                user.setNomUtilisateur(resultSet.getString(USER_LASTNAME));
+                user.setPrénomUtilisateur(resultSet.getString(USER_NAME));
+                user.setEmailUtilisateur(resultSet.getString(USER_EMAIL));
+                user.setIdRole(resultSet.getInt(ID_ROLE));
 
                 userList.add(user);
             }
@@ -65,7 +70,7 @@ public class UserDAO {
             ResultSet resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                roleId = resultSet.getInt("idRole");
+                roleId = resultSet.getInt(ID_ROLE);
             }
         } catch (SQLException e) {
             e.printStackTrace();

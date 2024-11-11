@@ -109,6 +109,12 @@
     <button type="button" id="btnModify" class="btn btn-modify" onclick="toggleEditMode(true)">Modifier</button>
     <button type="submit" id="btnSave" class="btn btn-modify" style="display: none;">Enregistrer</button>
     <button type="button" id="btnCancel" class="btn btn-cancel" style="display: none;" onclick="cancelEdit()">Annuler</button>
+
+    <% String message = (String) request.getAttribute("message"); %>
+    <% if (message != null) { %>
+    <p><%= message %></p>
+    <% } %>
+
 </form>
 
 </body>

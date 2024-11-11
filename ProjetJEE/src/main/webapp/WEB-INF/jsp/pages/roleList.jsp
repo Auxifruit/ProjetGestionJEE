@@ -56,7 +56,7 @@
         </td>
         <td><%= user.getNomUtilisateur() %>
         </td>
-        <td><%= user.getPrénomUtilisateur() %>
+        <td><%= user.getPrenomUtilisateur() %>
         </td>
         <td><%= user.getEmailUtilisateur() %>
         </td>

@@ -8,18 +8,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoleDAO {
+    private static final String ROLE_TABLE = "rolePossible";
+    private static final String ROLE_ID = "idRole";
+    private static final String ROLE_NAME = "nomRole";
+
     public static String getRoleNameById(int roleId) {
         String roleName = " ";
-        String query = "SELECT nomRole FROM RolePossible WHERE idRole = ?";
 
         try {
             Connection connection = DatabaseManager.getConnection();
+            String query = "SELECT " + ROLE_NAME + " FROM " + ROLE_TABLE + " WHERE " + ROLE_ID + " = " + roleId;
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roleId);  // Set the idRole as parameter
+
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                roleName = resultSet.getString("nomRole");  // Get the role name
+                roleName = resultSet.getString(ROLE_NAME);  // Get the role name
             }
         } catch (SQLException e) {
             e.printStackTrace();

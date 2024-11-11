@@ -52,7 +52,7 @@ public class TeacherDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, teacherID);
-
+            
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

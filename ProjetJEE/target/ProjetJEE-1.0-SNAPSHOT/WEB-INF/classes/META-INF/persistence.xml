@@ -8,13 +8,13 @@
       <class>com.example.projetjee.model.entities.Classe</class>
       <class>com.example.projetjee.model.entities.Cours</class>
       <class>com.example.projetjee.model.entities.Enseignant</class>
+      <class>com.example.projetjee.model.entities.Etudiant</class>
       <class>com.example.projetjee.model.entities.Matiere</class>
       <class>com.example.projetjee.model.entities.Note</class>
       <class>com.example.projetjee.model.entities.Rolepossible</class>
-      <class>com.example.projetjee.model.entities.Utilisateur</class>
       <class>com.example.projetjee.model.entities.Seance</class>
       <class>com.example.projetjee.model.entities.Seanceclasse</class>
-      <class>com.example.projetjee.model.entities.Etudiant</class>
+      <class>com.example.projetjee.model.entities.Utilisateur</class>
 
       <properties>
       <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/cydatabase2"/>

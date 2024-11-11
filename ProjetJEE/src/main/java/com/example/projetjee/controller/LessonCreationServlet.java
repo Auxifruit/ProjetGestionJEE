@@ -1,6 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.LessonDAO;
+import com.example.projetjee.util.DateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,19 +23,24 @@ public class LessonCreationServlet extends HttpServlet {
         String endDate = request.getParameter("endDate");
         int teacherId = Integer.parseInt(request.getParameter("teacher"));
 
-        System.out.println(courseId);
-        System.out.println(startDate);
-        System.out.println(endDate);
-        System.out.println(teacherId);
-
-        LessonDAO.AddLesson(1, formatDate(startDate), formatDate(endDate), courseId, teacherId);
-    }
-
-    private String formatDate(String date) {
-        // Replace the "T" with a space and add seconds "00"
-        if (date != null) {
-            date = date.replace("T", " ");
+        if(startDate == null || startDate.trim().isEmpty() || endDate == null || endDate.trim().isEmpty()) {
+            request.setAttribute("erreur", "Erreur : Veuillez saisir les 2 dates nécessaire pour la création d'une séance.");
+            this.getServletContext().getRequestDispatcher("/lesson-servlet").forward(request, response);
+            return;
         }
-        return date;
+        if(DateUtil.areDatesValid(startDate, endDate) == false) {
+            request.setAttribute("erreur", "Erreur : Veuillez saisir 2 dates valides.");
+            this.getServletContext().getRequestDispatcher("/lesson-servlet").forward(request, response);
+            return;
+        }
+        if(LessonDAO.isLessonPossible(teacherId, startDate, endDate) == false) {
+            request.setAttribute("erreur", "Erreur : Le professeur a déjà cours à ces dates.");
+            this.getServletContext().getRequestDispatcher("/lesson-servlet").forward(request, response);
+            return;
+        }
+
+        LessonDAO.AddLesson(null, startDate, endDate, courseId, teacherId);
     }
+
+
 }

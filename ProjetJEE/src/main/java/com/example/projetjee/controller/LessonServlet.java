@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "courseServlet", value = "/course-servlet")
-public class CourseServlet extends HttpServlet {
+@WebServlet(name = "lessonServlet", value = "/lesson-servlet")
+public class LessonServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

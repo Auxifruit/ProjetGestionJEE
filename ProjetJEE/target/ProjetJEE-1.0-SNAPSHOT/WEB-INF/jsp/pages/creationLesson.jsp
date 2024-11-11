@@ -71,7 +71,12 @@
 </br></br>
 <button type="submit">Valider</button>
 </form>
+<% String messageErreur = (String) request.getAttribute("erreur");
+  if(messageErreur != null && !messageErreur.isEmpty()) {
+%>
+<p style='color: red'><%= messageErreur %></p></br>
 <%
+      }
     }
   }
 %>

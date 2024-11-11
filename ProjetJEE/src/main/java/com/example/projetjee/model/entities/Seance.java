@@ -11,11 +11,11 @@ public class Seance {
     @Column(name = "idSeance")
     private int idSeance;
     @Basic
-    @Column(name = "dateDébutCours")
-    private Timestamp dateDébutCours;
+    @Column(name = "dateDebutSeance")
+    private Timestamp dateDebutSeance;
     @Basic
-    @Column(name = "dateFinCours")
-    private Timestamp dateFinCours;
+    @Column(name = "dateFinSeance")
+    private Timestamp dateFinSeance;
     @Basic
     @Column(name = "idCours")
     private Integer idCours;
@@ -31,20 +31,20 @@ public class Seance {
         this.idSeance = idSeance;
     }
 
-    public Timestamp getDateDébutCours() {
-        return dateDébutCours;
+    public Timestamp getDateDebutSeance() {
+        return dateDebutSeance;
     }
 
-    public void setDateDébutCours(Timestamp dateDébutCours) {
-        this.dateDébutCours = dateDébutCours;
+    public void setDateDebutSeance(Timestamp dateDebutSeance) {
+        this.dateDebutSeance = dateDebutSeance;
     }
 
-    public Timestamp getDateFinCours() {
-        return dateFinCours;
+    public Timestamp getDateFinSeance() {
+        return dateFinSeance;
     }
 
-    public void setDateFinCours(Timestamp dateFinCours) {
-        this.dateFinCours = dateFinCours;
+    public void setDateFinSeance(Timestamp dateFinSeance) {
+        this.dateFinSeance = dateFinSeance;
     }
 
     public Integer getIdCours() {
@@ -71,9 +71,9 @@ public class Seance {
         Seance seance = (Seance) o;
 
         if (idSeance != seance.idSeance) return false;
-        if (dateDébutCours != null ? !dateDébutCours.equals(seance.dateDébutCours) : seance.dateDébutCours != null)
+        if (dateDebutSeance != null ? !dateDebutSeance.equals(seance.dateDebutSeance) : seance.dateDebutSeance != null)
             return false;
-        if (dateFinCours != null ? !dateFinCours.equals(seance.dateFinCours) : seance.dateFinCours != null)
+        if (dateFinSeance != null ? !dateFinSeance.equals(seance.dateFinSeance) : seance.dateFinSeance != null)
             return false;
         if (idCours != null ? !idCours.equals(seance.idCours) : seance.idCours != null) return false;
         if (idEnseignant != null ? !idEnseignant.equals(seance.idEnseignant) : seance.idEnseignant != null)
@@ -85,8 +85,8 @@ public class Seance {
     @Override
     public int hashCode() {
         int result = idSeance;
-        result = 31 * result + (dateDébutCours != null ? dateDébutCours.hashCode() : 0);
-        result = 31 * result + (dateFinCours != null ? dateFinCours.hashCode() : 0);
+        result = 31 * result + (dateDebutSeance != null ? dateDebutSeance.hashCode() : 0);
+        result = 31 * result + (dateFinSeance != null ? dateFinSeance.hashCode() : 0);
         result = 31 * result + (idCours != null ? idCours.hashCode() : 0);
         result = 31 * result + (idEnseignant != null ? idEnseignant.hashCode() : 0);
         return result;

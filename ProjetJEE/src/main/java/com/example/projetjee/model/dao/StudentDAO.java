@@ -10,7 +10,7 @@ import java.util.List;
 public class StudentDAO {
     private static final String STUDENT_TABLE = "etudiant";
     private static final String STUDENT_ID = "idEtudiant";
-    private static final String ID_CLASSE = "idClasse";
+    private static final String CLASS_ID = "idClasse";
 
     public List<Etudiant> getAllStudents() {
         List<Etudiant> students = new ArrayList<>();

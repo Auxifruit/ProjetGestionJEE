@@ -15,8 +15,8 @@ public class Utilisateur {
     @Column(name = "nomUtilisateur")
     private String nomUtilisateur;
     @Basic
-    @Column(name = "prénomUtilisateur")
-    private String prénomUtilisateur;
+    @Column(name = "prenomUtilisateur")
+    private String prenomUtilisateur;
     @Basic
     @Column(name = "emailUtilisateur")
     private String emailUtilisateur;
@@ -51,12 +51,12 @@ public class Utilisateur {
         this.nomUtilisateur = nomUtilisateur;
     }
 
-    public String getPrénomUtilisateur() {
-        return prénomUtilisateur;
+    public String getPrenomUtilisateur() {
+        return prenomUtilisateur;
     }
 
-    public void setPrénomUtilisateur(String prénomUtilisateur) {
-        this.prénomUtilisateur = prénomUtilisateur;
+    public void setPrenomUtilisateur(String prenomUtilisateur) {
+        this.prenomUtilisateur = prenomUtilisateur;
     }
 
     public String getEmailUtilisateur() {
@@ -95,7 +95,7 @@ public class Utilisateur {
             return false;
         if (nomUtilisateur != null ? !nomUtilisateur.equals(that.nomUtilisateur) : that.nomUtilisateur != null)
             return false;
-        if (prénomUtilisateur != null ? !prénomUtilisateur.equals(that.prénomUtilisateur) : that.prénomUtilisateur != null)
+        if (prenomUtilisateur != null ? !prenomUtilisateur.equals(that.prenomUtilisateur) : that.prenomUtilisateur != null)
             return false;
         if (emailUtilisateur != null ? !emailUtilisateur.equals(that.emailUtilisateur) : that.emailUtilisateur != null)
             return false;
@@ -111,7 +111,7 @@ public class Utilisateur {
         int result = idUtilisateur;
         result = 31 * result + (motDePasseUtilisateur != null ? motDePasseUtilisateur.hashCode() : 0);
         result = 31 * result + (nomUtilisateur != null ? nomUtilisateur.hashCode() : 0);
-        result = 31 * result + (prénomUtilisateur != null ? prénomUtilisateur.hashCode() : 0);
+        result = 31 * result + (prenomUtilisateur != null ? prenomUtilisateur.hashCode() : 0);
         result = 31 * result + (emailUtilisateur != null ? emailUtilisateur.hashCode() : 0);
         result = 31 * result + (dateDeNaissanceUtilisateur != null ? dateDeNaissanceUtilisateur.hashCode() : 0);
         result = 31 * result + (idRole != null ? idRole.hashCode() : 0);

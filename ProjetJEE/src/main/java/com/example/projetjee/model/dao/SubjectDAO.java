@@ -3,17 +3,14 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Matiere;
 import com.example.projetjee.util.DatabaseManager;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectDAO {
     private static final String SUBJECT_TABLE = "matiere";
     private static final String SUBJECT_ID = "idMatiere";
-    private static final String SUBJECT_NAME = "nomMatière";
+    private static final String SUBJECT_NAME = "nomMatiere";
 
     public static List<Matiere> getAllSubject() {
         List<Matiere> subjects = new ArrayList<>();
@@ -25,7 +22,7 @@ public class SubjectDAO {
             while (resultSet.next()) {
                 Matiere subject = new Matiere();
                 subject.setIdMatiere(resultSet.getInt(SUBJECT_ID));
-                subject.setNomMatière(resultSet.getString(SUBJECT_NAME));
+                subject.setNomMatiere(resultSet.getString(SUBJECT_NAME));
 
                 subjects.add(subject);
             }
@@ -33,5 +30,24 @@ public class SubjectDAO {
             e.printStackTrace();
         }
         return subjects;
+    }
+
+    public static String getSubjectNameById(int subjectId) {
+        String subjectName = " ";
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            String query = "SELECT " + SUBJECT_NAME + " FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = " + subjectId;
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                subjectName = resultSet.getString(SUBJECT_NAME);  // Get the role name
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return subjectName;
     }
 }

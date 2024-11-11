@@ -14,7 +14,7 @@ public class UserDAO {
     private static final String USER_ID = "idUtilisateur";
     private static final String USER_PASSWORD = "motDePasseUtilisateur";
     private static final String USER_LASTNAME = "nomUtilisateur";
-    private static final String USER_NAME = "prénomUtilisateur";
+    private static final String USER_NAME = "prenomUtilisateur";
     private static final String USER_EMAIL = "emailUtilisateur";
     private static final String USER_BIRTHDATE = "dateDeNaissanceUtilisateur";
     private static final String ID_ROLE = "idRole";
@@ -41,7 +41,7 @@ public class UserDAO {
                 Utilisateur user = new Utilisateur();
                 user.setIdUtilisateur(resultSet.getInt(USER_ID));
                 user.setNomUtilisateur(resultSet.getString(USER_LASTNAME));
-                user.setPrénomUtilisateur(resultSet.getString(USER_NAME));
+                user.setPrenomUtilisateur(resultSet.getString(USER_NAME));
                 user.setEmailUtilisateur(resultSet.getString(USER_EMAIL));
                 user.setIdRole(resultSet.getInt(ID_ROLE));
 
@@ -55,7 +55,57 @@ public class UserDAO {
     }
 
     /**
-     * Method to get the role id of an user by its id
+     * Method to get the user's last name by his id
+     * @param userId the user's id
+     * @return the user's last name
+     */
+    public static String getLastNameById(int userId) {
+        String lastName = null;
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT " + USER_LASTNAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
+
+            ResultSet resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                lastName = resultSet.getString(USER_LASTNAME);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lastName;
+    }
+
+    /**
+     * Method to get the user's name by his id
+     * @param userId the user's id
+     * @return the user's name
+     */
+    public static String getNameById(int userId) {
+        String name = null;
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT " + USER_NAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
+
+            ResultSet resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                name = resultSet.getString(USER_NAME);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return name;
+    }
+
+    /**
+     * Method to get the user's role by his id
      * @param userId the user's id
      * @return the user's role id
      */

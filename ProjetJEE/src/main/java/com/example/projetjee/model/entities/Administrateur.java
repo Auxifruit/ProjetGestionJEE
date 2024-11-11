@@ -1,15 +1,12 @@
 package com.example.projetjee.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Administrateur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "idAdministrateur")
+    @Column(name = "idAdministrateur")
     private int idAdministrateur;
 
     public int getIdAdministrateur() {

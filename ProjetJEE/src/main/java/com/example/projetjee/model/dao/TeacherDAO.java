@@ -1,14 +1,40 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Enseignant;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TeacherDAO {
     private static final String TEACHER_TABLE = "enseignant";
     private static final String TEACHER_ID = "idEnseignant";
+
+    public static List<Enseignant> getAllTeachers() {
+        List<Enseignant> teacherList = new ArrayList<>();
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM " + TEACHER_TABLE;
+
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                Enseignant teacher = new Enseignant();
+                teacher.setIdEnseignant(resultSet.getInt(TEACHER_ID));
+
+                teacherList.add(teacher);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return teacherList;
+    }
 
     public static void deleteTeacherById(int teacherID) {
         try {

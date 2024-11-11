@@ -6,8 +6,14 @@ import jakarta.persistence.*;
 public class Cours {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "idCours")
+    @Column(name = "idCours")
     private int idCours;
+    @Basic
+    @Column(name = "nomCours")
+    private String nomCours;
+    @Basic
+    @Column(name = "idMatiere")
+    private Integer idMatiere;
 
     public int getIdCours() {
         return idCours;
@@ -17,10 +23,6 @@ public class Cours {
         this.idCours = idCours;
     }
 
-    @Basic
-    @Column(name = "nomCours")
-    private String nomCours;
-
     public String getNomCours() {
         return nomCours;
     }
@@ -28,10 +30,6 @@ public class Cours {
     public void setNomCours(String nomCours) {
         this.nomCours = nomCours;
     }
-
-    @Basic
-    @Column(name = "idMatiere")
-    private Integer idMatiere;
 
     public Integer getIdMatiere() {
         return idMatiere;

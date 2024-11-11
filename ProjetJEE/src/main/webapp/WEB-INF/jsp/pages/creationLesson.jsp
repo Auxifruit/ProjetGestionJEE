@@ -24,10 +24,10 @@
 <%
 } else {
 %>
-<form action="/lessonCreation-servlet" method="post">
+<form action="lessonCreation-servlet" method="post">
 <h1>Création d'une séance</h1>
 <label>Choix du cours : </label>
-<select name="subject">
+<select name="course">
   <%
     for (Cours course : coursesList) {
   %>
@@ -39,10 +39,10 @@
 </br></br>
 <label>Choix de la date de début et de fin : </label></br>
 <label>Date de début : </label>
-<input type="datetime-local" />
+<input name="startDate" type="datetime-local" />
 </br>
 <label>Date de fin : </label>
-<input type="datetime-local" />
+<input name="endDate" type="datetime-local" />
 </br></br>
 <%
   List<Enseignant> teacherList = (List<Enseignant>) request.getAttribute("teachers");
@@ -54,7 +54,7 @@
 } else {
 %>
 <label>Choix du professeur : </label>
-<select>
+<select name="teacher">
   <%
     for (Enseignant teacher : teacherList) {
       String teacherLastName = UserDAO.getLastNameById(teacher.getIdEnseignant());
@@ -62,7 +62,7 @@
 
       if(teacherLastName != null || teacherName != null) {
   %>
-  <option><%= teacherLastName + " " + teacherName %></option>
+  <option value=<%= teacher.getIdEnseignant() %>><%= teacherLastName + " " + teacherName %></option>
   <%
       }
     }

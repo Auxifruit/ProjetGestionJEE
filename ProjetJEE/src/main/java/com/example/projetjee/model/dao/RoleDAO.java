@@ -17,10 +17,13 @@ public class RoleDAO {
 
         try {
             Connection connection = DatabaseManager.getConnection();
-            String query = "SELECT " + ROLE_NAME + " FROM " + ROLE_TABLE + " WHERE " + ROLE_ID + " = " + roleId;
-            PreparedStatement statement = connection.prepareStatement(query);
 
-            ResultSet resultSet = statement.executeQuery();
+            String query = "SELECT " + ROLE_NAME + " FROM " + ROLE_TABLE + " WHERE " + ROLE_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, roleId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 roleName = resultSet.getString(ROLE_NAME);  // Get the role name

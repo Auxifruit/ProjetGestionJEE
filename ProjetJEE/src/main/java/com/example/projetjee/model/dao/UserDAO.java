@@ -64,10 +64,11 @@ public class UserDAO {
 
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "SELECT " + USER_LASTNAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
 
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT " + USER_LASTNAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 lastName = resultSet.getString(USER_LASTNAME);
@@ -89,10 +90,13 @@ public class UserDAO {
 
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "SELECT " + USER_NAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
 
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT " + USER_NAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 name = resultSet.getString(USER_NAME);
@@ -114,10 +118,13 @@ public class UserDAO {
 
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "SELECT " + ID_ROLE + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
 
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT " + ID_ROLE + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 roleId = resultSet.getInt(ID_ROLE);
@@ -132,10 +139,14 @@ public class UserDAO {
     public static boolean modifyUserRole(int userID, int oldRoleID, int newRoleID) {
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "UPDATE " + USER_TABLE + " SET " + ID_ROLE + " = " + newRoleID + " WHERE " + USER_ID + " = " + userID;
 
-            statement.executeUpdate(query);
+            String query = "UPDATE " + USER_TABLE + " SET " + ID_ROLE + " = ? WHERE " + USER_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, newRoleID);
+            preparedStatement.setInt(2, userID);
+
+            preparedStatement.executeUpdate();
 
             switch (oldRoleID) {
                 case 1:
@@ -151,7 +162,7 @@ public class UserDAO {
 
             switch (newRoleID) {
                 case 1:
-                    StudentDAO.addStudentById(userID);
+                    StudentDAO.addStudentInTable(userID, null);
                     break;
                 case 2:
                     TeacherDAO.addTeacherInTable(userID);

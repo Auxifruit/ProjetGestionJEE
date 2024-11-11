@@ -3,10 +3,7 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Enseignant;
 import com.example.projetjee.util.DatabaseManager;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +47,13 @@ public class TeacherDAO {
     public static void addTeacherInTable(int teacherID) {
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("INSERT INTO " + TEACHER_TABLE + " VALUES (" + teacherID + ")");
+
+            String query = "INSERT INTO " + TEACHER_TABLE + " VALUES (?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, teacherID);
+
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

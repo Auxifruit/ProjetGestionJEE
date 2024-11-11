@@ -16,8 +16,11 @@ public class SubjectDAO {
         List<Matiere> subjects = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + SUBJECT_TABLE);
+
+            String query = "SELECT * FROM " + SUBJECT_TABLE;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Matiere subject = new Matiere();
@@ -37,13 +40,16 @@ public class SubjectDAO {
 
         try {
             Connection connection = DatabaseManager.getConnection();
-            String query = "SELECT " + SUBJECT_NAME + " FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = " + subjectId;
-            PreparedStatement statement = connection.prepareStatement(query);
 
-            ResultSet resultSet = statement.executeQuery();
+            String query = "SELECT " + SUBJECT_NAME + " FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, subjectId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                subjectName = resultSet.getString(SUBJECT_NAME);  // Get the role name
+                subjectName = resultSet.getString(SUBJECT_NAME);
             }
         } catch (SQLException e) {
             e.printStackTrace();

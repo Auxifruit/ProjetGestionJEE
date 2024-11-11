@@ -16,8 +16,11 @@ public class StudentDAO {
         List<Etudiant> students = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + STUDENT_TABLE);
+
+            String query = "SELECT * FROM " + STUDENT_TABLE;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Etudiant student = new Etudiant();
@@ -33,31 +36,35 @@ public class StudentDAO {
     public static void deleteStudentById(int studentID) {
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM " + STUDENT_TABLE + " WHERE " + STUDENT_ID + " = " + studentID);
 
+            String query = "DELETE FROM " + STUDENT_TABLE + " WHERE " + STUDENT_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, studentID);
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void addStudentInTable(int studentID, int classID) {
+    public static void addStudentInTable(int studentID, Integer classID) {
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("INSERT INTO " + STUDENT_TABLE + " VALUES (" + studentID + ", " + classID + ")");
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+            String query = "INSERT INTO " + STUDENT_TABLE + " VALUES (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-    public static void addStudentById(int studentID) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("INSERT INTO " + STUDENT_TABLE + " VALUES (" + studentID + ", null)");
+            preparedStatement.setInt(1, studentID);
 
+            if(classID == null) {
+                preparedStatement.setNull(2, Types.INTEGER);
+            }
+            else {
+                preparedStatement.setInt(2, classID.intValue());
+            }
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

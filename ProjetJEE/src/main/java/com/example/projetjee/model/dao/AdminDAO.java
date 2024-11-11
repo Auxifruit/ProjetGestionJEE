@@ -3,6 +3,7 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,8 +14,12 @@ public class AdminDAO {
     public static void deleteAdminById(int adminID) {
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM " + ADMIN_TABLE + " WHERE " + ADMIN_ID + " = " + adminID);
+
+            String query = "DELETE FROM " + ADMIN_TABLE + " WHERE " + ADMIN_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, adminID);
+
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -24,8 +29,13 @@ public class AdminDAO {
     public static void addAdminInTable(int adminID) {
         try {
             Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("INSERT INTO " + ADMIN_TABLE + " VALUES(" + adminID + ")");
+
+            String query = "INSERT INTO " + ADMIN_TABLE + " VALUES(?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, adminID);
+
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -9,6 +9,6 @@
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a>
 <a href="${pageContext.request.contextPath}/user-servlet">Gestion des rôles</a>
-<a href="${pageContext.request.contextPath}/creatinoCours-servlet">Creation d'un cours</a>
+<a href="${pageContext.request.contextPath}/course-servlet">Creation d'un cours</a>
 </body>
 </html>

@@ -6,9 +6,9 @@ CREATE DATABASE CYDataBase;
 DROP TABLE administrateur;
 DROP TABLE note;
 DROP TABLE etudiant;
+DROP TABLE seanceClasse;
+DROP TABLE seance;
 DROP TABLE classe;
-DROP TABLE coursdateprof;
-DROP TABLE datecours;
 DROP TABLE cours;
 DROP TABLE enseignant;
 DROP TABLE matiere;
@@ -51,7 +51,7 @@ CREATE TABLE Enseignant (
 
 
 CREATE TABLE Classe(
-	idClasse INT PRIMARY KEY,
+	idClasse INT AUTO_INCREMENT PRIMARY KEY,
     nomClasse VARCHAR(50)
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE Etudiant (
 
 
 CREATE TABLE Matiere(
-	idMatiere INT PRIMARY KEY,
+	idMatiere INT AUTO_INCREMENT PRIMARY KEY,
     nomMatiere VARCHAR(50)
 );
 
@@ -87,34 +87,37 @@ CREATE TABLE Note (
 );
 
 CREATE TABLE Cours(
-	idCours INT PRIMARY KEY,
+	idCours INT AUTO_INCREMENT PRIMARY KEY,
     nomCours VARCHAR(50),
     idMatiere INT,
     
     FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON DELETE SET NULL
 );
 
-CREATE TABLE DateCours (
-	dateCours DATETIME PRIMARY KEY #YYYY-MM-DD HH:MM:SS
-);
-
-CREATE TABLE CoursDateProf (
-	dateCours DATETIME,
+CREATE TABLE Seance (
+	idSeance INT AUTO_INCREMENT PRIMARY KEY,
+	dateDebutSeance DATETIME,
+    dateFinSeance DATETIME,
     idCours INT,
 	idEnseignant int,
     
-	FOREIGN KEY (dateCours) REFERENCES DateCours(dateCours) ON DELETE CASCADE,
     FOREIGN KEY (idCours) REFERENCES Cours(idCours) ON DELETE CASCADE,
-    FOREIGN KEY (idEnseignant) REFERENCES Enseignant(idEnseignant) ON DELETE CASCADE,
-    
-    PRIMARY KEY(dateCours, idCours, idEnseignant)
+    FOREIGN KEY (idEnseignant) REFERENCES Enseignant(idEnseignant) ON DELETE SET NULL
 );
 
+CREATE TABLE SeanceClasse (
+	idSeanceClasse INT AUTO_INCREMENT PRIMARY KEY,
+    idSeance INT,
+    idClasse INT,
+    
+    FOREIGN KEY (idSeance) REFERENCES Seance(idSeance) ON DELETE CASCADE,
+    FOREIGN KEY (idClasse) REFERENCES Classe(idClasse) ON DELETE SET NULL
+);
 
 SELECT * FROM classe;
 SELECT * FROM cours;
-SELECT * FROM coursdateprof;
-SELECT * FROM datecours;
+SELECT * FROM seance;
+SELECT * FROM seanceClasse;
 
 SELECT * FROM matiere;
 SELECT * FROM note;
@@ -161,21 +164,16 @@ INSERT INTO note VALUES(4, 14, 2, 2, 2, 4);
 INSERT INTO note VALUES(5, 16, 3, 3, 1, 5);
 INSERT INTO note VALUES(6, 19, 2, 3, 2, 4);
 
-INSERT INTO datecours VALUES ("2024-10-10 10:15:00");
-INSERT INTO datecours VALUES ("2024-10-29 13:00:00");
-INSERT INTO datecours VALUES ("2024-11-02 08:30:00");
-INSERT INTO datecours VALUES ("2024-11-23 16:30:00");
-
 INSERT INTO cours VALUES (1, "Statistique", 1); 
 INSERT INTO cours VALUES (2, "JEE", 2); 
 INSERT INTO cours VALUES (3, "Optimisation Linéaire", 1); 
 INSERT INTO cours VALUES (4, "Design Patern", 2); 
 
-INSERT INTO coursdateprof VALUES ("2024-10-10 10:15:00", 1, 5);
-INSERT INTO coursdateprof VALUES ("2024-10-29 13:00:00", 2, 4);
-INSERT INTO coursdateprof VALUES ("2024-11-02 08:30:00", 3, 5);
-INSERT INTO coursdateprof VALUES ("2024-11-23 16:30:00", 4, 4);
+INSERT INTO seance VALUES (1, "2024-11-20T08:30:00", "2024-11-20T10:00:00", 1, 4);
+INSERT INTO seance VALUES (2, "2024-12-22T14:45:00", "2024-12-22T16:15:00", 1, 4);
 
+INSERT INTO seanceClasse VALUES (1, 1, 1);
+INSERT INTO seanceClasse VALUES (2, 2, 2);
 
 # Exemple de query
 

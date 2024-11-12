@@ -51,7 +51,7 @@ CREATE TABLE Enseignant (
 
 
 CREATE TABLE Classe(
-	idClasse INT PRIMARY KEY,
+	idClasse INT AUTO_INCREMENT PRIMARY KEY,
     nomClasse VARCHAR(50)
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE Etudiant (
 
 
 CREATE TABLE Matiere(
-	idMatiere INT PRIMARY KEY,
+	idMatiere INT AUTO_INCREMENT PRIMARY KEY,
     nomMatiere VARCHAR(50)
 );
 
@@ -87,7 +87,7 @@ CREATE TABLE Note (
 );
 
 CREATE TABLE Cours(
-	idCours INT PRIMARY KEY,
+	idCours INT AUTO_INCREMENT PRIMARY KEY,
     nomCours VARCHAR(50),
     idMatiere INT,
     

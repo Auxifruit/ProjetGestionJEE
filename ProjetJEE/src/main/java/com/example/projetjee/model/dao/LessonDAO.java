@@ -12,7 +12,7 @@ public class LessonDAO {
     private static final String LESSON_COURSE_ID = "idCours";
     private static final String LESSON_TEACHER_ID = "idEnseignant";
 
-    public static void AddLesson(Integer lessonId, String lessonStartDate, String lessonsEndDate, int lessonCourseId, int lessonTeacherId) {
+    public static boolean AddLesson(Integer lessonId, String lessonStartDate, String lessonsEndDate, int lessonCourseId, int lessonTeacherId) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -35,7 +35,10 @@ public class LessonDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
     public static boolean isLessonPossible(int teacherId, String lessonStartDate, String lessonEndDate) {

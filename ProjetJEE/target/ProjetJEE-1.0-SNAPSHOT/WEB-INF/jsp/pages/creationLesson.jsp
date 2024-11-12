@@ -15,6 +15,7 @@
 <head>
     <title>Création séance</title>
 </head>
+<body>
 <%
   List<Cours> coursesList = (List<Cours>) request.getAttribute("courses");
 
@@ -39,10 +40,10 @@
 </br></br>
 <label>Choix de la date de début et de fin : </label></br>
 <label>Date de début : </label>
-<input name="startDate" type="datetime-local" />
+<input name="startDate" type="datetime-local" required/>
 </br>
 <label>Date de fin : </label>
-<input name="endDate" type="datetime-local" />
+<input name="endDate" type="datetime-local" required/>
 </br></br>
 <%
   List<Enseignant> teacherList = (List<Enseignant>) request.getAttribute("teachers");

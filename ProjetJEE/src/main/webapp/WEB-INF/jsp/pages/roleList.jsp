@@ -18,17 +18,15 @@
 
 <%
     List<Utilisateur> userList = (List<Utilisateur>) request.getAttribute("users");
-%>
 
-<%
-    if (userList == null || userList.isEmpty()) {
+    if(userList == null || userList.isEmpty()) {
 %>
 <h2>Pas d'utilisateurs</h2>
 <%
 } else {
 %>
 <span><b>Filtrer par : </b></span>
-<form action="user-servlet" method="post" >
+<form action="changeRole-servlet" method="get" >
     <select name="roleFilter">
         <option value="">Tous</option>
         <option value="1">Étudiants</option>
@@ -62,7 +60,7 @@
         </td>
         <td><%= RoleDAO.getRoleNameById(user.getIdRole()) %>
         </td>
-        <td><input type="radio" name="user" value="<%= user.getIdUtilisateur() %>"></td>
+        <td><input type="radio" name="user" value="<%= user.getIdUtilisateur() %>" required></td>
     </tr>
     <%
         }
@@ -70,7 +68,7 @@
 </table>
 </br>
 <span><b>Nouveau rôle : </b></span>
-    <select name="newRoleID">
+    <select name="newRoleID" required>
         <option value="1">Étudiant</option>
         <option value="2">Enseignant</option>
         <option value="3">Administrateur</option>

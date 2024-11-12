@@ -2,8 +2,6 @@ package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 public class Matiere {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,8 +9,8 @@ public class Matiere {
     @Column(name = "idMatiere")
     private int idMatiere;
     @Basic
-    @Column(name = "nomMatière")
-    private String nomMatière;
+    @Column(name = "nomMatiere")
+    private String nomMatiere;
 
     public int getIdMatiere() {
         return idMatiere;
@@ -22,12 +20,12 @@ public class Matiere {
         this.idMatiere = idMatiere;
     }
 
-    public String getNomMatière() {
-        return nomMatière;
+    public String getNomMatiere() {
+        return nomMatiere;
     }
 
-    public void setNomMatière(String nomMatière) {
-        this.nomMatière = nomMatière;
+    public void setNomMatiere(String nomMatiere) {
+        this.nomMatiere = nomMatiere;
     }
 
     @Override
@@ -38,13 +36,15 @@ public class Matiere {
         Matiere matiere = (Matiere) o;
 
         if (idMatiere != matiere.idMatiere) return false;
-        return Objects.equals(nomMatière, matiere.nomMatière);
+        if (nomMatiere != null ? !nomMatiere.equals(matiere.nomMatiere) : matiere.nomMatiere != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = idMatiere;
-        result = 31 * result + (nomMatière != null ? nomMatière.hashCode() : 0);
+        result = 31 * result + (nomMatiere != null ? nomMatiere.hashCode() : 0);
         return result;
     }
 }

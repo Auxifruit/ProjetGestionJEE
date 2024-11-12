@@ -2,8 +2,6 @@ package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,14 +15,14 @@ public class Note {
     @Column(name = "coefficientNote")
     private Integer coefficientNote;
     @Basic
-    @Column(name = "emailEtudiant")
-    private String emailEtudiant;
+    @Column(name = "idEtudiant")
+    private Integer idEtudiant;
     @Basic
     @Column(name = "idMatiere")
     private Integer idMatiere;
     @Basic
-    @Column(name = "emailEnseignant")
-    private String emailEnseignant;
+    @Column(name = "idEnseignant")
+    private Integer idEnseignant;
 
     public int getIdNote() {
         return idNote;
@@ -50,12 +48,12 @@ public class Note {
         this.coefficientNote = coefficientNote;
     }
 
-    public String getEmailEtudiant() {
-        return emailEtudiant;
+    public Integer getIdEtudiant() {
+        return idEtudiant;
     }
 
-    public void setEmailEtudiant(String emailEtudiant) {
-        this.emailEtudiant = emailEtudiant;
+    public void setIdEtudiant(Integer idEtudiant) {
+        this.idEtudiant = idEtudiant;
     }
 
     public Integer getIdMatiere() {
@@ -66,12 +64,12 @@ public class Note {
         this.idMatiere = idMatiere;
     }
 
-    public String getEmailEnseignant() {
-        return emailEnseignant;
+    public Integer getIdEnseignant() {
+        return idEnseignant;
     }
 
-    public void setEmailEnseignant(String emailEnseignant) {
-        this.emailEnseignant = emailEnseignant;
+    public void setIdEnseignant(Integer idEnseignant) {
+        this.idEnseignant = idEnseignant;
     }
 
     @Override
@@ -82,13 +80,14 @@ public class Note {
         Note note = (Note) o;
 
         if (idNote != note.idNote) return false;
-        if (!Objects.equals(valeurNote, note.valeurNote)) return false;
-        if (!Objects.equals(coefficientNote, note.coefficientNote))
+        if (valeurNote != null ? !valeurNote.equals(note.valeurNote) : note.valeurNote != null) return false;
+        if (coefficientNote != null ? !coefficientNote.equals(note.coefficientNote) : note.coefficientNote != null)
             return false;
-        if (!Objects.equals(emailEtudiant, note.emailEtudiant))
-            return false;
-        if (!Objects.equals(idMatiere, note.idMatiere)) return false;
-        return Objects.equals(emailEnseignant, note.emailEnseignant);
+        if (idEtudiant != null ? !idEtudiant.equals(note.idEtudiant) : note.idEtudiant != null) return false;
+        if (idMatiere != null ? !idMatiere.equals(note.idMatiere) : note.idMatiere != null) return false;
+        if (idEnseignant != null ? !idEnseignant.equals(note.idEnseignant) : note.idEnseignant != null) return false;
+
+        return true;
     }
 
     @Override
@@ -96,9 +95,9 @@ public class Note {
         int result = idNote;
         result = 31 * result + (valeurNote != null ? valeurNote.hashCode() : 0);
         result = 31 * result + (coefficientNote != null ? coefficientNote.hashCode() : 0);
-        result = 31 * result + (emailEtudiant != null ? emailEtudiant.hashCode() : 0);
+        result = 31 * result + (idEtudiant != null ? idEtudiant.hashCode() : 0);
         result = 31 * result + (idMatiere != null ? idMatiere.hashCode() : 0);
-        result = 31 * result + (emailEnseignant != null ? emailEnseignant.hashCode() : 0);
+        result = 31 * result + (idEnseignant != null ? idEnseignant.hashCode() : 0);
         return result;
     }
 }

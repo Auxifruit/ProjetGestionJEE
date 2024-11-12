@@ -4,19 +4,20 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
   <persistence-unit name="default">
+      <class>com.example.projetjee.model.entities.Administrateur</class>
+      <class>com.example.projetjee.model.entities.Enseignant</class>
+      <class>com.example.projetjee.model.entities.Etudiant</class>
+      <class>com.example.projetjee.model.entities.Note</class>
+      <class>com.example.projetjee.model.entities.Rolepossible</class>
+      <class>com.example.projetjee.model.entities.Seance</class>
+      <class>com.example.projetjee.model.entities.Seanceclasse</class>
+      <class>com.example.projetjee.model.entities.Utilisateur</class>
+      <class>com.example.projetjee.model.entities.Classe</class>
+      <class>com.example.projetjee.model.entities.Cours</class>
+      <class>com.example.projetjee.model.entities.Matiere</class>
 
-    <class>com.example.projetjee.model.entities.Administrateur</class>
-    <class>com.example.projetjee.model.entities.Classe</class>
-    <class>com.example.projetjee.model.entities.Cours</class>
-    <class>com.example.projetjee.model.entities.Coursdateprof</class>
-    <class>com.example.projetjee.model.entities.Datecours</class>
-    <class>com.example.projetjee.model.entities.Enseignant</class>
-    <class>com.example.projetjee.model.entities.Etudiant</class>
-    <class>com.example.projetjee.model.entities.Matiere</class>
-    <class>com.example.projetjee.model.entities.Note</class>
-    <class>com.example.projetjee.model.entities.Utilisateur</class>
-    <properties>
-      <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/cydatabase"/>
+      <properties>
+      <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/cydatabase2"/>
       <property name="toplink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="toplink.jdbc.user" value="root"/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/cydatabase"/>
@@ -28,6 +29,6 @@
       <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/cydatabase"/>
       <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="eclipselink.jdbc.user" value="root"/>
-    </properties>
+      </properties>
   </persistence-unit>
 </persistence>

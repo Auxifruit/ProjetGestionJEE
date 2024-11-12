@@ -2,14 +2,15 @@ package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 public class Classe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "idClasse")
+    @Column(name = "idClasse")
     private int idClasse;
+    @Basic
+    @Column(name = "nomClasse")
+    private String nomClasse;
 
     public int getIdClasse() {
         return idClasse;
@@ -18,10 +19,6 @@ public class Classe {
     public void setIdClasse(int idClasse) {
         this.idClasse = idClasse;
     }
-
-    @Basic
-    @Column(name = "nomClasse")
-    private String nomClasse;
 
     public String getNomClasse() {
         return nomClasse;
@@ -39,7 +36,9 @@ public class Classe {
         Classe classe = (Classe) o;
 
         if (idClasse != classe.idClasse) return false;
-        return Objects.equals(nomClasse, classe.nomClasse);
+        if (nomClasse != null ? !nomClasse.equals(classe.nomClasse) : classe.nomClasse != null) return false;
+
+        return true;
     }
 
     @Override

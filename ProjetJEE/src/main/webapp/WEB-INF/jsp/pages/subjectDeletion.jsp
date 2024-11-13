@@ -39,7 +39,7 @@
     %>
 </table>
 </br>
-<button type="submit">Valider</button>
+<button type="submit">Supprimer</button>
 </form>
 <%
     }

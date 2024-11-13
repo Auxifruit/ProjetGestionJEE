@@ -41,7 +41,7 @@
 </br>
 <input type="text" name="subjectNewName" required>
 </br></br>
-<button type="submit">Valider</button>
+<button type="submit">Modifier</button>
 </form>
 <%
     }

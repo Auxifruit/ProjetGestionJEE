@@ -44,7 +44,7 @@
     <label>Nom de la nouvelle matière : </label>
     <input type="text" name="newSubject" required/>
     </br></br>
-    <button type="submit">Valider</button>
+    <button type="submit">Créer</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
     if (messageErreur != null && !messageErreur.isEmpty()) {

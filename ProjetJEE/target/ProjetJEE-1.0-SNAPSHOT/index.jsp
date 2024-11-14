@@ -9,7 +9,7 @@
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a></br>
 <a href="${pageContext.request.contextPath}/changeRole-servlet">Gestion des rôles</a></br>
-<a href="${pageContext.request.contextPath}/lessonCreation-servlet">Creation d'une séance</a></br>
+<a href="${pageContext.request.contextPath}/manageLesson-servlet">Gérer les séances</a></br>
 <a href="${pageContext.request.contextPath}/manageSubject-servlet">Gérer les matières</a></br>
 <a href="${pageContext.request.contextPath}/manageCourse-servlet">Gérer les cours</a></br>
 </body>

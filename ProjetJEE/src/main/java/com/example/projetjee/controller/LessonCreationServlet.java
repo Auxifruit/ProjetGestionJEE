@@ -5,6 +5,7 @@ import com.example.projetjee.model.dao.LessonDAO;
 import com.example.projetjee.model.dao.TeacherDAO;
 import com.example.projetjee.model.entities.Cours;
 import com.example.projetjee.model.entities.Enseignant;
+import com.example.projetjee.model.entities.Seance;
 import com.example.projetjee.util.DateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,42 +20,61 @@ import java.util.List;
 public class LessonCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        List<Seance> lessonList = LessonDAO.getAllLessons();
         List<Cours> courseList = CourseDAO.getAllCourses();
         List<Enseignant> teacherList = TeacherDAO.getAllTeachers();
 
+        request.setAttribute("lessons", lessonList);
         request.setAttribute("courses", courseList);
         request.setAttribute("teachers", teacherList);
 
         try {
-            request.getRequestDispatcher("WEB-INF/jsp/pages/creationLesson.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/pages/lessonCreation.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int courseId = Integer.parseInt(request.getParameter("course"));
+        String courseIdString = request.getParameter("course");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
-        int teacherId = Integer.parseInt(request.getParameter("teacher"));
+        String teacherIdString = request.getParameter("teacher");
 
-        if(startDate == null || startDate.trim().isEmpty() || endDate == null || endDate.trim().isEmpty()) {
+        if(courseIdString == null || courseIdString.isEmpty()) {
+            request.setAttribute("erreur", "Erreur : Veuillez choisir un cours.");
+            doGet(request, response);
+            return;
+        }
+
+        if(teacherIdString == null || teacherIdString.isEmpty()) {
+            request.setAttribute("erreur", "Erreur : Veuillez choisir un enseignant.");
+            doGet(request, response);
+            return;
+        }
+
+        int courseId = Integer.parseInt(courseIdString);
+        int teacherId = Integer.parseInt(teacherIdString);
+
+        if(startDate == null || startDate.isEmpty() || endDate == null || endDate.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez saisir les 2 dates nécessaire pour la création d'une séance.");
             doGet(request, response);
             return;
         }
+
         if(DateUtil.areDatesValid(startDate, endDate) == false) {
             request.setAttribute("erreur", "Erreur : Veuillez saisir 2 dates valides.");
             doGet(request, response);
             return;
         }
+
         if(LessonDAO.isLessonPossible(teacherId, startDate, endDate) == false) {
             request.setAttribute("erreur", "Erreur : Le professeur a déjà cours à ces dates.");
             doGet(request, response);
             return;
         }
 
-        if(LessonDAO.AddLesson(null, startDate, endDate, courseId, teacherId) == true) {
+        if(LessonDAO.addLessonInTable(null, startDate, endDate, courseId, teacherId) == true) {
             doGet(request, response);
         }
         else {

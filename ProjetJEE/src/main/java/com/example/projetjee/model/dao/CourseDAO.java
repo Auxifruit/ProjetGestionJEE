@@ -163,7 +163,7 @@ public class CourseDAO {
 
     public static boolean isCourseInTable(String courseName, int subjectId) {
         if(courseName == null || courseName.isEmpty() || subjectId <= 0) {
-            return false;
+            return true;
         }
         boolean isIn = true;
 
@@ -181,10 +181,11 @@ public class CourseDAO {
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);
                 isIn = count != 0;
-
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return true;
         }
 
         return isIn;

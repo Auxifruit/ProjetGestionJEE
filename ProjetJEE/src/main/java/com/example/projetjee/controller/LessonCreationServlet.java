@@ -75,7 +75,7 @@ public class LessonCreationServlet extends HttpServlet {
         }
 
         if(LessonDAO.addLessonInTable(null, startDate, endDate, courseId, teacherId) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de la séance.");

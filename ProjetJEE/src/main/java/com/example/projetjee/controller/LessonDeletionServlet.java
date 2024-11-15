@@ -20,15 +20,7 @@ import java.util.List;
 public class LessonDeletionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Seance> lessonList = LessonDAO.getAllLessons();
-
-        request.setAttribute("lessons", lessonList);
-
-        try {
-            request.getRequestDispatcher("WEB-INF/jsp/pages/lessonDeletion.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        doPost(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,7 +41,7 @@ public class LessonDeletionServlet extends HttpServlet {
         }
 
         if(LessonDAO.deleteLessonFromTable(lessonId) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de la suppression de la séance.");

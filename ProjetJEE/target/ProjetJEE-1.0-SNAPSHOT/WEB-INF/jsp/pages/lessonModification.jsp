@@ -17,42 +17,45 @@
     <title>Modification séance</title>
 </head>
 <body>
+<h1>Modification d'une séance</h1>
 <%
-  List<Seance> lessonList = (List<Seance>) request.getAttribute("lessons");
+  Seance lesson = (Seance) request.getAttribute("lesson");
 
-  if (lessonList == null || lessonList.isEmpty()) {
+  if (lesson == null) {
 %>
 <h2>Pas de séance à modifier</h2>
 <%
 } else {
 %>
-<h1>Création d'une séance</h1>
-<label>Séance existante :</label>
+<h3>Anciennes informations :</h3>
+<p>Ancien cours :
+<%
+  if(lesson.getIdCours() == null || lesson.getIdCours() <= 0) {
+%>
+Il n'y a pas de cours associé à la séance</p>
+<%
+  } else {
+%>
+<%= CourseDAO.getCourseName(lesson.getIdCours()) %></p>
+<%
+  }
+%>
+<p>Ancien Enseignant :
+<%
+  if(lesson.getIdEnseignant() == null || lesson.getIdEnseignant() <= 0) {
+%>
+Il n'y a pas d'enseignant associé à la séance</p>
+<%
+} else {
+%>
+<%= " " + UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></p>
+<%
+  }
+%>
+<p>Ancienne date de début : <%= lesson.getDateDebutSeance() %></p>
+<p>Ancienne date de fin : <%= lesson.getDateFinSeance() %></p>
 </br>
 <form action="lessonModification-servlet" method="post">
-<table border="1">
-  <tr>
-    <th>Nom du cours</th>
-    <th>Nom et prénom du professeur</th>
-    <th>Date de début</th>
-    <th>Date de fin</th>
-    <th>Selection</th>
-  </tr>
-  <%
-    for (Seance lesson : lessonList) {
-  %>
-  <tr>
-    <td><%= CourseDAO.getCourseName(lesson.getIdCours()) %></td>
-    <td><%= UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></td>
-    <td><%= lesson.getDateDebutSeance() %></td>
-    <td><%= lesson.getDateFinSeance() %></td>
-    <td><input type="radio" name="lessonId" value="<%= lesson.getIdSeance() %>" required></td>
-  </tr>
-  <%
-    }
-  %>
-</table>
-</br>
 <label>Choix du nouveau cours : </label>
   <%
     List<Cours> coursesList = (List<Cours>) request.getAttribute("courses");
@@ -110,6 +113,7 @@
     }
   %>
 </select>
+<input name="lessonId" value="<%= lesson.getIdSeance() %>" style="visibility: hidden">
 </br></br>
 <button type="submit">Valider</button>
 </form>

@@ -20,15 +20,23 @@ import java.util.List;
 public class LessonModificationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Seance> lessonList = LessonDAO.getAllLessons();
+        String lessonIdString = request.getParameter("lessonId");
         List<Cours> courseList = CourseDAO.getAllCourses();
         List<Enseignant> teacherList = TeacherDAO.getAllTeachers();
 
-        request.setAttribute("lessons", lessonList);
-        request.setAttribute("courses", courseList);
-        request.setAttribute("teachers", teacherList);
+        if(lessonIdString == null || lessonIdString.isEmpty()) {
+            request.setAttribute("erreur", "Erreur : Veuillez choisir une séance.");
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
+            return;
+        }
+
+        int lessonId = Integer.parseInt(lessonIdString);
+        Seance lesson = LessonDAO.getLesson(lessonId);
 
         try {
+            request.setAttribute("courses", courseList);
+            request.setAttribute("teachers", teacherList);
+            request.setAttribute("lesson", lesson);
             request.getRequestDispatcher("WEB-INF/jsp/pages/lessonModification.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,16 +65,17 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         int lessonId = Integer.parseInt(lessonIdString);
+        Seance lesson = LessonDAO.getLesson(lessonId);
 
         if(newStartDate == null || newStartDate.isEmpty()) {
-            newStartDate = LessonDAO.getLessonStartDate(lessonId);
+            newStartDate = lesson.getDateDebutSeance().toString();
         }
         else {
             dateModified = true;
         }
 
         if(newEndDate == null || newEndDate.isEmpty()) {
-            newEndDate = LessonDAO.getLessonEndDate(lessonId);
+            newEndDate = lesson.getDateFinSeance().toString();
         }
         else {
             dateModified = true;
@@ -75,7 +84,7 @@ public class LessonModificationServlet extends HttpServlet {
         int newCourseId;
 
         if(newCourseIdString == null || newCourseIdString.isEmpty()) {
-            newCourseId = LessonDAO.getLessonCourseId(lessonId);
+            newCourseId = lesson.getIdCours();
         }
         else {
             newCourseId = Integer.parseInt(newCourseIdString);
@@ -84,7 +93,7 @@ public class LessonModificationServlet extends HttpServlet {
         int newTeacherId;
 
         if(newTeacherIdString == null || newTeacherIdString.isEmpty()) {
-            newTeacherId = LessonDAO.getLessonTeacherId(lessonId);
+            newTeacherId = lesson.getIdEnseignant();
         }
         else {
             newTeacherId = Integer.parseInt(newTeacherIdString);
@@ -104,7 +113,7 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         if(LessonDAO.modifyLessonInTable(lessonId, newStartDate, newEndDate, newCourseId, newTeacherId) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de la modification de la séance.");

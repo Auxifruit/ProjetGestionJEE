@@ -24,10 +24,10 @@ public class SubjectModificationServlet extends HttpServlet {
         }
 
         int subjectId = Integer.parseInt(subjectIdString);
+        Matiere subject = SubjectDAO.getSubject(subjectId);
 
         try {
-            request.setAttribute("subjectId", subjectId);
-            request.setAttribute("subjectName", SubjectDAO.getSubjectNameById(subjectId));
+            request.setAttribute("subject", subject);
             request.getRequestDispatcher("WEB-INF/jsp/pages/subjectModification.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

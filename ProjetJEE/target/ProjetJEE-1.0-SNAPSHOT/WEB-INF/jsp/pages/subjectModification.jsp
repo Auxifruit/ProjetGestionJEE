@@ -14,21 +14,20 @@
 <body>
 <h1>Modification d'une matière</h1>
 <%
-    String subjectName = request.getAttribute("subjectName").toString();
-    int subjectId = Integer.parseInt(request.getAttribute("subjectId").toString());
+    Matiere subject = (Matiere) request.getAttribute("subject");
 
-    if (subjectName == null || subjectName.isEmpty()) {
+    if (subject == null) {
 %>
-<p>La matière n'a pas de nom/p>
+<p>La matière n'existe pas</p>
 <%
 } else {
 %>
 <h3>Ancienne information</h3>
-<p>Ancien nom de la matière : <%= subjectName %></p>
+<p>Ancien nom de la matière : <%= subject.getNomMatiere() %></p>
 <form action="subjectModification-servlet" method="post">
     <label>Nouveau nom de la matière : </label>
     <input type="text" name="subjectNewName" required>
-    <input name="subjectId" value="<%= subjectId %>" style="visibility: hidden">
+    <input name="subjectId" value="<%= subject.getIdMatiere() %>" style="visibility: hidden">
 
     </br></br>
     <button type="submit">Modifier</button>

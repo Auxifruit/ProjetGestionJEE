@@ -43,7 +43,7 @@ public class SubjectCreationServlet extends HttpServlet {
         }
 
         if(SubjectDAO.addSubjectInTable(subjectName) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de la matière.");

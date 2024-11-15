@@ -14,12 +14,20 @@ import java.util.List;
 @WebServlet(name = "subjectModificationServlet", value = "/subjectModification-servlet")
 public class SubjectModificationServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Matiere> subjectList = SubjectDAO.getAllSubject();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String subjectIdString = request.getParameter("subjectId");
 
-        request.setAttribute("subjects", subjectList);
+        if(subjectIdString == null || subjectIdString.isEmpty()) {
+            request.setAttribute("erreur", "Erreur : Veuillez choisir une matière.");
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
+            return;
+        }
+
+        int subjectId = Integer.parseInt(subjectIdString);
 
         try {
+            request.setAttribute("subjectId", subjectId);
+            request.setAttribute("subjectName", SubjectDAO.getSubjectNameById(subjectId));
             request.getRequestDispatcher("WEB-INF/jsp/pages/subjectModification.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,7 +36,7 @@ public class SubjectModificationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String subjectIdString = request.getParameter("subectIdToModify");
+        String subjectIdString = request.getParameter("subjectId");
         String subjectNewName = request.getParameter("subjectNewName");
 
         if(subjectIdString == null || subjectIdString.isEmpty()) {
@@ -51,8 +59,16 @@ public class SubjectModificationServlet extends HttpServlet {
             return;
         }
 
-        if(SubjectDAO.modifySubjectFromTable(subjectId, subjectNewName) == true) {
+        Matiere subject = SubjectDAO.getSubject(subjectId);
+
+        if(subject.getNomMatiere().equals(subjectNewName)) {
+            request.setAttribute("erreur", "Erreur : Veuillez choisir un nouveau différent.");
             doGet(request, response);
+            return;
+        }
+
+        if(SubjectDAO.modifySubjectFromTable(subjectId, subjectNewName) == true) {
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de la suppression de la matière.");

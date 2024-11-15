@@ -14,34 +14,24 @@
 <body>
 <h1>Modification d'une matière</h1>
 <%
-    List<Matiere> subjectList = (List<Matiere>) request.getAttribute("subjects");
+    String subjectName = request.getAttribute("subjectName").toString();
+    int subjectId = Integer.parseInt(request.getAttribute("subjectId").toString());
 
-    if (subjectList == null || subjectList.isEmpty()) {
+    if (subjectName == null || subjectName.isEmpty()) {
 %>
-<p>Il n'y a pas encore de matière</p>
+<p>La matière n'a pas de nom/p>
 <%
 } else {
 %>
-<h3>Matière existante : </h3>
+<h3>Ancienne information</h3>
+<p>Ancien nom de la matière : <%= subjectName %></p>
 <form action="subjectModification-servlet" method="post">
-<table border="1">
-    <th>Nom de la matière</th>
-    <th>Selection</th>
-    <%
-        for (Matiere subject : subjectList) {
-    %>
-    <tr>
-        <td><%= subject.getNomMatiere() %></td>
-        <td><input type="radio" name="subectIdToModify" value="<%= subject.getIdMatiere()%>"></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-</br>
-<input type="text" name="subjectNewName" required>
-</br></br>
-<button type="submit">Modifier</button>
+    <label>Nouveau nom de la matière : </label>
+    <input type="text" name="subjectNewName" required>
+    <input name="subjectId" value="<%= subjectId %>" style="visibility: hidden">
+
+    </br></br>
+    <button type="submit">Modifier</button>
 </form>
 <%
     }

@@ -56,7 +56,7 @@ public class CourseCreationServlet extends HttpServlet {
         }
 
         if(CourseDAO.addCourseInTable(courseName, subjectId) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("courseManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout du cours.");

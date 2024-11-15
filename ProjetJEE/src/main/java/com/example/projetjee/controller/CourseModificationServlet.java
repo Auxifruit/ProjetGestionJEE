@@ -17,13 +17,21 @@ import java.util.List;
 public class CourseModificationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Cours> courseList = CourseDAO.getAllCourses();
+        String courseIdString = request.getParameter("courseId");
         List<Matiere> subjectList = SubjectDAO.getAllSubject();
 
-        request.setAttribute("courses", courseList);
-        request.setAttribute("subjects", subjectList);
+        if(courseIdString == null || courseIdString.isEmpty()) {
+            request.setAttribute("erreur", "Erreur : Veuillez choisir un cours.");
+            request.getRequestDispatcher("courseManager-servlet").forward(request, response);
+            return;
+        }
+
+        int courseId = Integer.parseInt(courseIdString);
+        Cours course = CourseDAO.getCourses(courseId);
 
         try {
+            request.setAttribute("course", course);
+            request.setAttribute("subjects", subjectList);
             request.getRequestDispatcher("WEB-INF/jsp/pages/courseModification.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,15 +57,16 @@ public class CourseModificationServlet extends HttpServlet {
         }
 
         int courseId = Integer.parseInt(courseIdString);
+        Cours course = CourseDAO.getCourses(courseId);
 
         if(newCourseName == null || newCourseName.isEmpty()) {
-            newCourseName = CourseDAO.getCourseName(courseId);
+            newCourseName = course.getNomCours();
         }
 
         int newCourseSubjectId;
 
         if(newCourseSubjectIdString == null || newCourseSubjectIdString.isEmpty()) {
-            newCourseSubjectId = CourseDAO.getCourseSubjectId(courseId);
+            newCourseSubjectId = course.getIdMatiere();
         }
         else {
             newCourseSubjectId = Integer.parseInt(newCourseSubjectIdString);
@@ -70,7 +79,7 @@ public class CourseModificationServlet extends HttpServlet {
         }
 
         if(CourseDAO.modifyCourseInTable(courseId, newCourseName, newCourseSubjectId) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("courseManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de la modification du cours.");

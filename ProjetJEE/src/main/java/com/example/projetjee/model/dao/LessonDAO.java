@@ -43,6 +43,33 @@ public class LessonDAO {
         return lessons;
     }
 
+    public static Seance getLesson(int seanceId) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT * FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, seanceId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Seance lesson = new Seance();
+
+            if (resultSet.next()) {
+                lesson.setIdSeance(resultSet.getInt(LESSON_ID));
+                lesson.setDateDebutSeance(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
+                lesson.setDateFinSeance(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
+                lesson.setIdCours(resultSet.getInt(LESSON_COURSE_ID));
+                lesson.setIdEnseignant(resultSet.getInt(LESSON_TEACHER_ID));
+            }
+            return lesson;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static boolean addLessonInTable(Integer lessonId, String lessonStartDate, String lessonsEndDate, int lessonCourseId, int lessonTeacherId) {
         try {
             Connection connection = DatabaseManager.getConnection();

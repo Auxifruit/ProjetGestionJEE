@@ -31,7 +31,7 @@
         %>
         <tr>
             <td><%= subject.getNomMatiere() %></td>
-            <td><input type="radio" name="subjectId" value="<%= subject.getIdMatiere()%>" onclick="toggleButtons()" required></td>
+            <td><input type="radio" name="subjectId" value="<%= subject.getIdMatiere()%>" required></td>
         </tr>
         <%
             }

@@ -35,6 +35,30 @@ public class SubjectDAO {
         return subjects;
     }
 
+    public static Matiere getSubject(int subjectId) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT * FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, subjectId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Matiere subject = new Matiere();
+
+            if (resultSet.next()) {
+                subject.setIdMatiere(resultSet.getInt(SUBJECT_ID));
+                subject.setNomMatiere(resultSet.getString(SUBJECT_NAME));
+            }
+            return subject;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static boolean addSubjectInTable(String subjectName) {
         if(subjectName == null || subjectName.isEmpty()) {
             return false;

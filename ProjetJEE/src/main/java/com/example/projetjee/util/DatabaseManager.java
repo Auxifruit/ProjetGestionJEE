@@ -4,9 +4,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseManager {
-    private static final String URL = "jdbc:mysql://localhost:3306/cydatabase2";
+    private static final String URL = "jdbc:mysql://localhost:3306/cydtb_jee";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "cytech0001";
     private static Connection connection;
 
     /**

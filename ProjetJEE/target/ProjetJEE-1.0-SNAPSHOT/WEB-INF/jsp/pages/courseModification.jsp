@@ -16,37 +16,21 @@
 <body>
 <h1>Modification d'un cours</h1>
 <%
-    List<Cours> coursList = (List<Cours>) request.getAttribute("courses");
+    Cours course = (Cours) request.getAttribute("course");
     List<Matiere> subjectList = (List<Matiere>) request.getAttribute("subjects");
 
-    if (coursList == null || coursList.isEmpty()) {
+    if (course == null) {
 %>
-<p>Il n'y a pas encore de cours</p>
+<p>Le cours n'existe pas</p>
 <%
 } else {
 %>
-<h3>Cours existant : </h3>
+<h3>Anciennes informations</h3>
+<p>Ancien nom : <%= course.getNomCours() %></p>
+<p>Ancienne matière : <%= SubjectDAO.getSubjectNameById(course.getIdMatiere()) %></p>
+
 <form action="courseModification-servlet" method="post">
-<table border="1">
-    <th>Nom du cours</th>
-    <th>Nom de la matière</th>
-    <th>Selection</th>
-    <%
-        for (Cours course : coursList) {
-    %>
-    <tr>
-        <td><%= course.getNomCours() %></td>
-        <td><%= SubjectDAO.getSubjectNameById(course.getIdMatiere()) %></td>
-        <td><input type="radio" name="courseId" value="<%= course.getIdCours() %>" required></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-<%
-    }
-%>
-<h3>Nouvelles informations du cours :</h3>
+
 <%
     if(subjectList == null || subjectList.isEmpty()) {
 %>
@@ -69,6 +53,7 @@
     </br></br>
     <label>Choix du nouveau nom du cours : </label>
     <input type="text" name="newCourseName"/>
+    <input name="courseId" value="<%= course.getIdCours() %>" style="visibility: hidden">
     </br></br>
     <button type="submit">Modifier</button>
 </form>
@@ -81,6 +66,7 @@
 <p style='color: red'><%= messageErreur %>
 </p></br>
 <%
+    }
     }
 %>
 </body>

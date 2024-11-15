@@ -37,6 +37,31 @@ public class CourseDAO {
         return courses;
     }
 
+    public static Cours getCourses(int courseId) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT * FROM " + COURSE_TABLE + " WHERE " + COURSE_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, courseId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Cours course = new Cours();
+
+            if (resultSet.next()) {
+                course.setIdCours(resultSet.getInt(COURSE_ID));
+                course.setNomCours(resultSet.getString(COURSE_NAME));
+                course.setIdMatiere(resultSet.getInt(COURSE_SUBJECT_ID));
+            }
+            return course;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static boolean addCourseInTable(String subjectName, int subjectId) {
         if(subjectName == null || subjectName.isEmpty() || subjectId <= 0) {
             return false;

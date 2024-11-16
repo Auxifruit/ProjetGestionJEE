@@ -1,7 +1,8 @@
 <%@ page import="com.example.projetjee.model.entities.Matiere" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Cours" %>
-<%@ page import="com.example.projetjee.model.dao.SubjectDAO" %><%--
+<%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
+<%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 12/11/2024

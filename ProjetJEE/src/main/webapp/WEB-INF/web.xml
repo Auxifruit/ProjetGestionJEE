@@ -4,3 +4,19 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 </web-app>
+
+<!--<web-app xmlns="http://jakarta.ee/xml/ns/jakartaee"-->
+<!--         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--         xsi:schemaLocation="http://jakarta.ee/xml/ns/jakartaee-->
+<!--         http://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"-->
+<!--         version="5.0">-->
+<!--<display-name>ProjetJEE</display-name>-->
+
+<!--&lt;!&ndash; Configuration des JSP &ndash;&gt;-->
+<!--<jsp-config>-->
+<!--    <jsp-property-group>-->
+<!--        <url-pattern>*.jsp</url-pattern>-->
+<!--        <el-ignored>false</el-ignored>-->
+<!--    </jsp-property-group>-->
+<!--</jsp-config>-->
+<!--</web-app>-->

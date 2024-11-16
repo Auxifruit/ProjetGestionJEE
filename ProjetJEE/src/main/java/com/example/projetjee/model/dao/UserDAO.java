@@ -179,4 +179,21 @@ public class UserDAO {
         }
 
     }
+
+    public int authenticate(String email, String password) {
+        try (Connection connection = DatabaseManager.getConnection()) {
+            String query = "SELECT idUtilisateur FROM Utilisateur WHERE emailUtilisateur = ? AND motDePasseUtilisateur = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, email);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("idUtilisateur");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1; // Retourne -1 si l'authentification échoue
+    }
 }

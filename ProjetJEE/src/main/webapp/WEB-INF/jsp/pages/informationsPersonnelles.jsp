@@ -1,15 +1,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.*" %>
+<%@ page import="com.example.projetjee.model.entities.Utilisateur" %>
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 
 <%
-    // Informations de l'utilisateur
-    String email = (String) session.getAttribute("email");
-    String nom = (String) session.getAttribute("nom");
-    String prenom = (String) session.getAttribute("prenom");
-    String dateNaissance = (String) session.getAttribute("dateNaissance");
-    String identifiant = (String) session.getAttribute("identifiant");
-    String motDePasse = (String) session.getAttribute("motDePasse");
-    String role = (String) session.getAttribute("role");
+    // Récupérer l'ID utilisateur transmis par la Servlet
+    Integer userId = (Integer) request.getAttribute("userId");
+
+    // Vérifier que l'ID utilisateur est valide
+    if (userId == null) {
+%>
+<p style="color: red;">Erreur : aucun utilisateur connecté.</p>
+<%
+        return;
+    }
+
+    // Appeler la méthode DAO pour récupérer les données utilisateur
+    Utilisateur user = UserDAO.getUserById(userId);
+
+    // Vérifier que l'utilisateur existe
+    if (user == null) {
+%>
+<p style="color: red;">Utilisateur introuvable.</p>
+<%
+        return;
+    }
 %>
 
 <html lang="fr">
@@ -26,13 +40,16 @@
         .btn { padding: 8px 12px; cursor: pointer; margin-top: 10px; }
         .btn-modify { background-color: #4CAF50; color: white; }
         .btn-cancel { background-color: #f44336; color: white; }
-        .password-container { display: flex; align-items: center; }
-        .eye-icon { margin-left: 5px; cursor: pointer; }
     </style>
     <script>
+        // Utilisation des données utilisateur dans JavaScript
         let originalValues = {
-            email: "<%= email %>", nom: "<%= nom %>", prenom: "<%= prenom %>",
-            dateNaissance: "<%= dateNaissance %>", identifiant: "<%= identifiant %>", motDePasse: "<%= motDePasse %>"
+            email: "<%= user.getEmailUtilisateur() %>",
+            nom: "<%= user.getNomUtilisateur() %>",
+            prenom: "<%= user.getPrenomUtilisateur() %>",
+            dateNaissance: "<%= user.getDateDeNaissanceUtilisateur() %>",
+            identifiant: "<%= user.getIdUtilisateur() %>",
+            motDePasse: "<%= user.getMotDePasseUtilisateur() %>"
         };
 
         function toggleEditMode(isEditable) {
@@ -41,9 +58,7 @@
             document.getElementById("prenom").readOnly = !isEditable;
             document.getElementById("identifiant").readOnly = !isEditable;
             document.getElementById("motDePasse").readOnly = !isEditable;
-            <% if (!"admin".equals(role)) { %>
             document.getElementById("dateNaissance").readOnly = !isEditable;
-            <% } %>
             document.getElementById("btnModify").style.display = isEditable ? "none" : "inline";
             document.getElementById("btnSave").style.display = isEditable ? "inline" : "none";
             document.getElementById("btnCancel").style.display = isEditable ? "inline" : "none";
@@ -55,67 +70,39 @@
             document.getElementById("prenom").value = originalValues.prenom;
             document.getElementById("identifiant").value = originalValues.identifiant;
             document.getElementById("motDePasse").value = originalValues.motDePasse;
-            <% if (!"admin".equals(role)) { %>
             document.getElementById("dateNaissance").value = originalValues.dateNaissance;
-            <% } %>
             toggleEditMode(false);
-        }
-
-        function togglePasswordVisibility() {
-            const passwordField = document.getElementById("motDePasse");
-            const eyeIcon = document.getElementById("eyeIcon");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.textContent = "🙈"; // Icône pour masquer le mot de passe
-            } else {
-                passwordField.type = "password";
-                eyeIcon.textContent = "👁️"; // Icône pour afficher le mot de passe
-            }
         }
     </script>
 </head>
-<body onload="toggleEditMode(false)">
+<body>
 <h1>Modifier mes informations</h1>
 
-<!-- Formulaire de modification des informations -->
 <form action="modifierInformations" method="post">
     <label>Email :</label>
-    <input type="text" id="email" name="email" value="<%= email %>" readonly>
+    <input type="text" id="email" name="email" value="<%= user.getEmailUtilisateur() %>" readonly>
 
     <label>Nom :</label>
-    <input type="text" id="nom" name="nom" value="<%= nom %>" readonly>
+    <input type="text" id="nom" name="nom" value="<%= user.getNomUtilisateur() %>" readonly>
 
     <label>Prénom :</label>
-    <input type="text" id="prenom" name="prenom" value="<%= prenom %>" readonly>
+    <input type="text" id="prenom" name="prenom" value="<%= user.getPrenomUtilisateur() %>" readonly>
 
-    <% if (!"admin".equals(role)) { %>
     <label>Date de naissance :</label>
-    <input type="date" id="dateNaissance" name="dateNaissance" value="<%= dateNaissance %>" readonly>
-    <% } %>
+    <input type="date" id="dateNaissance" name="dateNaissance" value="<%= user.getDateDeNaissanceUtilisateur() %>" readonly>
 
     <label>Identifiant :</label>
-    <input type="text" id="identifiant" name="identifiant" value="<%= identifiant %>" readonly>
+    <input type="text" id="identifiant" name="identifiant" value="<%= user.getIdUtilisateur() %>" readonly>
 
     <label>Mot de passe :</label>
-    <div class="password-container">
-        <input type="password" id="motDePasse" name="motDePasse" value="<%= motDePasse %>" readonly>
-        <span id="eyeIcon" class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
+    <div>
+        <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getMotDePasseUtilisateur() %>" readonly>
     </div>
 
-    <label>Rôle utilisateur :</label>
-    <input type="text" id="role" name="role" value="<%= role %>" readonly>
-
-    <!-- Boutons de modification, enregistrement et annulation -->
-    <button type="button" id="btnModify" class="btn btn-modify" onclick="toggleEditMode(true)">Modifier</button>
-    <button type="submit" id="btnSave" class="btn btn-modify" style="display: none;">Enregistrer</button>
-    <button type="button" id="btnCancel" class="btn btn-cancel" style="display: none;" onclick="cancelEdit()">Annuler</button>
-
-    <% String message = (String) request.getAttribute("message"); %>
-    <% if (message != null) { %>
-    <p><%= message %></p>
-    <% } %>
-
+    <!-- Boutons -->
+    <button type="button" onclick="toggleEditMode(true)">Modifier</button>
+    <button type="submit" style="display: none;">Enregistrer</button>
+    <button type="button" style="display: none;" onclick="cancelEdit()">Annuler</button>
 </form>
-
 </body>
 </html>

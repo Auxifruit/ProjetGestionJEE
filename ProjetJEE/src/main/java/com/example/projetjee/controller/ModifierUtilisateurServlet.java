@@ -1,5 +1,7 @@
 package com.example.projetjee.controller;
 
+import com.example.projetjee.model.dao.UserDAO;
+import com.example.projetjee.model.entities.Utilisateur;
 import com.example.projetjee.util.DatabaseManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +27,7 @@ public class ModifierUtilisateurServlet extends HttpServlet {
         String identifiant = request.getParameter("identifiant");
         String motDePasse = request.getParameter("motDePasse");
 
-        // ID de l'utilisateur connecté (on suppose qu'il est dans la session)
+        // ID de l'utilisateur connecté
         int userId = (int) request.getSession().getAttribute("userId");
 
         // Connexion à la base de données et mise à jour des informations
@@ -52,12 +54,15 @@ public class ModifierUtilisateurServlet extends HttpServlet {
             }
 
         } catch (SQLException e) {
+            // Gérer l'exception SQL
             e.printStackTrace();
-            request.setAttribute("message", "Erreur lors de la mise à jour des informations.");
+            request.setAttribute("message", "Erreur lors de la mise à jour des informations : " + e.getMessage());
         }
 
-        // Rediriger ou afficher un message de confirmation
+        // Transmettre uniquement l'userId au JSP
+        request.setAttribute("userId", userId);
+
+        // Rediriger vers la page JSP
         request.getRequestDispatcher("/informationsPersonnelles.jsp").forward(request, response);
     }
 }
-

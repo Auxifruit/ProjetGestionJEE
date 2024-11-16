@@ -179,4 +179,38 @@ public class UserDAO {
         }
 
     }
+
+
+    public static Utilisateur getUserById(int userId) {
+        Utilisateur user = null;
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                user = new Utilisateur();
+                user.setIdUtilisateur(resultSet.getInt(USER_ID));
+                user.setNomUtilisateur(resultSet.getString(USER_LASTNAME));
+                user.setPrenomUtilisateur(resultSet.getString(USER_NAME));
+                user.setEmailUtilisateur(resultSet.getString(USER_EMAIL));
+                user.setDateDeNaissanceUtilisateur(resultSet.getDate(USER_BIRTHDATE).toString());
+                user.setMotDePasseUtilisateur(resultSet.getString(USER_PASSWORD));
+                user.setIdRole(resultSet.getInt(ID_ROLE));
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
 }

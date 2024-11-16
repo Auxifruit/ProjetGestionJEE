@@ -1,6 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Cours" %>
-<%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
 <%@ page import="com.example.projetjee.model.entities.Seance" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %><%--
@@ -52,6 +50,7 @@
     </br>
     <button type="submit" formaction="lessonModification-servlet">Modifier</button>
     <button type="submit" formaction="lessonDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="lessonClassesManager-servlet">Assigner une ou plusieurs classes à la séance</button>
 </form>
 <form action="lessonCreation-servlet" method="get">
     <button type="submit">Créer</button>

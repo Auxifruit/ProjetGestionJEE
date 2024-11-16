@@ -28,7 +28,7 @@ public class LessonDeletionServlet extends HttpServlet {
 
         if(lessonIdString == null || lessonIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une séance.");
-            doGet(request, response);
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
             return;
         }
 
@@ -36,7 +36,7 @@ public class LessonDeletionServlet extends HttpServlet {
 
         if(LessonDAO.isLessonInTable(lessonId) == false) {
             request.setAttribute("erreur", "Erreur : La séance n'existe pas.");
-            doGet(request, response);
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
             return;
         }
 
@@ -45,7 +45,7 @@ public class LessonDeletionServlet extends HttpServlet {
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de la suppression de la séance.");
-            doGet(request, response);
+            request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
     }
 

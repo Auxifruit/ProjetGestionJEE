@@ -62,7 +62,7 @@ Il n'y a pas d'enseignant associé à la séance</p>
 
     if (coursesList == null || coursesList.isEmpty()) {
   %>
-  <h3>Pas de cours à selectionner</h3>
+  <h3>Pas de séacence à selectionner</h3>
   <%
     }
     else {

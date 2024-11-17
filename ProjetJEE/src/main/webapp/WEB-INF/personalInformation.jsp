@@ -78,7 +78,10 @@
 <body>
 <h1>Modifier mes informations</h1>
 
-<form action="modifierInformations" method="post">
+<form action="editInformations" method="post">
+    <!-- Champ caché pour l'ID utilisateur -->
+    <input type="hidden" id="userId" name="userId" value="<%= user.getIdUtilisateur() %>">
+
     <label>Email :</label>
     <input type="text" id="email" name="email" value="<%= user.getEmailUtilisateur() %>" readonly>
 
@@ -100,9 +103,10 @@
     </div>
 
     <!-- Boutons -->
-    <button type="button" onclick="toggleEditMode(true)">Modifier</button>
-    <button type="submit" style="display: none;">Enregistrer</button>
-    <button type="button" style="display: none;" onclick="cancelEdit()">Annuler</button>
+    <button type="button" id="btnModify" onclick="toggleEditMode(true)">Modifier</button>
+    <button type="submit" id="btnSave" style="display: none;">Enregistrer</button>
+    <button type="button" id="btnCancel" style="display: none;" onclick="cancelEdit()">Annuler</button>
 </form>
+
 </body>
 </html>

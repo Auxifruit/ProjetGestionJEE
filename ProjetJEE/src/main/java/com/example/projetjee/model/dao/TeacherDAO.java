@@ -62,12 +62,12 @@ public class TeacherDAO {
 
     public static List<String> getAllDiscipline(int teacherID) {
         List<String> discipline = new ArrayList<>();
-        // la query pour chercher les matières en passant par "Seance"
-        String query = "SELECT DISTINCT Cours.nomCours " +
-                "FROM Cours " +
-                "JOIN Seance ON Cours.idCours = Seance.idCours " +
-                "JOIN Enseignant ON Seance.idEnseignant = Enseignant.idEnseignant " +
-                "WHERE Enseignant.idEnseignant = ?"; // le ? sera le teacherID associé au 1 du preparedStatement
+        // the query to search the right discipline by joining in the database "lesson"
+        String query = "SELECT DISTINCT Course.courseName " +
+                "FROM Course " +
+                "JOIN Lesson ON Course.courseId = Lesson.courseId " +
+                "JOIN Teacher ON Lesson.teacherId = Teacher.teacherId " +
+                "WHERE Teacher.teacherId = ?"; // TeacherID is the parameter of the prepared statement
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
@@ -76,7 +76,7 @@ public class TeacherDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                discipline.add(resultSet.getString("nomCours"));
+                discipline.add(resultSet.getString("courseName"));
             }
 
         } catch (SQLException e) {
@@ -88,11 +88,11 @@ public class TeacherDAO {
 
     public static List<String> getAllClasses(int teacherID) {
         List<String> classList = new ArrayList<>();
-        String query = "SELECT c.nomClasse " +
-                "FROM Seance s " +
-                "JOIN SeanceClasse sc ON s.idSeance = sc.idSeance " +
-                "JOIN Classe c ON sc.idClasse = c.idClasse " +
-                "WHERE s.idEnseignant = ?";  // TeacherID param
+        String query = "SELECT DISTINCT Class.className " +
+                "FROM Lesson " +
+                "JOIN LessonClass ON Lesson.lessonId = LessonClass.lessonId " +
+                "JOIN Class ON LessonClass.classId = Class.classId " +
+                "WHERE Lesson.teacherId = ?";  // TeacherID is the parameter of the prepared statement
 
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -102,7 +102,7 @@ public class TeacherDAO {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                classList.add(resultSet.getString("nomClasse"));
+                classList.add(resultSet.getString("className"));
             }
 
         } catch (SQLException e) {

@@ -17,7 +17,7 @@ public class LoginServlet extends HttpServlet {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/CYDataBase?useSSL=false&serverTimezone=UTC";
     private static final String DB_USERNAME = "root"; // Change en fonction de ton utilisateur MySQL
-    private static final String DB_PASSWORD = "cytech0001";     // Ajoute ton mot de passe MySQL
+    private static final String DB_PASSWORD = "cytech0001"; // Ton mot de passe MySQL
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 
             // Établir la connexion à la base de données
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
-                String sql = "SELECT * FROM Utilisateur WHERE emailUtilisateur = ? AND motDePasseUtilisateur = ?";
+                String sql = "SELECT * FROM Users WHERE userEmail = ? AND userPassword = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, email);
                 statement.setString(2, password);
@@ -46,8 +46,8 @@ public class LoginServlet extends HttpServlet {
 
                 if (resultSet.next()) {
                     // Authentification réussie
-                    request.getSession().setAttribute("user", resultSet.getString("prenomUtilisateur"));
-                    response.sendRedirect("dashboard");
+                    request.getSession().setAttribute("user", resultSet.getString("userName"));
+                    response.sendRedirect("dashboard"); // Modifie ce chemin si nécessaire
                 } else {
                     // Authentification échouée
                     request.setAttribute("error", "Email ou mot de passe incorrect !");
@@ -60,5 +60,4 @@ public class LoginServlet extends HttpServlet {
             throw new ServletException("Erreur lors de la connexion à la base de données", e);
         }
     }
-
 }

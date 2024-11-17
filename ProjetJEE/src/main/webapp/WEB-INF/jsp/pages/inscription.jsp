@@ -2,20 +2,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inscription</title>
+    <title>Inscription Étudiant</title>
 </head>
 <body>
-<h2>Inscription</h2>
-<form action="InscriptionServlet" method="post">
-    Nom d'utilisateur: <input type="text" name="username" required><br>
-    Mot de passe: <input type="password" name="password" required><br>
-    Email: <input type="email" name="email" required><br>
-    Rôle: <select name="role">
-    <option value="etudiant">Étudiant</option>
-    <option value="enseignant">Enseignant</option>
-    <option value="admin">Administrateur</option>
-</select><br>
-    <input type="submit" value="S'inscrire">
+<h1>Inscription Étudiant</h1>
+<form action="${pageContext.request.contextPath}/inscription" method="post">
+    <label for="nom">Nom :</label>
+    <input type="text" id="nom" name="nom" required><br><br>
+
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom" required><br><br>
+
+    <label for="email">Email :</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="password">Mot de passe :</label>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="dateNaissance">Date de naissance :</label>
+    <input type="date" id="dateNaissance" name="dateNaissance" required><br><br>
+
+    <label for="classe">Filière :</label>
+    <select id="classe" name="classe" required>
+        <option value="1">GSI1</option>
+        <option value="2">GSI2</option>
+        <option value="3">GSI3</option>
+    </select><br><br>
+
+    <button type="submit">S'inscrire</button>
 </form>
 </body>
 </html>

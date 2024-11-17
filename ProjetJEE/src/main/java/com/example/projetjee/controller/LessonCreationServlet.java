@@ -3,6 +3,8 @@ package com.example.projetjee.controller;
 import com.example.projetjee.model.dao.CourseDAO;
 import com.example.projetjee.model.dao.LessonDAO;
 import com.example.projetjee.model.dao.TeacherDAO;
+import com.example.projetjee.model.entities.Course;
+import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.util.DateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,8 +19,8 @@ import java.util.List;
 public class LessonCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Cours> courseList = CourseDAO.getAllCourses();
-        List<Enseignant> teacherList = TeacherDAO.getAllTeachers();
+        List<Course> courseList = CourseDAO.getAllCourses();
+        List<Teacher> teacherList = TeacherDAO.getAllTeachers();
 
         request.setAttribute("courses", courseList);
         request.setAttribute("teachers", teacherList);

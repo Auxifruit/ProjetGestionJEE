@@ -62,13 +62,16 @@ public class LessonCreationServlet extends HttpServlet {
             return;
         }
 
+        System.out.println("Start date : " + startDate);
+        System.out.println("End date : " + endDate);
+
         if(DateUtil.areDatesValid(startDate, endDate) == false) {
             request.setAttribute("erreur", "Erreur : Veuillez saisir 2 dates valides.");
             doGet(request, response);
             return;
         }
 
-        if(LessonDAO.isLessonPossible(teacherId, startDate, endDate) == false) {
+        if(LessonDAO.isLessonPossible(null, teacherId, startDate, endDate) == false) {
             request.setAttribute("erreur", "Erreur : Le professeur a déjà cours à ces dates.");
             doGet(request, response);
             return;

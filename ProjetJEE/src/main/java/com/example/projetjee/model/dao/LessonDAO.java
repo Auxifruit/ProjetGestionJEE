@@ -283,10 +283,10 @@ public class LessonDAO {
         return isIn;
     }
 
-    public static boolean isLessonPossible(int teacherId, String lessonStartDate, String lessonEndDate) {
+    public static boolean isLessonPossible(Integer lessonId, int teacherId, String lessonStartDate, String lessonEndDate) {
         boolean isPossible = true;
 
-        String query = "SELECT COUNT(*) FROM " + LESSON_TABLE + " WHERE " + LESSON_TEACHER_ID +" = ? AND ("
+        String query = "SELECT COUNT(*) FROM " + LESSON_TABLE + " WHERE " + LESSON_TEACHER_ID +" = ? AND (? IS NULL OR " + LESSON_ID + " != ?) AND ("
                 + "(" + LESSON_START_DATE + " < ? AND " + LESSON_END_DATE + " > ?) "
                 + "OR (" + LESSON_START_DATE + " BETWEEN ? AND ?) "
                 + "OR (" + LESSON_END_DATE + " BETWEEN ? AND ?))";
@@ -296,12 +296,19 @@ public class LessonDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, teacherId);
-            preparedStatement.setString(2, lessonStartDate);
-            preparedStatement.setString(3, lessonEndDate);
+            if (lessonId == null) {
+                preparedStatement.setNull(2, java.sql.Types.INTEGER); // Aucun ID à exclure
+                preparedStatement.setNull(3, java.sql.Types.INTEGER);
+            } else {
+                preparedStatement.setInt(2, lessonId); // Exclusion de l'ID de la séance
+                preparedStatement.setInt(3, lessonId);
+            }
             preparedStatement.setString(4, lessonStartDate);
             preparedStatement.setString(5, lessonEndDate);
             preparedStatement.setString(6, lessonStartDate);
             preparedStatement.setString(7, lessonEndDate);
+            preparedStatement.setString(8, lessonStartDate);
+            preparedStatement.setString(9, lessonEndDate);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "lessonModificationServlet", value = "/lessonModification-servlet")
@@ -69,6 +71,7 @@ public class LessonModificationServlet extends HttpServlet {
 
         if(newStartDate == null || newStartDate.isEmpty()) {
             newStartDate = lesson.getDateDebutSeance().toString();
+            newStartDate = newStartDate.split("\\.")[0].replace(" ", "T");
         }
         else {
             dateModified = true;
@@ -76,6 +79,7 @@ public class LessonModificationServlet extends HttpServlet {
 
         if(newEndDate == null || newEndDate.isEmpty()) {
             newEndDate = lesson.getDateFinSeance().toString();
+            newEndDate = newEndDate.split("\\.")[0].replace(" ", "T");
         }
         else {
             dateModified = true;
@@ -106,7 +110,7 @@ public class LessonModificationServlet extends HttpServlet {
             return;
         }
 
-        if((dateModified == true || teacherModified == true ) && LessonDAO.isLessonPossible(newTeacherId, newStartDate, newEndDate) == false) {
+        if((dateModified == true || teacherModified == true ) && LessonDAO.isLessonPossible(lessonId, newTeacherId, newStartDate, newEndDate) == false) {
             request.setAttribute("erreur", "Erreur : Le professeur a déjà cours à ces dates.");
             doGet(request, response);
             return;

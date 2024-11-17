@@ -11,10 +11,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Gestion des cours</title>
+    <title>Gestion des séance</title>
 </head>
 <body>
-<h1>Liste des cours</h1>
+<h1>Liste des séance</h1>
 <%
     List<Seance> lessonList = (List<Seance>) request.getAttribute("lessons");
 

@@ -1,13 +1,10 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Utilisateur;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UserDAO {
     private static final String USER_TABLE = "utilisateur";

@@ -1,7 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.model.entities.Utilisateur;
+import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

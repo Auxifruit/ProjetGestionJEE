@@ -3,18 +3,18 @@ package com.example.projetjee.model.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class Enseignant {
+public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "idEnseignant")
-    private int idEnseignant;
+    @Column(name = "teacherId")
+    private int teacherId;
 
-    public int getIdEnseignant() {
-        return idEnseignant;
+    public int getTeacherId() {
+        return teacherId;
     }
 
-    public void setIdEnseignant(int idEnseignant) {
-        this.idEnseignant = idEnseignant;
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
     }
 
     @Override
@@ -22,15 +22,15 @@ public class Enseignant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Enseignant that = (Enseignant) o;
+        Teacher teacher = (Teacher) o;
 
-        if (idEnseignant != that.idEnseignant) return false;
+        if (teacherId != teacher.teacherId) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return idEnseignant;
+        return teacherId;
     }
 }

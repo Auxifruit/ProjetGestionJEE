@@ -3,8 +3,6 @@ package com.example.projetjee.controller;
 import com.example.projetjee.model.dao.CourseDAO;
 import com.example.projetjee.model.dao.LessonDAO;
 import com.example.projetjee.model.dao.TeacherDAO;
-import com.example.projetjee.model.entities.Cours;
-import com.example.projetjee.model.entities.Enseignant;
 import com.example.projetjee.util.DateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -1,7 +1,6 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.SubjectDAO;
-import com.example.projetjee.model.entities.Matiere;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

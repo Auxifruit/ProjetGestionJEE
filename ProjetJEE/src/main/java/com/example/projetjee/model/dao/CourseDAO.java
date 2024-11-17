@@ -1,6 +1,5 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Cours;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;

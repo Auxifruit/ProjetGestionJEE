@@ -86,10 +86,13 @@
   <div class="subject-buttons">
     <%
       List<String> disciplines = (List<String>) request.getAttribute("disciplines");
-      if (disciplines != null) {
+      if (disciplines != null && !disciplines.isEmpty()) {
         for (String discipline : disciplines) {
     %>
-    <button class="subject-button"><%= discipline %></button>
+    <button type="button" class="subject-button"
+            onclick="selectDiscipline('<%= discipline %>')">
+      <%= discipline %>
+    </button>
     <%
       }
     } else {
@@ -101,18 +104,31 @@
   <!-- classes -->
   <div class="class-buttons">
     <%
-      List<String> classNames = (List<String>) request.getAttribute("classes");
-      if (classNames != null && !classNames.isEmpty()) {
-        for (String className : classNames) {
+      List<String> classes = (List<String>) request.getAttribute("classes");
+      if (classes != null && !classes.isEmpty()) {
+        for (String className : classes) {
     %>
-    <button class="class-button"><%= className %></button>
+    <button type="button" class="class-button"
+            onclick="selectClass('<%= className %>')">
+      <%= className %>
+    </button>
     <%
       }
     } else {
     %>
     <p>Pas de classe.</p>
-    <% } %>
+    <%
+      }
+    %>
   </div>
+
+  <form action="/list-student-entry-note-servlet" method="POST" id="criteria-form">
+    <input type="hidden" name="discipline" id="selected-discipline" value="">
+    <input type="hidden" name="class" id="selected-class" value="">
+    <button type="submit" id="submit-button">OK</button>
+  </form>
+
+  <hr>
 
   <!-- formulaire d'ajout de note -->
   <div class="form-section">

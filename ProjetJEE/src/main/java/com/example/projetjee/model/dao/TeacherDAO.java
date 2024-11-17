@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Enseignant;
+import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -11,8 +11,8 @@ public class TeacherDAO {
     private static final String TEACHER_TABLE = "enseignant";
     private static final String TEACHER_ID = "idEnseignant";
 
-    public static List<Enseignant> getAllTeachers() {
-        List<Enseignant> teacherList = new ArrayList<>();
+    public static List<Teacher> getAllTeachers() {
+        List<Teacher> teacherList = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -21,8 +21,8 @@ public class TeacherDAO {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                Enseignant teacher = new Enseignant();
-                teacher.setIdEnseignant(resultSet.getInt(TEACHER_ID));
+                Teacher teacher = new Teacher();
+                teacher.setTeacherId(resultSet.getInt(TEACHER_ID));
 
                 teacherList.add(teacher);
             }
@@ -68,8 +68,9 @@ public class TeacherDAO {
                 "JOIN Lesson ON Course.courseId = Lesson.courseId " +
                 "JOIN Teacher ON Lesson.teacherId = Teacher.teacherId " +
                 "WHERE Teacher.teacherId = ?"; // TeacherID is the parameter of the prepared statement
-        try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, teacherID);
 
@@ -94,18 +95,22 @@ public class TeacherDAO {
                 "JOIN Class ON LessonClass.classId = Class.classId " +
                 "WHERE Lesson.teacherId = ?";  // TeacherID is the parameter of the prepared statement
 
-        try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setInt(1, teacherID);
 
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                classList.add(resultSet.getString("className"));
+                String className = resultSet.getString("className");
+                System.out.println("Class found: " + className); // Logs
+                classList.add(className);
             }
 
         } catch (SQLException e) {
+            System.out.println("Erreur recuperation classes" + e.getMessage()); // logs
             e.printStackTrace();
         }
 

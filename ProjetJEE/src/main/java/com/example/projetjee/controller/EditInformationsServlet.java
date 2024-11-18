@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @WebServlet("/editInformations")
-public class editInformationsServlet extends HttpServlet {
+public class EditInformationsServlet extends HttpServlet {
     private static final String USER_EMAIL = "email";
     private static final String USER_LASTNAME = "nom";
     private static final String USER_FIRSTNAME = "prenom";

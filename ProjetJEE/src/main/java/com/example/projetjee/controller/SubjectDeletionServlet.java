@@ -1,7 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.SubjectDAO;
-import com.example.projetjee.model.entities.Matiere;
+import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,26 +13,19 @@ import java.util.List;
 
 @WebServlet(name = "subjectDeletionServlet", value = "/subjectDeletion-servlet")
 public class SubjectDeletionServlet extends HttpServlet {
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Matiere> subjectList = SubjectDAO.getAllSubject();
-
-        request.setAttribute("subjects", subjectList);
-
-        try {
-            request.getRequestDispatcher("WEB-INF/jsp/pages/subjectDeletion.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String subjectIdString = request.getParameter("subjectIdToDelete");
+        String subjectIdString = request.getParameter("subjectId");
 
         if(subjectIdString == null || subjectIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une matière.");
-            doGet(request, response);
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
             return;
         }
 
@@ -40,19 +33,17 @@ public class SubjectDeletionServlet extends HttpServlet {
 
         if(SubjectDAO.isSubjectInTable(SubjectDAO.getSubjectNameById(subjectId)) == false) {
             request.setAttribute("erreur", "Erreur : La matière n'existe pas.");
-            doGet(request, response);
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
             return;
         }
 
         if(SubjectDAO.deleteSubjectFromTable(subjectId) == true) {
-            doGet(request, response);
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de la suppression de la matière.");
-            doGet(request, response);
+            request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
 
     }
-
-
 }

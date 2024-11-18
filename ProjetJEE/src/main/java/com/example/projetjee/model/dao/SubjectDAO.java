@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Matiere;
+import com.example.projetjee.model.entities.Subjects;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectDAO {
-    private static final String SUBJECT_TABLE = "matiere";
-    private static final String SUBJECT_ID = "idMatiere";
-    private static final String SUBJECT_NAME = "nomMatiere";
+    private static final String SUBJECT_TABLE = "Subjects";
+    private static final String SUBJECT_ID = "subjectId";
+    private static final String SUBJECT_NAME = "subjectName";
 
-    public static List<Matiere> getAllSubject() {
-        List<Matiere> subjects = new ArrayList<>();
+    public static List<Subjects> getAllSubject() {
+        List<Subjects> subjects = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -23,9 +23,9 @@ public class SubjectDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Matiere subject = new Matiere();
-                subject.setIdMatiere(resultSet.getInt(SUBJECT_ID));
-                subject.setNomMatiere(resultSet.getString(SUBJECT_NAME));
+                Subjects subject = new Subjects();
+                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
+                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
 
                 subjects.add(subject);
             }
@@ -33,6 +33,30 @@ public class SubjectDAO {
             e.printStackTrace();
         }
         return subjects;
+    }
+
+    public static Subjects getSubject(int subjectId) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT * FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, subjectId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Subjects subject = new Subjects();
+
+            if (resultSet.next()) {
+                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
+                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
+            }
+            return subject;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static boolean addSubjectInTable(String subjectName) {

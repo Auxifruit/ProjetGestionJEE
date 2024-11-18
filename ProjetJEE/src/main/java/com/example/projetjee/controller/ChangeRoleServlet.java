@@ -1,7 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.model.entities.Utilisateur;
+import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +17,7 @@ public class ChangeRoleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         String roleFilter = request.getParameter("roleFilter");
-        List<Utilisateur> usersList = UserDAO.getAllUsers(roleFilter);
+        List<Users> usersList = UserDAO.getAllUsers(roleFilter);
 
         request.setAttribute("users", usersList);
 
@@ -34,14 +34,14 @@ public class ChangeRoleServlet extends HttpServlet {
         String userParam = request.getParameter("user");
 
         if (userParam == null || userParam.isEmpty()) {
-            request.setAttribute("erreur", "Erreur : Veuillez choisir un utilisateur.");
+            request.setAttribute("erreur", "Erreur : Veuillez choisir un Users.");
             doGet(request, response);
         }
 
         int userId = Integer.parseInt(userParam);
 
         if (newRoleID == UserDAO.getRoleIdByUserID(userId)) {
-            request.setAttribute("erreur", "Erreur : L'utilisateur a déjà ce rôle.");
+            request.setAttribute("erreur", "Erreur : L'Users a déjà ce rôle.");
             doGet(request, response);
         }
 

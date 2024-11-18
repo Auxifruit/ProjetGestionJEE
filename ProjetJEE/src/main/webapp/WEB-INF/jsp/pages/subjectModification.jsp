@@ -1,4 +1,4 @@
-<%@ page import="com.example.projetjee.model.entities.Matiere" %>
+<%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -14,34 +14,23 @@
 <body>
 <h1>Modification d'une matière</h1>
 <%
-    List<Matiere> subjectList = (List<Matiere>) request.getAttribute("subjects");
+    Subjects subject = (Subjects) request.getAttribute("subject");
 
-    if (subjectList == null || subjectList.isEmpty()) {
+    if (subject == null) {
 %>
-<p>Il n'y a pas encore de matière</p>
+<p>La matière n'existe pas</p>
 <%
 } else {
 %>
-<h3>Matière existante : </h3>
+<h3>Ancienne information</h3>
+<p>Ancien nom de la matière : <%= subject.getSubjectName() %></p>
 <form action="subjectModification-servlet" method="post">
-<table border="1">
-    <th>Nom de la matière</th>
-    <th>Selection</th>
-    <%
-        for (Matiere subject : subjectList) {
-    %>
-    <tr>
-        <td><%= subject.getNomMatiere() %></td>
-        <td><input type="radio" name="subectIdToModify" value="<%= subject.getIdMatiere()%>"></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-</br>
-<input type="text" name="subjectNewName" required>
-</br></br>
-<button type="submit">Valider</button>
+    <label>Nouveau nom de la matière : </label>
+    <input type="text" name="subjectNewName" required>
+    <input name="subjectId" value="<%= subject.getSubjectId() %>" style="visibility: hidden">
+
+    </br></br>
+    <button type="submit">Modifier</button>
 </form>
 <%
     }

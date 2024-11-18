@@ -10,7 +10,8 @@
 <%@ page import="com.example.projetjee.model.entities.Enseignant" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.entities.Cours" %>
-<%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Seance" %>
+<%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <br>
 <head>
     <title>Création séance</title>
@@ -25,14 +26,48 @@
 <%
 } else {
 %>
-<form action="lessonCreation-servlet" method="post">
+<%
+  List<Seance> lessonList = (List<Seance>) request.getAttribute("lessons");
+  if (lessonList == null || lessonList.isEmpty()) {
+%>
+<h2>Pas de séance pour l'instant</h2>
+<%
+} else {
+%>
 <h1>Création d'une séance</h1>
+<label>Séance existante :</label>
+</br>
+<table border="1">
+  <tr>
+    <th>Nom du cours</th>
+    <th>Nom et prénom du professeur</th>
+    <th>Date de début</th>
+    <th>Date de fin</th>
+  </tr>
+  <%
+    for (Seance lesson : lessonList) {
+  %>
+  <tr>
+    <td><%= CourseDAO.getCourseName(lesson.getIdCours()) %></td>
+    <td><%= UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></td>
+    <td><%= lesson.getDateDebutSeance() %></td>
+    <td><%= lesson.getDateFinSeance() %></td>
+  </tr>
+  <%
+    }
+  %>
+</table>
+</br>
+<%
+  }
+%>
+<form action="lessonCreation-servlet" method="post">
 <label>Choix du cours : </label>
 <select name="course">
   <%
     for (Cours course : coursesList) {
   %>
-  <option value=<%= course.getIdCours() %>><%= course.getNomCours() + " | " + SubjectDAO.getSubjectNameById(course.getIdMatiere()) %></option>
+  <option value=<%= course.getIdCours() %>><%= course.getNomCours()%></option>
   <%
     }
   %>

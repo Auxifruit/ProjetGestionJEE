@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AdminDAO {
-    private static final String ADMIN_TABLE = "administrateur";
-    private static final String ADMIN_ID = "idAdministrateur";
+    private static final String ADMIN_TABLE = "administrator";
+    private static final String ADMIN_ID = "administratorId";
 
     public static void deleteAdminById(int adminID) {
         try {

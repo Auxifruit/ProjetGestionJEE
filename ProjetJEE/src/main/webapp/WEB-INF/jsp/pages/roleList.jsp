@@ -7,21 +7,21 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Utilisateur" %>
+<%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <html>
 <head>
-    <title>Liste utilisateurs</title>
+    <title>Liste Userss</title>
 </head>
 <body>
-<h1>List des utilisateurs</h1>
+<h1>List des Userss</h1>
 
 <%
-    List<Utilisateur> userList = (List<Utilisateur>) request.getAttribute("users");
+    List<Users> userList = (List<Users>) request.getAttribute("users");
 
     if(userList == null || userList.isEmpty()) {
 %>
-<h2>Pas d'utilisateurs</h2>
+<h2>Pas d'Userss</h2>
 <%
 } else {
 %>
@@ -39,28 +39,28 @@
 <form action="changeRole-servlet" method="post">
 <table border="1px">
     <tr>
-        <th>Id utilisateur</th>
-        <th>Nom utilisateur</th>
-        <th>Prenom utilisateur</th>
-        <th>Email utilisateur</th>
-        <th>Rôle utilisateur</th>
+        <th>Id Users</th>
+        <th>Nom Users</th>
+        <th>Prenom Users</th>
+        <th>Email Users</th>
+        <th>Rôle Users</th>
         <th>Selection</th>
     </tr>
     <%
-        for (Utilisateur user : userList) {
+        for (Users user : userList) {
     %>
     <tr>
-        <td><%= user.getIdUtilisateur() %>
+        <td><%= user.getUserId() %>
         </td>
-        <td><%= user.getNomUtilisateur() %>
+        <td><%= user.getUserLastName() %>
         </td>
-        <td><%= user.getPrenomUtilisateur() %>
+        <td><%= user.getUserName() %>
         </td>
-        <td><%= user.getEmailUtilisateur() %>
+        <td><%= user.getUserEmail() %>
         </td>
-        <td><%= RoleDAO.getRoleNameById(user.getIdRole()) %>
+        <td><%= RoleDAO.getRoleNameById(user.getRoleId()) %>
         </td>
-        <td><input type="radio" name="user" value="<%= user.getIdUtilisateur() %>" required></td>
+        <td><input type="radio" name="user" value="<%= user.getUserId() %>" required></td>
     </tr>
     <%
         }

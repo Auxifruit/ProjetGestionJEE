@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Etudiant;
+import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
-    private static final String STUDENT_TABLE = "etudiant";
-    private static final String STUDENT_ID = "idEtudiant";
-    private static final String CLASS_ID = "idClasse";
+    private static final String STUDENT_TABLE = "student";
+    private static final String STUDENT_ID = "studentId";
+    private static final String CLASS_ID = "classId";
 
-    public List<Etudiant> getAllStudents() {
-        List<Etudiant> students = new ArrayList<>();
+    public List<Student> getAllStudents() {
+        List<Student> students = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -23,7 +23,7 @@ public class StudentDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Etudiant student = new Etudiant();
+                Student student = new Student();
                 // Add more fields as per your table structure
                 students.add(student);
             }

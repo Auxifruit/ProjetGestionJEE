@@ -7,10 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Enseignant" %>
+<%@ page import="com.example.projetjee.model.entities.Teacher" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Cours" %>
-<%@ page import="com.example.projetjee.model.entities.Seance" %>
+<%@ page import="com.example.projetjee.model.entities.Course" %>
+<%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <br>
 <head>
@@ -19,7 +19,7 @@
 <body>
 <h1>Modification d'une séance</h1>
 <%
-  Seance lesson = (Seance) request.getAttribute("lesson");
+  Lesson lesson = (Lesson) request.getAttribute("lesson");
 
   if (lesson == null) {
 %>
@@ -28,51 +28,51 @@
 } else {
 %>
 <h3>Anciennes informations :</h3>
-<p>Ancien cours :
+<p>Ancien Course :
 <%
-  if(lesson.getIdCours() == null || lesson.getIdCours() <= 0) {
+  if(lesson.getCourseId() == null || lesson.getCourseId() <= 0) {
 %>
-Il n'y a pas de cours associé à la séance</p>
+Il n'y a pas de Course associé à la séance</p>
 <%
   } else {
 %>
-<%= CourseDAO.getCourseName(lesson.getIdCours()) %></p>
+<%= CourseDAO.getCourseName(lesson.getCourseId()) %></p>
 <%
   }
 %>
-<p>Ancien Enseignant :
+<p>Ancien Teacher :
 <%
-  if(lesson.getIdEnseignant() == null || lesson.getIdEnseignant() <= 0) {
+  if(lesson.getTeacherId() == null || lesson.getTeacherId() <= 0) {
 %>
-Il n'y a pas d'enseignant associé à la séance</p>
+Il n'y a pas d'Teacher associé à la séance</p>
 <%
 } else {
 %>
-<%= " " + UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></p>
+<%= " " + UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></p>
 <%
   }
 %>
-<p>Ancienne date de début : <%= lesson.getDateDebutSeance() %></p>
-<p>Ancienne date de fin : <%= lesson.getDateFinSeance() %></p>
+<p>Ancienne date de début : <%= lesson.getLessonStartDate() %></p>
+<p>Ancienne date de fin : <%= lesson.getLessonEndDate() %></p>
 </br>
 <form action="lessonModification-servlet" method="post">
-<label>Choix du nouveau cours : </label>
+<label>Choix du nouveau Course : </label>
   <%
-    List<Cours> coursesList = (List<Cours>) request.getAttribute("courses");
+    List<Course> CourseesList = (List<Course>) request.getAttribute("Coursees");
 
-    if (coursesList == null || coursesList.isEmpty()) {
+    if (CourseesList == null || CourseesList.isEmpty()) {
   %>
   <h3>Pas de séacence à selectionner</h3>
   <%
     }
     else {
   %>
-  <select name="newCourseId">
-    <option value="">Ne pas modifier le cours</option>
+  <select name="newCourseeId">
+    <option value="">Ne pas modifier le Course</option>
   <%
-      for (Cours course : coursesList) {
+      for (Course Coursee : CourseesList) {
   %>
-    <option value=<%= course.getIdCours() %>><%= course.getNomCours()%></option>
+    <option value=<%= Coursee.getCourseId() %>><%= Coursee.getCourseName()%></option>
   <%
       }
   %>
@@ -89,7 +89,7 @@ Il n'y a pas d'enseignant associé à la séance</p>
 <input name="newEndDate" type="datetime-local"/>
 </br></br>
 <%
-  List<Enseignant> teacherList = (List<Enseignant>) request.getAttribute("teachers");
+  List<Teacher> teacherList = (List<Teacher>) request.getAttribute("teachers");
 
   if (teacherList == null || teacherList.isEmpty()) {
 %>
@@ -97,23 +97,23 @@ Il n'y a pas d'enseignant associé à la séance</p>
 <%
 } else {
 %>
-<label>Choix du enseignant : </label>
+<label>Choix du Teacher : </label>
 <select name="newTeacherId">
-  <option value="">Ne pas modifier l'enseignant</option>
+  <option value="">Ne pas modifier l'Teacher</option>
   <%
-    for (Enseignant teacher : teacherList) {
-      String teacherLastName = UserDAO.getLastNameById(teacher.getIdEnseignant());
-      String teacherName = UserDAO.getNameById(teacher.getIdEnseignant());
+    for (Teacher teacher : teacherList) {
+      String teacherLastName = UserDAO.getLastNameById(teacher.getTeacherId());
+      String teacherName = UserDAO.getNameById(teacher.getTeacherId());
 
       if(teacherLastName != null || teacherName != null) {
   %>
-  <option value=<%= teacher.getIdEnseignant() %>><%= teacherLastName + " " + teacherName %></option>
+  <option value=<%= teacher.getTeacherId() %>><%= teacherLastName + " " + teacherName %></option>
   <%
       }
     }
   %>
 </select>
-<input name="lessonId" value="<%= lesson.getIdSeance() %>" style="visibility: hidden">
+<input name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
 </br></br>
 <button type="submit">Valider</button>
 </form>

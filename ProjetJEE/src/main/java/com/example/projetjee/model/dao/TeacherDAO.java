@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TeacherDAO {
     private static final String TEACHER_TABLE = "teacher";
-    private static final String TEACHER_ID = "idTeacher";
+    private static final String TEACHER_ID = "teacherId";
 
     public static List<Teacher> getAllTeachers() {
         List<Teacher> teacherList = new ArrayList<>();

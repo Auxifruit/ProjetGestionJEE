@@ -7,10 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Enseignant" %>
+<%@ page import="com.example.projetjee.model.entities.Teacher" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Cours" %>
-<%@ page import="com.example.projetjee.model.entities.Seance" %>
+<%@ page import="com.example.projetjee.model.entities.Course" %>
+<%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <br>
 <head>
@@ -18,7 +18,7 @@
 </head>
 <body>
 <%
-  List<Cours> coursesList = (List<Cours>) request.getAttribute("courses");
+  List<Course> coursesList = (List<Course>) request.getAttribute("courses");
 
   if (coursesList == null || coursesList.isEmpty()) {
 %>
@@ -27,7 +27,7 @@
 } else {
 %>
 <%
-  List<Seance> lessonList = (List<Seance>) request.getAttribute("lessons");
+  List<Lesson> lessonList = (List<Lesson>) request.getAttribute("lessons");
   if (lessonList == null || lessonList.isEmpty()) {
 %>
 <h2>Pas de séance pour l'instant</h2>
@@ -45,13 +45,13 @@
     <th>Date de fin</th>
   </tr>
   <%
-    for (Seance lesson : lessonList) {
+    for (Lesson lesson : lessonList) {
   %>
   <tr>
-    <td><%= CourseDAO.getCourseName(lesson.getIdCours()) %></td>
-    <td><%= UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></td>
-    <td><%= lesson.getDateDebutSeance() %></td>
-    <td><%= lesson.getDateFinSeance() %></td>
+    <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
+    <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+    <td><%= lesson.getLessonStartDate() %></td>
+    <td><%= lesson.getLessonEndDate() %></td>
   </tr>
   <%
     }
@@ -65,9 +65,9 @@
 <label>Choix du cours : </label>
 <select name="course">
   <%
-    for (Cours course : coursesList) {
+    for (Course course : coursesList) {
   %>
-  <option value=<%= course.getIdCours() %>><%= course.getNomCours()%></option>
+  <option value=<%= course.getCourseId() %>><%= course.getCourseName()%></option>
   <%
     }
   %>
@@ -81,7 +81,7 @@
 <input name="endDate" type="datetime-local" required/>
 </br></br>
 <%
-  List<Enseignant> teacherList = (List<Enseignant>) request.getAttribute("teachers");
+  List<Teacher> teacherList = (List<Teacher>) request.getAttribute("teachers");
 
   if (teacherList == null || teacherList.isEmpty()) {
 %>
@@ -92,13 +92,13 @@
 <label>Choix du professeur : </label>
 <select name="teacher">
   <%
-    for (Enseignant teacher : teacherList) {
-      String teacherLastName = UserDAO.getLastNameById(teacher.getIdEnseignant());
-      String teacherName = UserDAO.getNameById(teacher.getIdEnseignant());
+    for (Teacher teacher : teacherList) {
+      String teacherLastName = UserDAO.getLastNameById(teacher.getTeacherId());
+      String teacherName = UserDAO.getNameById(teacher.getTeacherId());
 
       if(teacherLastName != null || teacherName != null) {
   %>
-  <option value=<%= teacher.getIdEnseignant() %>><%= teacherLastName + " " + teacherName %></option>
+  <option value=<%= teacher.getTeacherId() %>><%= teacherLastName + " " + teacherName %></option>
   <%
       }
     }

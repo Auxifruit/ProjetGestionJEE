@@ -1,6 +1,6 @@
-<%@ page import="com.example.projetjee.model.entities.Matiere" %>
+<%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Cours" %>
+<%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -16,7 +16,7 @@
 <body>
 <h1>Suppression d'un cours</h1>
 <%
-    List<Cours> coursList = (List<Cours>) request.getAttribute("courses");
+    List<Course> coursList = (List<Course>) request.getAttribute("courses");
 
     if (coursList == null || coursList.isEmpty()) {
 %>
@@ -31,12 +31,12 @@
     <th>Nom de la matière</th>
     <th>Selection</th>
     <%
-        for (Cours course : coursList) {
+        for (Course course : coursList) {
     %>
     <tr>
-        <td><%= course.getNomCours() %></td>
-        <td><%= SubjectDAO.getSubjectNameById(course.getIdMatiere()) %></td>
-        <td><input type="radio" name="courseId" value="<%= course.getIdCours() %>" required></td>
+        <td><%= course.getCourseName() %></td>
+        <td><%= SubjectDAO.getSubjectNameById(course.getSubjectId()) %></td>
+        <td><input type="radio" name="courseId" value="<%= course.getCourseId() %>" required></td>
     </tr>
     <%
         }

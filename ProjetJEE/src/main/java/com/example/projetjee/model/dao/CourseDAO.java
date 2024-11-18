@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDAO {
-    private static final String COURSE_TABLE = "cours";
-    private static final String COURSE_ID = "idCours";
-    private static final String COURSE_NAME = "nomCours";
-    private static final String COURSE_SUBJECT_ID = "idMatiere";
+    private static final String COURSE_TABLE = "course";
+    private static final String COURSE_ID = "courseId";
+    private static final String COURSE_NAME = "courseName";
+    private static final String COURSE_SUBJECT_ID = "subjectId";
 
     public static List<Course> getAllCourses() {
         List<Course> courses = new ArrayList<>();

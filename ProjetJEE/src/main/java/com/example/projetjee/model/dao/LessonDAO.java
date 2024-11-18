@@ -10,11 +10,11 @@ import java.util.List;
 
 public class LessonDAO {
     private static final String LESSON_TABLE = "Lesson";
-    private static final String LESSON_ID = "idLesson";
-    private static final String LESSON_START_DATE = "dateDebutLesson";
-    private static final String LESSON_END_DATE = "dateFinLesson";
-    private static final String LESSON_COURSE_ID = "idCours";
-    private static final String LESSON_TEACHER_ID = "idEnseignant";
+    private static final String LESSON_ID = "lessonId";
+    private static final String LESSON_START_DATE = "lessonStartDate";
+    private static final String LESSON_END_DATE = "lessonEndDate";
+    private static final String LESSON_COURSE_ID = "courseId";
+    private static final String LESSON_TEACHER_ID = "teacherId";
 
     public static List<Lesson> getAllLessons() {
         List<Lesson> lessons = new ArrayList<>();

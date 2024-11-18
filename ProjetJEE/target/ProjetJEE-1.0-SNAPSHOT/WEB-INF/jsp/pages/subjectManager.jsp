@@ -1,4 +1,4 @@
-<%@ page import="com.example.projetjee.model.entities.Matiere" %>
+<%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -14,7 +14,7 @@
 <body>
 <h1>Liste des matières</h1>
 <%
-    List<Matiere> subjectList = (List<Matiere>) request.getAttribute("subjects");
+    List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
 
     if (subjectList == null || subjectList.isEmpty()) {
 %>
@@ -27,11 +27,11 @@
         <th>Nom de la matière</th>
         <th>Selection</th>
         <%
-            for (Matiere subject : subjectList) {
+            for (Subjects subject : subjectList) {
         %>
         <tr>
-            <td><%= subject.getNomMatiere() %></td>
-            <td><input type="radio" name="subjectId" value="<%= subject.getIdMatiere()%>" required></td>
+            <td><%= subject.getSubjectName() %></td>
+            <td><input type="radio" name="subjectId" value="<%= subject.getSubjectId()%>" required></td>
         </tr>
         <%
             }

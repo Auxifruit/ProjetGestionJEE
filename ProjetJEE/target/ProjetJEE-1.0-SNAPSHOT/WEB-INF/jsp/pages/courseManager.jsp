@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Cours" %>
+<%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -15,7 +15,7 @@
 <body>
 <h1>Liste des cours</h1>
 <%
-    List<Cours> courseList = (List<Cours>) request.getAttribute("courses");
+    List<Course> courseList = (List<Course>) request.getAttribute("courses");
 
     if (courseList == null || courseList.isEmpty()) {
 %>
@@ -29,13 +29,13 @@
         <th>Nom de la matière du cours</th>
         <th>Selection</th>
         <%
-            for (Cours course : courseList) {
+            for (Course course : courseList) {
         %>
         <tr>
-            <td><%= course.getNomCours() %></td>
+            <td><%= course.getCourseName() %></td>
             <td>
                 <%
-                    String subjectName = SubjectDAO.getSubjectNameById(course.getIdMatiere());
+                    String subjectName = SubjectDAO.getSubjectNameById(course.getSubjectId());
                     if(subjectName == null || subjectName.isEmpty()) {
                 %>
                         <p>Pas de matière</p>
@@ -43,12 +43,12 @@
                     }
                     else {
                 %>
-                        <%= SubjectDAO.getSubjectNameById(course.getIdMatiere())%>
+                        <%= SubjectDAO.getSubjectNameById(course.getSubjectId())%>
                 <%
                     }
                 %>
             </td>
-            <td><input type="radio" name="courseId" value="<%= course.getIdCours()%>" required></td>
+            <td><input type="radio" name="courseId" value="<%= course.getCourseId()%>" required></td>
         </tr>
         <%
             }

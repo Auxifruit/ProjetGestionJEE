@@ -32,7 +32,7 @@ public class UserDAO {
             String query = "SELECT * FROM " + USER_TABLE;
 
             if (roleFilter != null && roleFilter != "") {
-                query += " WHERE idRole = " + roleFilter;
+                query += " WHERE " + ID_ROLE + " = " + roleFilter;
             }
 
             ResultSet resultSet = statement.executeQuery(query);
@@ -162,7 +162,7 @@ public class UserDAO {
 
             switch (newRoleID) {
                 case 1:
-                    StudentDAO.addStudentInTable(userID, null);
+                    StudentDAO.addStudentInTable(userID, null, null);
                     break;
                 case 2:
                     TeacherDAO.addTeacherInTable(userID);

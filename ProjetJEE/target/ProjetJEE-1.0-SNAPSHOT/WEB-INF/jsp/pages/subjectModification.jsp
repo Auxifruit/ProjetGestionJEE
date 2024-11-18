@@ -1,4 +1,4 @@
-<%@ page import="com.example.projetjee.model.entities.Matiere" %>
+<%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -14,7 +14,7 @@
 <body>
 <h1>Modification d'une matière</h1>
 <%
-    Matiere subject = (Matiere) request.getAttribute("subject");
+    Subjects subject = (Subjects) request.getAttribute("subject");
 
     if (subject == null) {
 %>
@@ -23,11 +23,11 @@
 } else {
 %>
 <h3>Ancienne information</h3>
-<p>Ancien nom de la matière : <%= subject.getNomMatiere() %></p>
+<p>Ancien nom de la matière : <%= subject.getSubjectName() %></p>
 <form action="subjectModification-servlet" method="post">
     <label>Nouveau nom de la matière : </label>
     <input type="text" name="subjectNewName" required>
-    <input name="subjectId" value="<%= subject.getIdMatiere() %>" style="visibility: hidden">
+    <input name="subjectId" value="<%= subject.getSubjectId() %>" style="visibility: hidden">
 
     </br></br>
     <button type="submit">Modifier</button>

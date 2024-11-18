@@ -1,9 +1,9 @@
-<%@ page import="com.example.projetjee.model.entities.Seance" %>
-<%@ page import="com.example.projetjee.model.entities.Classe" %>
+<%@ page import="com.example.projetjee.model.entities.Lesson" %>
+<%@ page import="com.example.projetjee.model.entities.Classes" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
-<%@ page import="com.example.projetjee.model.dao.LessonClasseDAO" %>
+<%@ page import="com.example.projetjee.model.dao.LessonClassesDAO" %>
 <%--
 Created by IntelliJ IDEA.
   User: CYTech Student
@@ -17,9 +17,9 @@ Created by IntelliJ IDEA.
     <title>Assigner des cours</title>
 </head>
 <body>
-<h1>Assignation des séances à des classes</h1>
+<h1>Assignation des séances à des Classs</h1>
 <%
-    Seance lesson = (Seance) request.getAttribute("lesson");
+    Lesson lesson = (Lesson) request.getAttribute("lesson");
 
     if (lesson == null) {
 %>
@@ -30,91 +30,91 @@ Created by IntelliJ IDEA.
 <h3>Informations de la séance :</h3>
 <p>Cours :
     <%
-        if(lesson.getIdCours() == null || lesson.getIdCours() <= 0) {
+        if(lesson.getCourseId() == null || lesson.getCourseId() <= 0) {
     %>
     Il n'y a pas de cours associé à la séance</p>
 <%
 } else {
 %>
-    <%= CourseDAO.getCourseName(lesson.getIdCours()) %></p>
+    <%= CourseDAO.getCourseName(lesson.getCourseId()) %></p>
 <%
     }
 %>
 <p>Enseignant :
     <%
-        if(lesson.getIdEnseignant() == null || lesson.getIdEnseignant() <= 0) {
+        if(lesson.getTeacherId() == null || lesson.getTeacherId() <= 0) {
     %>
     Il n'y a pas d'enseignant associé à la séance</p>
 <%
 } else {
 %>
-    <%= " " + UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></p>
+    <%= " " + UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></p>
 <%
     }
 %>
-<p>Date de début : <%= lesson.getDateDebutSeance() %></p>
-<p>Date de fin : <%= lesson.getDateFinSeance() %></p>
+<p>Date de début : <%= lesson.getLessonStartDate() %></p>
+<p>Date de fin : <%= lesson.getLessonEndDate() %></p>
 </br>
 <%
-    List<Classe> availableClasse = (List<Classe>) request.getAttribute("availableClasses");
+    List<Classes> availableClass = (List<Classes>) request.getAttribute("availableClass");
 
-    if(availableClasse == null || availableClasse.isEmpty()) {
+    if(availableClass == null || availableClass.isEmpty()) {
 %>
 <p>Aucune classe n'est disponible pour la séance</p>
 <%
     } else {
 %>
 <h3>Classe(s) disponible(s) : </h3>
-<form action="lessonClassesAssignation-servlet" method="post">
+<form action="lessonClasssAssignation-servlet" method="post">
 <table border="1">
     <tr>
         <th>Nom de la classe</th>
         <th>Selection</th>
     </tr>
     <%
-        for(Classe classe : availableClasse) {
+        for(Classes classes : availableClass) {
     %>
     <tr>
-        <td><%= classe.getNomClasse() %></td>
-        <td><input type="radio" name="classId" value="<%= classe.getIdClasse() %>"></td>
+        <td><%= classes.getClassName() %></td>
+        <td><input type="radio" name="classId" value="<%= classes.getClassName() %>"></td>
     </tr>
     <%
         }
     %>
 </table>
-    <input type="text" name="lessonId" value="<%= lesson.getIdSeance() %>" style="visibility: hidden">
+    <input type="text" name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
     </br>
     <button type="submit">Assigner</button>
 </form>
 <%
     }
 
-    List<Classe> participatingClass = LessonClasseDAO.getLessonClasses(lesson.getIdSeance());
+    List<Classes> participatingClass = LessonClassesDAO.getLessonClasses(lesson.getLessonId());
     if(participatingClass == null || participatingClass.isEmpty()) {
 %>
-<p>Aucune classe ne participe à la séance</p>
+<p>Aucune Class ne participe à la séance</p>
 <%
     } else {
 %>
-<h3>Classe(s) participantes(s) : </h3>
-<form action="lessonClassesUnassignation-servlet" method="post">
+<h3>Class(s) participantes(s) : </h3>
+<form action="lessonClasssUnassignation-servlet" method="post">
     <table border="1">
         <tr>
             <th>Nom de la classe</th>
             <th>Selection</th>
         </tr>
         <%
-            for(Classe classe : participatingClass) {
+            for(Classes classes : participatingClass) {
         %>
         <tr>
-            <td><%= classe.getNomClasse() %></td>
-            <td><input type="radio" name="classId" value="<%= classe.getIdClasse() %>"></td>
+            <td><%= classes.getClassName() %></td>
+            <td><input type="radio" name="classId" value="<%= classes.getClassId() %>"></td>
         </tr>
         <%
             }
         %>
     </table>
-    <input type="text" name="lessonId" value="<%= lesson.getIdSeance() %>" style="visibility: hidden">
+    <input type="text" name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
     </br>
     <button type="submit">Désassigner</button>
 </form>

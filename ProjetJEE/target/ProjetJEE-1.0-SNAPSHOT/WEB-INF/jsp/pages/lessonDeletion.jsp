@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Seance" %>
+<%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <br>
 <head>
@@ -16,7 +16,7 @@
 </head>
 <body>
 <%
-  List<Seance> lessonsList = (List<Seance>) request.getAttribute("lessons");
+  List<Lesson> lessonsList = (List<Lesson>) request.getAttribute("lessons");
 
   if (lessonsList == null || lessonsList.isEmpty()) {
 %>
@@ -36,14 +36,14 @@
     <th>Selection</th>
   </tr>
   <%
-    for (Seance lesson : lessonsList) {
+    for (Lesson lesson : lessonsList) {
   %>
   <tr>
-    <td><%= CourseDAO.getCourseName(lesson.getIdCours()) %></td>
-    <td><%= UserDAO.getLastNameById(lesson.getIdEnseignant()) + " " + UserDAO.getNameById(lesson.getIdEnseignant()) %></td>
-    <td><%= lesson.getDateDebutSeance() %></td>
-    <td><%= lesson.getDateFinSeance() %></td>
-    <td><input type="radio" name="lessonId" value="<%= lesson.getIdSeance() %>"></td>
+    <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
+    <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+    <td><%= lesson.getLessonStartDate() %></td>
+    <td><%= lesson.getLessonEndDate() %></td>
+    <td><input type="radio" name="lessonId" value="<%= lesson.getLessonId() %>"></td>
   </tr>
   <%
     }

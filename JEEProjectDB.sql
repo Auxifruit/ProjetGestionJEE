@@ -9,7 +9,7 @@ DROP TABLE student;
 DROP TABLE major;
 DROP TABLE lessonClass;
 DROP TABLE lesson;
-DROP TABLE class;
+DROP TABLE classes;
 DROP TABLE course;
 DROP TABLE teacher;
 DROP TABLE subjects;
@@ -56,7 +56,7 @@ CREATE TABLE Teacher (
 );
 
 
-CREATE TABLE Class(
+CREATE TABLE Classes(
 	classId INT AUTO_INCREMENT PRIMARY KEY,
     className VARCHAR(50)
 );
@@ -68,7 +68,7 @@ CREATE TABLE Student (
     majorId INT,
     
 	FOREIGN KEY  (studentId) REFERENCES Users(userId) ON DELETE CASCADE,
-    FOREIGN KEY  (classId) REFERENCES Class(classId) ON DELETE SET NULL,
+    FOREIGN KEY  (classId) REFERENCES Classes(classId) ON DELETE SET NULL,
     FOREIGN KEY  (majorId) REFERENCES Major(majorId) ON DELETE SET NULL,
     
     PRIMARY KEY (studentId)
@@ -119,11 +119,11 @@ CREATE TABLE LessonClass (
     classId INT,
     
     FOREIGN KEY (lessonId) REFERENCES Lesson(lessonId) ON DELETE CASCADE,
-    FOREIGN KEY (classId) REFERENCES Class(classId) ON DELETE SET NULL
+    FOREIGN KEY (classId) REFERENCES Classes(classId) ON DELETE SET NULL
 );
 
 SELECT * FROM course;
-SELECT * FROM class;
+SELECT * FROM classes;
 SELECT * FROM lesson;
 SELECT * FROM lessonClass;
 
@@ -140,9 +140,9 @@ INSERT INTO PossibleRole VALUES (1, "student");
 INSERT INTO PossibleRole VALUES (2, "teacher");
 INSERT INTO PossibleRole VALUES (3, "administrator");
 
-INSERT INTO Class VALUES (1, "GSI1");
-INSERT INTO Class VALUES (2, "GSI2");
-INSERT INTO Class VALUES (3, "GSI3");
+INSERT INTO Classes VALUES (1, "GSI1");
+INSERT INTO Classes VALUES (2, "GSI2");
+INSERT INTO Classes VALUES (3, "GSI3");
 
 INSERT INTO Major VALUES (1, "GI");
 INSERT INTO Major VALUES (2, "GM");

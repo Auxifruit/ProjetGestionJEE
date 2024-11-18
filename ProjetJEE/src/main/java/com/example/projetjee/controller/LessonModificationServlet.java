@@ -3,9 +3,9 @@ package com.example.projetjee.controller;
 import com.example.projetjee.model.dao.CourseDAO;
 import com.example.projetjee.model.dao.LessonDAO;
 import com.example.projetjee.model.dao.TeacherDAO;
-import com.example.projetjee.model.entities.Cours;
-import com.example.projetjee.model.entities.Enseignant;
-import com.example.projetjee.model.entities.Seance;
+import com.example.projetjee.model.entities.Course;
+import com.example.projetjee.model.entities.Teacher;
+import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.DateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,8 +23,8 @@ public class LessonModificationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String lessonIdString = request.getParameter("lessonId");
-        List<Cours> courseList = CourseDAO.getAllCourses();
-        List<Enseignant> teacherList = TeacherDAO.getAllTeachers();
+        List<Course> courseList = CourseDAO.getAllCourses();
+        List<Teacher> teacherList = TeacherDAO.getAllTeachers();
 
         if(lessonIdString == null || lessonIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une séance.");
@@ -33,7 +33,7 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         int lessonId = Integer.parseInt(lessonIdString);
-        Seance lesson = LessonDAO.getLesson(lessonId);
+        Lesson lesson = LessonDAO.getLesson(lessonId);
 
         try {
             request.setAttribute("courses", courseList);
@@ -67,10 +67,10 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         int lessonId = Integer.parseInt(lessonIdString);
-        Seance lesson = LessonDAO.getLesson(lessonId);
+        Lesson lesson = LessonDAO.getLesson(lessonId);
 
         if(newStartDate == null || newStartDate.isEmpty()) {
-            newStartDate = lesson.getDateDebutSeance().toString();
+            newStartDate = lesson.getLessonStartDate().toString();
             newStartDate = newStartDate.split("\\.")[0].replace(" ", "T");
         }
         else {
@@ -78,7 +78,7 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         if(newEndDate == null || newEndDate.isEmpty()) {
-            newEndDate = lesson.getDateFinSeance().toString();
+            newEndDate = lesson.getLessonEndDate().toString();
             newEndDate = newEndDate.split("\\.")[0].replace(" ", "T");
         }
         else {
@@ -88,7 +88,7 @@ public class LessonModificationServlet extends HttpServlet {
         int newCourseId;
 
         if(newCourseIdString == null || newCourseIdString.isEmpty()) {
-            newCourseId = lesson.getIdCours();
+            newCourseId = lesson.getCourseId();
         }
         else {
             newCourseId = Integer.parseInt(newCourseIdString);
@@ -97,7 +97,7 @@ public class LessonModificationServlet extends HttpServlet {
         int newTeacherId;
 
         if(newTeacherIdString == null || newTeacherIdString.isEmpty()) {
-            newTeacherId = lesson.getIdEnseignant();
+            newTeacherId = lesson.getTeacherId();
         }
         else {
             newTeacherId = Integer.parseInt(newTeacherIdString);

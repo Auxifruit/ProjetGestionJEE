@@ -2,8 +2,8 @@ package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.ClasseDAO;
 import com.example.projetjee.model.dao.LessonDAO;
-import com.example.projetjee.model.entities.Classe;
-import com.example.projetjee.model.entities.Seance;
+import com.example.projetjee.model.entities.Classes;
+import com.example.projetjee.model.entities.Lesson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,7 +19,7 @@ public class LessonClassesManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         String lessonIdString = request.getParameter("lessonId");
-        List<Classe> availableClassesList;
+        List<Classes> availableClassesList;
 
         if(lessonIdString == null || lessonIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une séance.");
@@ -29,8 +29,8 @@ public class LessonClassesManagerServlet extends HttpServlet {
 
         int lessonId = Integer.parseInt(lessonIdString);
 
-        Seance lesson = LessonDAO.getLesson(lessonId);
-        availableClassesList = ClasseDAO.getAvailableClassesForLesson(lesson.getIdSeance());
+        Lesson lesson = LessonDAO.getLesson(lessonId);
+        availableClassesList = ClasseDAO.getAvailableClassesForLesson(lesson.getLessonId());
 
         request.setAttribute("lesson", lesson);
         request.setAttribute("availableClasses", availableClassesList);

@@ -1,6 +1,6 @@
-<%@ page import="com.example.projetjee.model.entities.Matiere" %>
+<%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Cours" %>
+<%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -16,8 +16,8 @@
 <body>
 <h1>Création d'un nouveau cours</h1>
 <%
-    List<Cours> coursList = (List<Cours>) request.getAttribute("courses");
-    List<Matiere> subjectList = (List<Matiere>) request.getAttribute("subjects");
+    List<Course> coursList = (List<Course>) request.getAttribute("courses");
+    List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
 
     if (coursList == null || coursList.isEmpty()) {
 %>
@@ -30,11 +30,11 @@
     <th>Nom du cours</th>
     <th>Nom de la matière</th>
     <%
-        for (Cours course : coursList) {
+        for (Course course : coursList) {
     %>
     <tr>
-        <td><%= course.getNomCours() %></td>
-        <td><%= SubjectDAO.getSubjectNameById(course.getIdMatiere()) %></td>
+        <td><%= course.getCourseName() %></td>
+        <td><%= SubjectDAO.getSubjectNameById(course.getSubjectId()) %></td>
     </tr>
     <%
         }
@@ -56,9 +56,9 @@
     <label>Choix de la matière : </label>
     <select name="courseSubjectId" required>
         <%
-            for (Matiere subject : subjectList) {
+            for (Subjects subject : subjectList) {
         %>
-        <option value="<%= subject.getIdMatiere() %>"><%= subject.getNomMatiere() %></option>
+        <option value="<%= subject.getSubjectId() %>"><%= subject.getSubjectName() %></option>
         <%
             }
         %>

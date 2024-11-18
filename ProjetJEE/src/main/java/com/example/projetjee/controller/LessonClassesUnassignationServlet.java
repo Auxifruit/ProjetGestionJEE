@@ -1,10 +1,8 @@
 package com.example.projetjee.controller;
 
-import com.example.projetjee.model.dao.ClasseDAO;
-import com.example.projetjee.model.dao.LessonClasseDAO;
-import com.example.projetjee.model.dao.LessonDAO;
-import com.example.projetjee.model.entities.Classe;
-import com.example.projetjee.model.entities.Seance;
+import com.example.projetjee.model.dao.LessonClassesDAO;
+import com.example.projetjee.model.entities.Classes;
+import com.example.projetjee.model.entities.Lesson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet(name = "lessonClassesUnassignationServlet", value = "/lessonClassesUnassignation-servlet")
 public class LessonClassesUnassignationServlet extends HttpServlet {
@@ -34,7 +31,7 @@ public class LessonClassesUnassignationServlet extends HttpServlet {
         int classeId = Integer.parseInt(classeIdString);
 
 
-        if(LessonClasseDAO.deleteLessonClassInTable(lessonId, classeId) == true) {
+        if(LessonClassesDAO.deleteLessonClassInTable(lessonId, classeId) == true) {
             request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
         }
         else {

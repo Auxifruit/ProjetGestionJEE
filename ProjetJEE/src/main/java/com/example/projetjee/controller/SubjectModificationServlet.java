@@ -1,7 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.SubjectDAO;
-import com.example.projetjee.model.entities.Matiere;
+import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,7 +24,7 @@ public class SubjectModificationServlet extends HttpServlet {
         }
 
         int subjectId = Integer.parseInt(subjectIdString);
-        Matiere subject = SubjectDAO.getSubject(subjectId);
+        Subjects subject = SubjectDAO.getSubject(subjectId);
 
         try {
             request.setAttribute("subject", subject);
@@ -59,9 +59,9 @@ public class SubjectModificationServlet extends HttpServlet {
             return;
         }
 
-        Matiere subject = SubjectDAO.getSubject(subjectId);
+        Subjects subject = SubjectDAO.getSubject(subjectId);
 
-        if(subject.getNomMatiere().equals(subjectNewName)) {
+        if(subject.getSubjectName().equals(subjectNewName)) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un nouveau différent.");
             doGet(request, response);
             return;

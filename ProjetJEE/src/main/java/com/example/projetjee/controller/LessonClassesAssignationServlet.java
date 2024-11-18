@@ -1,7 +1,6 @@
 package com.example.projetjee.controller;
 
-import com.example.projetjee.model.dao.LessonClasseDAO;
-import com.example.projetjee.model.dao.LessonDAO;
+import com.example.projetjee.model.dao.LessonClassesDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -29,13 +28,13 @@ public class LessonClassesAssignationServlet extends HttpServlet {
 
         int classeId = Integer.parseInt(classeIdString);
 
-        if(LessonClasseDAO.canClassParticipate(classeId, lessonId) == false) {
+        if(LessonClassesDAO.canClassParticipate(classeId, lessonId) == false) {
             request.setAttribute("erreur", "Erreur : La classe a une séance à ces horaires.");
             request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
             return;
         }
 
-        if(LessonClasseDAO.addLessonClassInTable(lessonId, classeId) == true) {
+        if(LessonClassesDAO.addLessonClassInTable(lessonId, classeId) == true) {
             request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
         }
         else {

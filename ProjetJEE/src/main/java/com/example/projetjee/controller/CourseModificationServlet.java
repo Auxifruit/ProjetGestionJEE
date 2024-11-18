@@ -2,8 +2,8 @@ package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.CourseDAO;
 import com.example.projetjee.model.dao.SubjectDAO;
-import com.example.projetjee.model.entities.Cours;
-import com.example.projetjee.model.entities.Matiere;
+import com.example.projetjee.model.entities.Course;
+import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +18,7 @@ public class CourseModificationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String courseIdString = request.getParameter("courseId");
-        List<Matiere> subjectList = SubjectDAO.getAllSubject();
+        List<Subjects> subjectList = SubjectDAO.getAllSubject();
 
         if(courseIdString == null || courseIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un cours.");
@@ -27,7 +27,7 @@ public class CourseModificationServlet extends HttpServlet {
         }
 
         int courseId = Integer.parseInt(courseIdString);
-        Cours course = CourseDAO.getCourses(courseId);
+        Course course = CourseDAO.getCourses(courseId);
 
         try {
             request.setAttribute("course", course);
@@ -57,16 +57,16 @@ public class CourseModificationServlet extends HttpServlet {
         }
 
         int courseId = Integer.parseInt(courseIdString);
-        Cours course = CourseDAO.getCourses(courseId);
+        Course course = CourseDAO.getCourses(courseId);
 
         if(newCourseName == null || newCourseName.isEmpty()) {
-            newCourseName = course.getNomCours();
+            newCourseName = course.getCourseName();
         }
 
         int newCourseSubjectId;
 
         if(newCourseSubjectIdString == null || newCourseSubjectIdString.isEmpty()) {
-            newCourseSubjectId = course.getIdMatiere();
+            newCourseSubjectId = course.getSubjectId();
         }
         else {
             newCourseSubjectId = Integer.parseInt(newCourseSubjectIdString);

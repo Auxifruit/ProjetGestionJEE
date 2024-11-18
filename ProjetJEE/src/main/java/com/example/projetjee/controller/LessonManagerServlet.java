@@ -1,7 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.LessonDAO;
-import com.example.projetjee.model.entities.Seance;
+import com.example.projetjee.model.entities.Lesson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import java.util.List;
 public class LessonManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Seance> lessonList = LessonDAO.getAllLessons();
+        List<Lesson> lessonList = LessonDAO.getAllLessons();
 
         request.setAttribute("lessons", lessonList);
 

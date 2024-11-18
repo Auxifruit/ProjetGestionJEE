@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Cours;
+import com.example.projetjee.model.entities.Course;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -13,8 +13,8 @@ public class CourseDAO {
     private static final String COURSE_NAME = "nomCours";
     private static final String COURSE_SUBJECT_ID = "idMatiere";
 
-    public static List<Cours> getAllCourses() {
-        List<Cours> courses = new ArrayList<>();
+    public static List<Course> getAllCourses() {
+        List<Course> courses = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -24,10 +24,10 @@ public class CourseDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Cours course = new Cours();
-                course.setIdCours(resultSet.getInt(COURSE_ID));
-                course.setNomCours(resultSet.getString(COURSE_NAME));
-                course.setIdMatiere(resultSet.getInt(COURSE_SUBJECT_ID));
+                Course course = new Course();
+                course.setCourseId(resultSet.getInt(COURSE_ID));
+                course.setCourseName(resultSet.getString(COURSE_NAME));
+                course.setSubjectId(resultSet.getInt(COURSE_SUBJECT_ID));
 
                 courses.add(course);
             }
@@ -37,7 +37,7 @@ public class CourseDAO {
         return courses;
     }
 
-    public static Cours getCourses(int courseId) {
+    public static Course getCourses(int courseId) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -48,12 +48,12 @@ public class CourseDAO {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Cours course = new Cours();
+            Course course = new Course();
 
             if (resultSet.next()) {
-                course.setIdCours(resultSet.getInt(COURSE_ID));
-                course.setNomCours(resultSet.getString(COURSE_NAME));
-                course.setIdMatiere(resultSet.getInt(COURSE_SUBJECT_ID));
+                course.setCourseId(resultSet.getInt(COURSE_ID));
+                course.setCourseName(resultSet.getString(COURSE_NAME));
+                course.setSubjectId(resultSet.getInt(COURSE_SUBJECT_ID));
             }
             return course;
         } catch (SQLException e) {

@@ -2,8 +2,8 @@ package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.CourseDAO;
 import com.example.projetjee.model.dao.SubjectDAO;
-import com.example.projetjee.model.entities.Cours;
-import com.example.projetjee.model.entities.Matiere;
+import com.example.projetjee.model.entities.Course;
+import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,8 +17,8 @@ import java.util.List;
 public class CourseCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Cours> courseList = CourseDAO.getAllCourses();
-        List<Matiere> subjectList = SubjectDAO.getAllSubject();
+        List<Course> courseList = CourseDAO.getAllCourses();
+        List<Subjects> subjectList = SubjectDAO.getAllSubject();
 
         request.setAttribute("courses", courseList);
         request.setAttribute("subjects", subjectList);

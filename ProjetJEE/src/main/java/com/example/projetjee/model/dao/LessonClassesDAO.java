@@ -1,7 +1,7 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Classe;
-import com.example.projetjee.model.entities.Seance;
+import com.example.projetjee.model.entities.Classes;
+import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.Connection;
@@ -11,13 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LessonClasseDAO {
-    private static String LESSON_CLASS_TABLE = "SeanceClasse";
-    private static String LESSON_CLASS_ID = "idSeanceClasse";
-    private static String LESSON_ID = "idSeance";
-    private static String CLASS_ID = "idClasse";
-    public static List<Classe> getLessonClasses(int lessonId) {
-        List<Classe> availableClasses = new ArrayList<>();
+public class LessonClassesDAO {
+    private static String LESSON_CLASS_TABLE = "LessonClass";
+    private static String LESSON_CLASS_ID = "lessonClassId";
+    private static String LESSON_ID = "lessonId";
+    private static String CLASS_ID = "classId";
+    public static List<Classes> getLessonClasses(int lessonId) {
+        List<Classes> availableClasses = new ArrayList<>();
 
         try {
             Connection connection = DatabaseManager.getConnection();
@@ -86,24 +86,24 @@ public class LessonClasseDAO {
         return true;
     }
 
-    public static boolean canClassParticipate(int idClasse, int idSeance) {
-        Seance lesson = LessonDAO.getLesson(idSeance);
+    public static boolean canClassParticipate(int idClasse, int idLesson) {
+        Lesson lesson = LessonDAO.getLesson(idLesson);
 
         if (lesson == null) {
             return false;
         }
 
-        String lessonStartDate = lesson.getDateDebutSeance().toString();
-        String lessonEndDate = lesson.getDateFinSeance().toString();
+        String lessonStartDate = lesson.getLessonStartDate().toString();
+        String lessonEndDate = lesson.getLessonEndDate().toString();
 
-        String query = "SELECT COUNT(*) FROM SeanceClasse sc JOIN Seance s ON sc.idSeance = s.idSeance WHERE sc.idClasse = ? AND s.idSeance != ? AND ( (s.dateDebutSeance < ? AND s.dateFinSeance > ?) OR (s.dateDebutSeance < ? AND s.dateFinSeance > ?) OR (s.dateDebutSeance >= ? AND s.dateFinSeance <= ?)); ";
+        String query = "SELECT COUNT(*) FROM LessonClasse sc JOIN Lesson s ON sc.idLesson = s.idLesson WHERE sc.idClasse = ? AND s.idLesson != ? AND ( (s.dateDebutLesson < ? AND s.dateFinLesson > ?) OR (s.dateDebutLesson < ? AND s.dateFinLesson > ?) OR (s.dateDebutLesson >= ? AND s.dateFinLesson <= ?)); ";
 
         try {
             Connection connection = DatabaseManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, idClasse);
-            preparedStatement.setInt(2, idSeance);
+            preparedStatement.setInt(2, idLesson);
             preparedStatement.setString(3, lessonEndDate);
             preparedStatement.setString(4, lessonStartDate);
             preparedStatement.setString(5, lessonEndDate);

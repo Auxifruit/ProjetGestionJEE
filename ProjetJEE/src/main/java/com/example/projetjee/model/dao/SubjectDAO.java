@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Matiere;
+import com.example.projetjee.model.entities.Subjects;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectDAO {
-    private static final String SUBJECT_TABLE = "matiere";
-    private static final String SUBJECT_ID = "idMatiere";
-    private static final String SUBJECT_NAME = "nomMatiere";
+    private static final String SUBJECT_TABLE = "Subjects";
+    private static final String SUBJECT_ID = "subjectId";
+    private static final String SUBJECT_NAME = "subjectName";
 
-    public static List<Matiere> getAllSubject() {
-        List<Matiere> subjects = new ArrayList<>();
+    public static List<Subjects> getAllSubject() {
+        List<Subjects> subjects = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -23,9 +23,9 @@ public class SubjectDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Matiere subject = new Matiere();
-                subject.setIdMatiere(resultSet.getInt(SUBJECT_ID));
-                subject.setNomMatiere(resultSet.getString(SUBJECT_NAME));
+                Subjects subject = new Subjects();
+                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
+                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
 
                 subjects.add(subject);
             }
@@ -35,7 +35,7 @@ public class SubjectDAO {
         return subjects;
     }
 
-    public static Matiere getSubject(int subjectId) {
+    public static Subjects getSubject(int subjectId) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -46,11 +46,11 @@ public class SubjectDAO {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Matiere subject = new Matiere();
+            Subjects subject = new Subjects();
 
             if (resultSet.next()) {
-                subject.setIdMatiere(resultSet.getInt(SUBJECT_ID));
-                subject.setNomMatiere(resultSet.getString(SUBJECT_NAME));
+                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
+                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
             }
             return subject;
         } catch (SQLException e) {

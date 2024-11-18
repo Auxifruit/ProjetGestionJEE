@@ -1,6 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Seance;
+import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.DatabaseManager;
 import com.example.projetjee.util.DateUtil;
 
@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LessonDAO {
-    private static final String LESSON_TABLE = "seance";
-    private static final String LESSON_ID = "idSeance";
-    private static final String LESSON_START_DATE = "dateDebutSeance";
-    private static final String LESSON_END_DATE = "dateFinSeance";
+    private static final String LESSON_TABLE = "Lesson";
+    private static final String LESSON_ID = "idLesson";
+    private static final String LESSON_START_DATE = "dateDebutLesson";
+    private static final String LESSON_END_DATE = "dateFinLesson";
     private static final String LESSON_COURSE_ID = "idCours";
     private static final String LESSON_TEACHER_ID = "idEnseignant";
 
-    public static List<Seance> getAllLessons() {
-        List<Seance> lessons = new ArrayList<>();
+    public static List<Lesson> getAllLessons() {
+        List<Lesson> lessons = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -27,13 +27,13 @@ public class LessonDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Seance lesson = new Seance();
+                Lesson lesson = new Lesson();
 
-                lesson.setIdSeance(resultSet.getInt(LESSON_ID));
-                lesson.setDateDebutSeance(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setDateFinSeance(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setIdCours(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setIdEnseignant(resultSet.getInt(LESSON_TEACHER_ID));
+                lesson.setLessonId(resultSet.getInt(LESSON_ID));
+                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
+                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
+                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
+                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
 
                 lessons.add(lesson);
             }
@@ -43,25 +43,25 @@ public class LessonDAO {
         return lessons;
     }
 
-    public static Seance getLesson(int seanceId) {
+    public static Lesson getLesson(int LessonId) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
             String query = "SELECT * FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setInt(1, seanceId);
+            preparedStatement.setInt(1, LessonId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Seance lesson = new Seance();
+            Lesson lesson = new Lesson();
 
             if (resultSet.next()) {
-                lesson.setIdSeance(resultSet.getInt(LESSON_ID));
-                lesson.setDateDebutSeance(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setDateFinSeance(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setIdCours(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setIdEnseignant(resultSet.getInt(LESSON_TEACHER_ID));
+                lesson.setLessonId(resultSet.getInt(LESSON_ID));
+                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
+                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
+                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
+                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
             }
             return lesson;
         } catch (SQLException e) {

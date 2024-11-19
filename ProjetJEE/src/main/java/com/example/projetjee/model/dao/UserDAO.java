@@ -179,10 +179,8 @@ public class UserDAO {
         }
 
     }
-
-
-    public static Utilisateur getUserById(int userId) {
-        Utilisateur user = null;
+ public static Users getUserById(int userId) {
+        Users user = null;
 
         try {
             Connection connection = DatabaseManager.getConnection();
@@ -195,14 +193,14 @@ public class UserDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                user = new Utilisateur();
-                user.setIdUtilisateur(resultSet.getInt(USER_ID));
-                user.setNomUtilisateur(resultSet.getString(USER_LASTNAME));
-                user.setPrenomUtilisateur(resultSet.getString(USER_NAME));
-                user.setEmailUtilisateur(resultSet.getString(USER_EMAIL));
-                user.setDateDeNaissanceUtilisateur(resultSet.getDate(USER_BIRTHDATE).toString());
-                user.setMotDePasseUtilisateur(resultSet.getString(USER_PASSWORD));
-                user.setIdRole(resultSet.getInt(ID_ROLE));
+                user = new Users();
+                user.setUserId(resultSet.getInt(USER_ID));
+                user.setUserLastName(resultSet.getString(USER_LASTNAME));
+                user.setUserName(resultSet.getString(USER_NAME));
+                user.setUserEmail(resultSet.getString(USER_EMAIL));
+                user.setUserBirthdate(resultSet.getDate(USER_BIRTHDATE).toString());
+                user.setUserPassword(resultSet.getString(USER_PASSWORD));
+                user.setRoleId(resultSet.getInt(ID_ROLE));
             }
 
             resultSet.close();
@@ -212,5 +210,26 @@ public class UserDAO {
         }
 
         return user;
+    }
+    
+    public  static boolean updateUserInDatabase(int userId, String email, String lastName, String name, String birthDate, String password) throws SQLException {
+        String sql = "UPDATE Utilisateur SET " + USER_EMAIL + " = ?, " + USER_LASTNAME + " = ?, " + USER_NAME + " = ?, " +
+                USER_BIRTHDATE + " = ?, " + USER_PASSWORD + " = ? WHERE " + USER_ID + " = ?";
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, email);
+            statement.setString(2, lastName);
+            statement.setString(3, name);
+            statement.setString(4, birthDate);
+            statement.setString(5, password);
+            statement.setInt(6, userId);
+
+            return statement.executeUpdate() > 0; // Renvoie true si au moins une ligne est mise à jour
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

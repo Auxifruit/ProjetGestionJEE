@@ -12,5 +12,6 @@
 <a href="${pageContext.request.contextPath}/lessonManager-servlet">Gérer les séances</a></br>
 <a href="${pageContext.request.contextPath}/subjectManager-servlet">Gérer les matières</a></br>
 <a href="${pageContext.request.contextPath}/courseManager-servlet">Gérer les cours</a></br>
+<a href="${pageContext.request.contextPath}/studentSchedule-servlet?studentId=2">Emplois du temps de l'étudiant n°2</a></br>
 </body>
 </html>

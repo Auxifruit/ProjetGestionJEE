@@ -5,7 +5,7 @@
              version="3.0">
   <persistence-unit name="default">
       <class>com.example.projetjee.model.entities.Administrator</class>
-      <class>com.example.projetjee.model.entities.Clazz</class>
+      <class>com.example.projetjee.model.entities.Classes</class>
       <class>com.example.projetjee.model.entities.Course</class>
       <class>com.example.projetjee.model.entities.Grade</class>
       <class>com.example.projetjee.model.entities.Lesson</class>

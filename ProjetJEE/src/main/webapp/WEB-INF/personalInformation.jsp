@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.example.projetjee.model.entities.Utilisateur" %>
+<%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 
 <%
@@ -15,7 +15,7 @@
     }
 
     // Appeler la méthode DAO pour récupérer les données utilisateur
-    Utilisateur user = UserDAO.getUserById(userId);
+    Users user = UserDAO.getUserById(userId);
 
     // Vérifier que l'utilisateur existe
     if (user == null) {
@@ -44,12 +44,12 @@
     <script>
         // Utilisation des données utilisateur dans JavaScript
         let originalValues = {
-            email: "<%= user.getEmailUtilisateur() %>",
-            nom: "<%= user.getNomUtilisateur() %>",
-            prenom: "<%= user.getPrenomUtilisateur() %>",
-            dateNaissance: "<%= user.getDateDeNaissanceUtilisateur() %>",
-            identifiant: "<%= user.getIdUtilisateur() %>",
-            motDePasse: "<%= user.getMotDePasseUtilisateur() %>"
+            email: "<%= user.getUserEmail() %>",
+            nom: "<%= user.getUserLastName() %>",
+            prenom: "<%= user.getUserName() %>",
+            dateNaissance: "<%= user.getUserBirthdate() %>",
+            identifiant: "<%= user.getUserId() %>",
+            motDePasse: "<%= user.getUserPassword() %>"
         };
 
         function toggleEditMode(isEditable) {
@@ -80,26 +80,26 @@
 
 <form action="editInformations" method="post">
     <!-- Champ caché pour l'ID utilisateur -->
-    <input type="hidden" id="userId" name="userId" value="<%= user.getIdUtilisateur() %>">
+    <input type="hidden" id="userId" name="userId" value="<%= user.getUserId() %>">
 
     <label>Email :</label>
-    <input type="text" id="email" name="email" value="<%= user.getEmailUtilisateur() %>" readonly>
+    <input type="text" id="email" name="email" value="<%= user.getUserEmail() %>" readonly>
 
     <label>Nom :</label>
-    <input type="text" id="nom" name="nom" value="<%= user.getNomUtilisateur() %>" readonly>
+    <input type="text" id="nom" name="nom" value="<%= user.getUserLastName() %>" readonly>
 
     <label>Prénom :</label>
-    <input type="text" id="prenom" name="prenom" value="<%= user.getPrenomUtilisateur() %>" readonly>
+    <input type="text" id="prenom" name="prenom" value="<%= user.getUserName() %>" readonly>
 
     <label>Date de naissance :</label>
-    <input type="date" id="dateNaissance" name="dateNaissance" value="<%= user.getDateDeNaissanceUtilisateur() %>" readonly>
+    <input type="date" id="dateNaissance" name="dateNaissance" value="<%= user.getUserBirthdate() %>" readonly>
 
     <label>Identifiant :</label>
-    <input type="text" id="identifiant" name="identifiant" value="<%= user.getIdUtilisateur() %>" readonly>
+    <input type="text" id="identifiant" name="identifiant" value="<%= user.getUserId() %>" readonly>
 
     <label>Mot de passe :</label>
     <div>
-        <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getMotDePasseUtilisateur() %>" readonly>
+        <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getUserPassword() %>" readonly>
     </div>
 
     <!-- Boutons -->

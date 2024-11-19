@@ -71,40 +71,44 @@ public class StudentDAO {
         }
     }
 
-
+    // this is an use for a teacher and need a version without teacherID for student or admin i guess
     public static List<Users> getStudentsByDisciplineAndClass(String discipline, String className, int teacherID) {
         List<Users> users = new ArrayList<>();
 
-        // Query to fetch users (students) by joining the necessary tables
-        String query = "SELECT DISTINCT User.userId, User.firstName, User.lastName " +
-                "FROM User " +
-                "JOIN Enrollment ON User.userId = Enrollment.userId " +
-                "JOIN Class ON Enrollment.classId = Class.classId " +
-                "JOIN LessonClass ON Class.classId = LessonClass.classId " +
+        // Nouvelle requête SQL qui correspond à la logique donnée
+        String query = "SELECT DISTINCT Users.userId, Users.userName, Users.userLastName, Users.userEmail " +
+                "FROM Users " +
+                "JOIN Student ON Users.userId = Student.studentId " +
+                "JOIN Classes ON Student.classesId = Classes.classesId " +
+                "JOIN LessonClass ON Classes.classesId = LessonClass.classesId " +
                 "JOIN Lesson ON LessonClass.lessonId = Lesson.lessonId " +
                 "JOIN Course ON Lesson.courseId = Course.courseId " +
-                "WHERE Course.courseName = ? AND Class.className = ? " +
-                "AND User.roleId = 1 AND Lesson.teacherId = ?"; // roleId = 1 for students, filter by teacherID
+                "WHERE Course.courseName = ? " +
+                "AND Classes.classesName = ? " +
+                "AND Users.roleId = 1 " + // 1 pour les étudiants
+                "AND Lesson.teacherId = ?"; // Pour le professeur spécifié
 
         try {
             Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
-            // Set the parameters for the query
-            statement.setString(1, discipline);
-            statement.setString(2, className);
-            statement.setInt(3, teacherID); // Set the teacher ID as the 3rd parameter
+            // Définir les paramètres de la requête SQL
+            statement.setString(1, discipline);   // Le nom de la discipline (matière)
+            statement.setString(2, className);    // Le nom de la classe
+            statement.setInt(3, teacherID);       // L'ID du professeur
 
-            // Execute the query
+            // Exécuter la requête
             ResultSet resultSet = statement.executeQuery();
 
-            // Populate the list of users (students)
+            // Parcourir les résultats et ajouter les étudiants dans la liste
             while (resultSet.next()) {
                 Users user = new Users();
                 user.setUserId(resultSet.getInt("userId"));
-                user.setUserName(resultSet.getString("firstName"));
-                user.setUserLastName(resultSet.getString("lastName"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setUserLastName(resultSet.getString("userLastName"));
+                user.setUserEmail(resultSet.getString("userEmail"));
 
+                // Ajouter l'utilisateur (étudiant) à la liste
                 users.add(user);
             }
         } catch (SQLException e) {

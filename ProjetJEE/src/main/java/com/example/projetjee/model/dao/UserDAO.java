@@ -1,5 +1,6 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Users;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -21,8 +22,8 @@ public class UserDAO {
      * @param roleFilter the role we want the list to be full of
      * @return a list of all the users according to the role filter
      */
-    public static List<Utilisateur> getAllUsers(String roleFilter) {
-        List<Utilisateur> userList = new ArrayList<>();
+    public static List<Users> getAllUsers(String roleFilter) {
+        List<Users> userList = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -35,12 +36,12 @@ public class UserDAO {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                Utilisateur user = new Utilisateur();
-                user.setIdUtilisateur(resultSet.getInt(USER_ID));
-                user.setNomUtilisateur(resultSet.getString(USER_LASTNAME));
-                user.setPrenomUtilisateur(resultSet.getString(USER_NAME));
-                user.setEmailUtilisateur(resultSet.getString(USER_EMAIL));
-                user.setIdRole(resultSet.getInt(ID_ROLE));
+                Users user = new Users();
+                user.setUserId(resultSet.getInt(USER_ID));
+                user.setUserLastName(resultSet.getString(USER_LASTNAME));
+                user.setUserName(resultSet.getString(USER_NAME));
+                user.setUserEmail(resultSet.getString(USER_EMAIL));
+                user.setRoleId(resultSet.getInt(ID_ROLE));
 
                 userList.add(user);
             }

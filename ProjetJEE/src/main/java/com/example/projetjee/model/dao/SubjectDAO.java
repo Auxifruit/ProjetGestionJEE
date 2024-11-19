@@ -1,5 +1,6 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Subjects;
 import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
@@ -11,8 +12,8 @@ public class SubjectDAO {
     private static final String SUBJECT_ID = "idMatiere";
     private static final String SUBJECT_NAME = "nomMatiere";
 
-    public static List<Matiere> getAllSubject() {
-        List<Matiere> subjects = new ArrayList<>();
+    public static List<Subjects> getAllSubject() {
+        List<Subjects> subjects = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -22,9 +23,9 @@ public class SubjectDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Matiere subject = new Matiere();
-                subject.setIdMatiere(resultSet.getInt(SUBJECT_ID));
-                subject.setNomMatiere(resultSet.getString(SUBJECT_NAME));
+                Subjects subject = new Subjects();
+                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
+                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
 
                 subjects.add(subject);
             }

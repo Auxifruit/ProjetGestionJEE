@@ -88,11 +88,11 @@ public class TeacherDAO {
     }
 
     public static List<String> getAllClasses(int teacherID) {
-        List<String> classList = new ArrayList<>();
-        String query = "SELECT DISTINCT Class.className " +
+        List<String> classesList = new ArrayList<>();
+        String query = "SELECT DISTINCT Classes.classesName " +
                 "FROM Lesson " +
                 "JOIN LessonClass ON Lesson.lessonId = LessonClass.lessonId " +
-                "JOIN Class ON LessonClass.classId = Class.classId " +
+                "JOIN Classes ON LessonClass.classesId = Classes.classesId " +
                 "WHERE Lesson.teacherId = ?";  // TeacherID is the parameter of the prepared statement
 
         try {
@@ -104,9 +104,9 @@ public class TeacherDAO {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String className = resultSet.getString("className");
+                String className = resultSet.getString("classesName");
                 System.out.println("Class found: " + className); // Logs
-                classList.add(className);
+                classesList.add(className);
             }
 
         } catch (SQLException e) {
@@ -114,6 +114,6 @@ public class TeacherDAO {
             e.printStackTrace();
         }
 
-        return classList;
+        return classesList;
     }
 }

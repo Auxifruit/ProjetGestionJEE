@@ -27,6 +27,7 @@
       <class>com.example.projetjee.model.entities.Subjects</class>
       <class>com.example.projetjee.model.entities.Teacher</class>
       <class>com.example.projetjee.model.entities.Users</class>
+      <class>com.example.projetjee.model.entities.Classes</class>
 
       <properties>
       <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/cydtb_jee"/>

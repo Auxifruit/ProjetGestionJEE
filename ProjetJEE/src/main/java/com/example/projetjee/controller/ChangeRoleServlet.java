@@ -17,7 +17,7 @@ public class ChangeRoleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         String roleFilter = request.getParameter("roleFilter");
-        List<Utilisateur> usersList = UserDAO.getAllUsers(roleFilter);
+        List<Users> usersList = UserDAO.getAllUsers(roleFilter);
 
         request.setAttribute("users", usersList);
 

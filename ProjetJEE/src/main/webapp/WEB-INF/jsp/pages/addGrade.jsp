@@ -1,4 +1,5 @@
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.projetjee.model.entities.Users" %><%--
   Created by IntelliJ IDEA.
   User: Amaury
   Date: 15/11/2024
@@ -40,16 +41,16 @@
       color: white;
       border: none;
       cursor: pointer;
+      background-color: #a0c4ff; /* Couleur bleue */
     }
 
-    .subject-button:nth-child(1) { background-color: #a0c4ff; }
-    .subject-button:nth-child(2) { background-color: #9ec4ff; }
-    .subject-button:nth-child(3) { background-color: #8ec4ff; }
+    .subject-button.selected {
+      background-color: #4a90e2; /* Couleur plus sombre lorsque sélectionné */
+    }
 
-    .class-button:nth-child(1) { background-color: #80ed99; }
-    .class-button:nth-child(2) { background-color: #ffef65; }
-    .class-button:nth-child(3) { background-color: #89fc00; }
-    .class-button:nth-child(4) { background-color: #9d4edd; }
+    .class-button.selected {
+      background-color: #4a90e2; /* Couleur plus sombre lorsque sélectionné */
+    }
 
     /* Section formulaire pour ajouter une note */
     .form-section {
@@ -78,7 +79,39 @@
     .notes-table, .note-entry, .student-note, .student-appreciation {
       margin-top: 20px;
     }
+
   </style>
+  <script>
+    function selectDiscipline(discipline) {
+      // reset the selected state to the 'subject' buttons
+      const buttons = document.querySelectorAll('.subject-button');
+      buttons.forEach(button => button.classList.remove('selected'));
+
+      // add selected state to the selected button
+      const selectedButton = Array.from(buttons).find(btn => btn.textContent.trim() === discipline);
+      if (selectedButton) {
+        selectedButton.classList.add('selected');
+      }
+
+      // update hidden value of the form
+      document.getElementById('selected-discipline').value = discipline;
+    }
+
+    function selectClass(className) {
+      // reset select state to the 'classes' buttons
+      const buttons = document.querySelectorAll('.class-button');
+      buttons.forEach(button => button.classList.remove('selected'));
+
+      // add selected state to the selected button
+      const selectedButton = Array.from(buttons).find(btn => btn.textContent.trim() === className);
+      if (selectedButton) {
+        selectedButton.classList.add('selected');
+      }
+
+      // update hide value
+      document.getElementById('selected-class').value = className;
+    }
+  </script>
 </head>
 <body>
 <div class="container">
@@ -122,13 +155,45 @@
     %>
   </div>
 
-  <form action="/list-student-entry-note-servlet" method="POST" id="criteria-form">
+  <form action="${pageContext.request.contextPath}/entry-note-servlet" method="POST" id="criteria-form">
     <input type="hidden" name="discipline" id="selected-discipline" value="">
     <input type="hidden" name="class" id="selected-class" value="">
     <button type="submit" id="submit-button">OK</button>
   </form>
 
   <hr>
+
+  <!-- Table to display students -->
+  <div class="notes-table">
+    <h3>Liste des étudiants</h3>
+    <table>
+      <tr>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+      </tr>
+      <%
+        List<Users> students = (List<Users>) request.getAttribute("students");
+        if (students != null && !students.isEmpty()) {
+          for (Users student : students) {
+      %>
+      <tr>
+        <td><%= student.getUserName() %></td>
+        <td><%= student.getUserLastName() %></td>
+        <td><%= student.getUserEmail() %></td>
+      </tr>
+      <%
+        }
+      } else {
+      %>
+      <tr>
+        <td colspan="3">Aucun étudiant trouvé pour cette matière et cette classe.</td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+
+  <hr><br>
 
   <!-- formulaire d'ajout de note -->
   <div class="form-section">

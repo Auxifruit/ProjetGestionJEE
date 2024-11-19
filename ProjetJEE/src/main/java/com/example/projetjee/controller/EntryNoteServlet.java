@@ -36,9 +36,11 @@ public class EntryNoteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        // Retrieve the criteria submitted from the form
         String discipline = request.getParameter("discipline");
         String className = request.getParameter("class");
+
+        System.out.println("flag2");
+        System.out.println("Discipline: " + discipline + " ; Class: " + className);
 
         // Validate the criteria
         if (discipline != null && className != null && !discipline.isEmpty() && !className.isEmpty()) {
@@ -48,7 +50,7 @@ public class EntryNoteServlet extends HttpServlet {
             // Add the list of students as a request attribute
             request.setAttribute("students", students);
         } else {
-            // No criteria provided or invalid criteria
+            // If no valid criteria, set an empty list or null
             request.setAttribute("students", null);
         }
 
@@ -56,6 +58,8 @@ public class EntryNoteServlet extends HttpServlet {
         request.getRequestDispatcher("WEB-INF/jsp/pages/addGrade.jsp").forward(request, response);
     }
 
+    @Override
     public void destroy() {
+        // Cleanup code if needed
     }
 }

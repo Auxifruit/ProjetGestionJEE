@@ -1,6 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.SubjectDAO;
+import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +15,7 @@ import java.util.List;
 public class SubjectDeletionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Matiere> subjectList = SubjectDAO.getAllSubject();
+        List<Subjects> subjectList = SubjectDAO.getAllSubject();
 
         request.setAttribute("subjects", subjectList);
 

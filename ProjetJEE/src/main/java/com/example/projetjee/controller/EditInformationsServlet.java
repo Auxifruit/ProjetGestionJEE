@@ -1,13 +1,12 @@
 package com.example.projetjee.controller;
 
-import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.model.entities.Utilisateur;
-import com.example.projetjee.util.DatabaseManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import com.example.projetjee.model.dao.UserDAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,58 +15,46 @@ import java.sql.SQLException;
 
 @WebServlet("/editInformations")
 public class EditInformationsServlet extends HttpServlet {
-    private static final String USER_EMAIL = "email";
-    private static final String USER_LASTNAME = "nom";
-    private static final String USER_FIRSTNAME = "prenom";
-    private static final String USER_BIRTHDATE = "dateNaissance";
-    private static final String USER_ID = "identifiant";
-    private static final String USER_PASSWORD = "motDePasse";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Récupérer les informations du formulaire
         String email = request.getParameter("email");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String dateNaissance = request.getParameter("dateNaissance");
-        String identifiant = request.getParameter("identifiant");
-        String motDePasse = request.getParameter("motDePasse");
+        String lastName = request.getParameter("nom");
+        String name = request.getParameter("prenom");
+        String birthDate = request.getParameter("dateNaissance");
+        String password = request.getParameter("motDePasse");
 
         // ID de l'utilisateur connecté
         String userIdStr = request.getParameter("userId");
-        int userId = Integer.parseInt(userIdStr);
+        int userId;
 
-
-        if (email == null || email.trim().isEmpty() || nom == null || nom.trim().isEmpty()) {
-            request.setAttribute("message", "Certains champs obligatoires sont vides.");
-            request.getRequestDispatcher("/informationsPersonnelles.jsp").forward(request, response);
+        try {
+            userId = Integer.parseInt(userIdStr);
+        } catch (NumberFormatException e) {
+            request.setAttribute("message", "ID utilisateur invalide.");
+            request.getRequestDispatcher("/personalInformation.jsp").forward(request, response);
             return;
         }
 
-        // Connexion à la base de données et mise à jour des informations
-        try (Connection connection = DatabaseManager.getConnection()) {
-            String sql = "UPDATE Utilisateur SET " + USER_EMAIL + " = ?, "+ USER_LASTNAME +" = ?, "+ USER_FIRSTNAME +" = ?, " +
-                    USER_BIRTHDATE +" = ?, "+ USER_PASSWORD +" = ? WHERE "+ USER_ID +" = ?";
+        // Validation des champs obligatoires
+        if (email == null || email.trim().isEmpty() || lastName == null || lastName.trim().isEmpty()) {
+            request.setAttribute("message", "Certains champs obligatoires sont vides.");
+            request.getRequestDispatcher("/personalInformation.jsp").forward(request, response);
+            return;
+        }
 
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, email);        // Position 1 -> USER_EMAIL
-                statement.setString(2, nom);          // Position 2 -> USER_LASTNAME
-                statement.setString(3, prenom);       // Position 3 -> USER_FIRSTNAME
-                statement.setString(4, dateNaissance);// Position 4 -> USER_BIRTHDATE
-                statement.setString(5, motDePasse);   // Position 5 -> USER_PASSWORD
-                statement.setInt(6, userId);          // Position 6 -> USER_ID
+        // Mise à jour des informations dans la base de données
+        try {
+            boolean updateSuccessful = UserDAO.updateUserInDatabase(userId, email, lastName, name, birthDate, password);
 
-                int rowsUpdated = statement.executeUpdate();
-
-                if (rowsUpdated > 0) {
-                    request.setAttribute("message", "Les informations ont été mises à jour avec succès.");
-                } else {
-                    request.setAttribute("message", "Échec de la mise à jour des informations.");
-                }
+            if (updateSuccessful) {
+                request.setAttribute("message", "Les informations ont été mises à jour avec succès.");
+            } else {
+                request.setAttribute("message", "Échec de la mise à jour des informations.");
             }
 
         } catch (SQLException e) {
-            // Gérer l'exception SQL
             e.printStackTrace();
             request.setAttribute("message", "Erreur lors de la mise à jour des informations : " + e.getMessage());
         }
@@ -76,6 +63,8 @@ public class EditInformationsServlet extends HttpServlet {
         request.setAttribute("userId", userId);
 
         // Rediriger vers la page JSP
-        request.getRequestDispatcher("/informationsPersonnelles.jsp").forward(request, response);
+        request.getRequestDispatcher("/personalInformation.jsp").forward(request, response);
     }
+
+
 }

@@ -30,7 +30,7 @@ public class LessonClassesDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int idClasse = resultSet.getInt("idClasse");
+                int idClasse = resultSet.getInt(CLASS_ID);
 
                 availableClasses.add(ClasseDAO.getClasse(idClasse));
             }
@@ -86,8 +86,8 @@ public class LessonClassesDAO {
         return true;
     }
 
-    public static boolean canClassParticipate(int idClasse, int idLesson) {
-        Lesson lesson = LessonDAO.getLesson(idLesson);
+    public static boolean canClassParticipate(int classId, int lessonId) {
+        Lesson lesson = LessonDAO.getLesson(lessonId);
 
         if (lesson == null) {
             return false;
@@ -96,14 +96,14 @@ public class LessonClassesDAO {
         String lessonStartDate = lesson.getLessonStartDate().toString();
         String lessonEndDate = lesson.getLessonEndDate().toString();
 
-        String query = "SELECT COUNT(*) FROM LessonClasse sc JOIN Lesson s ON sc.idLesson = s.idLesson WHERE sc.idClasse = ? AND s.idLesson != ? AND ( (s.dateDebutLesson < ? AND s.dateFinLesson > ?) OR (s.dateDebutLesson < ? AND s.dateFinLesson > ?) OR (s.dateDebutLesson >= ? AND s.dateFinLesson <= ?)); ";
+        String query = "SELECT COUNT(*) FROM " + LESSON_CLASS_TABLE +  " sc JOIN Lesson s ON sc." + LESSON_ID + " = s." + LESSON_ID +  " WHERE sc." + CLASS_ID + " = ? AND s." + LESSON_ID + " != ? AND ( (s.lessonStartDate < ? AND s.lessonEndDate > ?) OR (s.lessonStartDate < ? AND s.lessonEndDate > ?) OR (s.lessonStartDate >= ? AND s.lessonEndDate <= ?)); ";
 
         try {
             Connection connection = DatabaseManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setInt(1, idClasse);
-            preparedStatement.setInt(2, idLesson);
+            preparedStatement.setInt(1, classId);
+            preparedStatement.setInt(2, lessonId);
             preparedStatement.setString(3, lessonEndDate);
             preparedStatement.setString(4, lessonStartDate);
             preparedStatement.setString(5, lessonEndDate);

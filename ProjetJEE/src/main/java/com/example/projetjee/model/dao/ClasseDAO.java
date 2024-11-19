@@ -41,26 +41,26 @@ public class ClasseDAO {
         return null;
     }
 
-    public static List<Classes> getAvailableClassesForLesson(int idLesson) {
+    public static List<Classes> getAvailableClassesForLesson(int lessonId) {
         List<Classes> availableClasses = new ArrayList<>();
 
         try {
             Connection connection = DatabaseManager.getConnection();
 
-            String query = "SELECT c.idClasse, c.nomClasse FROM Classe c WHERE c.idClasse NOT IN (SELECT sc.idClasse FROM LessonClasse sc WHERE sc.idLesson = ?)";
+            String query = "SELECT c." + CLASS_ID + ", c." + CLASS_NAME + " FROM " + CLASS_TABLE + " c WHERE c." + CLASS_ID + " NOT IN (SELECT sc." + CLASS_ID + " FROM LessonClass sc WHERE sc.lessonId = ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setInt(1, idLesson);
+            preparedStatement.setInt(1, lessonId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Classes classe = new Classes();
-                int idClasse = resultSet.getInt("idClasse");
-                String nomClasse = resultSet.getString("nomClasse");
+                int classId = resultSet.getInt(CLASS_ID);
+                String className = resultSet.getString(CLASS_NAME);
 
-                classe.setClassId(idClasse);
-                classe.setClassName(nomClasse);
+                classe.setClassId(classId);
+                classe.setClassName(className);
 
                 availableClasses.add(classe);
             }

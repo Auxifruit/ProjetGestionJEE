@@ -56,7 +56,7 @@ Created by IntelliJ IDEA.
 <p>Date de fin : <%= lesson.getLessonEndDate() %></p>
 </br>
 <%
-    List<Classes> availableClass = (List<Classes>) request.getAttribute("availableClass");
+    List<Classes> availableClass = (List<Classes>) request.getAttribute("availableClasses");
 
     if(availableClass == null || availableClass.isEmpty()) {
 %>
@@ -65,7 +65,7 @@ Created by IntelliJ IDEA.
     } else {
 %>
 <h3>Classe(s) disponible(s) : </h3>
-<form action="lessonClasssAssignation-servlet" method="post">
+<form action="lessonClassesAssignation-servlet" method="post">
 <table border="1">
     <tr>
         <th>Nom de la classe</th>
@@ -76,7 +76,7 @@ Created by IntelliJ IDEA.
     %>
     <tr>
         <td><%= classes.getClassName() %></td>
-        <td><input type="radio" name="classId" value="<%= classes.getClassName() %>"></td>
+        <td><input type="radio" name="classId" value="<%= classes.getClassId() %>"></td>
     </tr>
     <%
         }
@@ -97,7 +97,7 @@ Created by IntelliJ IDEA.
     } else {
 %>
 <h3>Class(s) participantes(s) : </h3>
-<form action="lessonClasssUnassignation-servlet" method="post">
+<form action="lessonClassesUnassignation-servlet" method="post">
     <table border="1">
         <tr>
             <th>Nom de la classe</th>

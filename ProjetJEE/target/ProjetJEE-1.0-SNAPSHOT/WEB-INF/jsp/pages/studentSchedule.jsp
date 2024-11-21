@@ -111,7 +111,8 @@
                 }
             %>
         </div>
-        <button onclick="toggleDisplay()">Voir les cours passés</button>
+        </br>
+        <button onclick="toggleDisplay()">Afficher ou non les cours passés</button>
 
         <%
         for(Map.Entry<LocalDate, List<Lesson>> entry : futureLessons.entrySet()) {

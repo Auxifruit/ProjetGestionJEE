@@ -1,40 +1,59 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.example.projetjee.model.entities.Etudiant" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Liste des Élèves</title>
-</head>
-<body>
-<h2>Liste des Élèves</h2>
-
-<!-- Formulaire de filtrage -->
-<form action="result.jsp" method="get">
-    <label for="filterBy">Filtrer par :</label>
-    <select name="filterBy" id="filterBy">
-        <option value="">Sélectionnez un critère</option>
-        <option value="prenom">Prénom</option>
-        <option value="nom">Nom</option>
-        <option value="email">Email</option>
-        <option value="dateNaissance">Date de Naissance</option>
-        <option value="classe">Classe</option>
-    </select>
-
-    <button type="submit">Valider</button>
-</form>
-
-<!-- Récupération de la liste des élèves depuis un attribut de requête ou de session -->
+<%@ page import="com.example.projetjee.model.entities.Users" %>
+<%@ page import="java.util.Map" %>
 <%
-    List<Etudiant> etudiants = (List<Etudiant>) request.getAttribute("students");
+    List<Map<String, Object>> etudiants = (List<Map<String, Object>>) request.getAttribute("users");
+    List<String> availableClasses = (List<String>) request.getAttribute("availableClasses"); // Liste des classes à partir du backend.
     if (etudiants == null) {
-        etudiants = new ArrayList<>(); // Si la liste est nulle, on initialise une liste vide.
+        etudiants = new ArrayList<>();
+    }
+    if (availableClasses == null) {
+        availableClasses = new ArrayList<>();
     }
 %>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/CSS/ListStudents.css">
+<!-- Formulaire de recherche -->
+<form>
+    <div style="margin-bottom: 20px;">
+        <!-- Sélecteur de critère de recherche -->
+        <label for="filterCriteria">Rechercher par :</label>
+        <select id="filterCriteria">
+            <option value="all">Tous</option>
+            <option value="prenom">Prénom</option>
+            <option value="nom">Nom</option>
+            <option value="email">Email</option>
+        </select>
 
-<table>
+        <!-- Barre de recherche -->
+        <input
+                type="text"
+                id="searchInput"
+                onkeyup="filterTable()"
+                placeholder="Entrez votre recherche"
+                style="width: 300px; padding: 5px;"
+        >
+    </div>
+</form>
+
+<!-- Formulaire de filtrage par classe -->
+<form>
+    <div style="margin-bottom: 20px;">
+        <label for="classSelector">Filtrer par classe :</label>
+        <select id="classSelector" onchange="filterTable()">
+            <option value="all">Toutes les classes</option>
+            <%
+                for (String classe : availableClasses) {
+            %>
+            <option value="<%= classe %>"><%= classe %></option>
+            <%
+                }
+            %>
+        </select>
+    </div>
+</form>
+
+<table id="myTable">
     <thead>
     <tr>
         <th>Prénom</th>
@@ -49,18 +68,18 @@
         if (etudiants.isEmpty()) {
     %>
     <tr>
-        <td colspan="4">Aucun élève trouvé</td>
+        <td colspan="5">Aucun étudiant trouvé</td>
     </tr>
     <%
     } else {
-        for (Etudiant etudiant : etudiants) {
+        for (Map<String, Object> etudiant : etudiants) {
     %>
     <tr>
-        <td><%= etudiant.getPrénomEtudiant() %></td>
-        <td><%= etudiant.getNomEtudiant() %></td>
-        <td><%= etudiant.getEmailEtudiant() %></td>
-        <td><%= etudiant.getDateDeNaissanceEtudiant() %></td>
-        <td><%= etudiant.getIdClasse() %></td>
+        <td><%= etudiant.get("userName") %></td>
+        <td><%= etudiant.get("userLastName") %></td>
+        <td><%= etudiant.get("userEmail") %></td>
+        <td><%= etudiant.get("userBirthdate") %></td>
+        <td><%= etudiant.get("className") %></td>
     </tr>
     <%
             }
@@ -68,5 +87,37 @@
     %>
     </tbody>
 </table>
-</body>
-</html>
+
+<script>
+    function filterTable() {
+        // Récupérer la valeur de la recherche, le critère sélectionné et la classe
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const filterCriteria = document.getElementById('filterCriteria').value;
+        const selectedClass = document.getElementById('classSelector').value;
+        const table = document.getElementById('myTable');
+        const rows = table.getElementsByTagName('tr');
+
+        // Parcourir toutes les lignes du tableau et les filtrer
+        for (let i = 1; i < rows.length; i++) { // Commencer à 1 pour ignorer l'en-tête du tableau
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            // Filtrage basé sur le critère de recherche
+            if (filterCriteria === 'prenom' && cells[0].textContent.toLowerCase().includes(input)) {
+                match = true;
+            } else if (filterCriteria === 'nom' && cells[1].textContent.toLowerCase().includes(input)) {
+                match = true;
+            } else if (filterCriteria === 'email' && cells[2].textContent.toLowerCase().includes(input)) {
+                match = true;
+            } else if (filterCriteria === 'all') {
+                match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(input));
+            }
+
+            // Filtrage basé sur la classe
+            const classMatch = selectedClass === 'all' || cells[4].textContent === selectedClass;
+
+            // Afficher ou masquer la ligne
+            rows[i].style.display = match && classMatch ? '' : 'none';
+        }
+    }
+</script>

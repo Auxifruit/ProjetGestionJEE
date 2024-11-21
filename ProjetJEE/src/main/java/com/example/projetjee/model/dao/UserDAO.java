@@ -5,17 +5,19 @@ import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDAO {
-    private static final String USER_TABLE = "utilisateur";
-    private static final String USER_ID = "idUtilisateur";
-    private static final String USER_PASSWORD = "motDePasseUtilisateur";
-    private static final String USER_LASTNAME = "nomUtilisateur";
-    private static final String USER_NAME = "prenomUtilisateur";
-    private static final String USER_EMAIL = "emailUtilisateur";
-    private static final String USER_BIRTHDATE = "dateDeNaissanceUtilisateur";
-    private static final String ID_ROLE = "idRole";
+    private static final String USER_TABLE = "users";
+    private static final String USER_ID = "userId";
+    private static final String USER_PASSWORD = "userPassword";
+    private static final String USER_LASTNAME = "userLastName";
+    private static final String USER_NAME = "userName";
+    private static final String USER_EMAIL = "userEmail";
+    private static final String USER_BIRTHDATE = "userBirthdate";
+    private static final String ID_ROLE = "roleId";
 
     /**
      * Method to get a list of all the users
@@ -30,7 +32,7 @@ public class UserDAO {
             String query = "SELECT * FROM " + USER_TABLE;
 
             if (roleFilter != null && roleFilter != "") {
-                query += " WHERE idRole = " + roleFilter;
+                query += " WHERE " + ID_ROLE + " = " + roleFilter;
             }
 
             ResultSet resultSet = statement.executeQuery(query);
@@ -160,7 +162,7 @@ public class UserDAO {
 
             switch (newRoleID) {
                 case 1:
-                    StudentDAO.addStudentInTable(userID, null);
+                    StudentDAO.addStudentInTable(userID, null, null);
                     break;
                 case 2:
                     TeacherDAO.addTeacherInTable(userID);

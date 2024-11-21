@@ -8,9 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoleDAO {
-    private static final String ROLE_TABLE = "rolePossible";
-    private static final String ROLE_ID = "idRole";
-    private static final String ROLE_NAME = "nomRole";
+    private static final String ROLE_TABLE = "possibleRole";
+    private static final String ROLE_ID = "roleId";
+    private static final String ROLE_NAME = "roleName";
 
     public static String getRoleNameById(int roleId) {
         String roleName = " ";

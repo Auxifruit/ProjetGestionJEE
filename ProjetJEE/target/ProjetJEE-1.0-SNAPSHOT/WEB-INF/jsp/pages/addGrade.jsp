@@ -115,7 +115,8 @@
 </head>
 <body>
 <div class="container">
-  <!-- matière -->
+
+  <!-- Discipline -->
   <div class="subject-buttons">
     <%
       List<String> disciplines = (List<String>) request.getAttribute("disciplines");
@@ -134,7 +135,7 @@
     <% } %>
   </div>
 
-  <!-- classes -->
+  <!-- Classes -->
   <div class="class-buttons">
     <%
       List<String> classes = (List<String>) request.getAttribute("classes");
@@ -155,6 +156,7 @@
     %>
   </div>
 
+  <!-- The OK button for the POST form to sent the criteria of the search -->
   <form action="${pageContext.request.contextPath}/entry-note-servlet" method="POST" id="criteria-form">
     <input type="hidden" name="discipline" id="selected-discipline" value="">
     <input type="hidden" name="class" id="selected-class" value="">
@@ -164,59 +166,58 @@
   <hr>
 
   <!-- Table to display students -->
-  <div class="notes-table">
-    <h3>Liste des étudiants</h3>
-    <table>
-      <tr>
-        <th>Prénom</th>
-        <th>Nom</th>
-        <th>Email</th>
-      </tr>
-      <%
-        List<Users> students = (List<Users>) request.getAttribute("students");
-        if (students != null && !students.isEmpty()) {
-          for (Users student : students) {
-      %>
-      <tr>
-        <td><%= student.getUserName() %></td>
-        <td><%= student.getUserLastName() %></td>
-        <td><%= student.getUserEmail() %></td>
-      </tr>
-      <%
-        }
-      } else {
-      %>
-      <tr>
-        <td colspan="3">Aucun étudiant trouvé pour cette matière et cette classe.</td>
-      </tr>
-      <% } %>
-    </table>
-  </div>
-
-  <hr><br>
-
-  <!-- formulaire d'ajout de note -->
-  <div class="form-section">
-    <form action="HelloServlet" method="post">
-      <button type="button" class="subject-button">+ Nouvelle note</button>
-
+  <form action="${pageContext.request.contextPath}/add-grade-servlet" method="post">
+    <div class="form-section">
       <label>Intitulé du contrôle</label>
-      <input type="text" name="intituleControle" class="input-field">
+      <input type="text" name="gradeName" class="input-field" required>
 
       <label>Choix Coefficient</label>
-      <input type="text" name="coefficient" class="input-field">
+      <input type="text" name="gradeCoefficient" class="input-field" required>
+    </div>
 
-      <label>Note de l'élève</label>
-      <input type="text" name="note" class="input-field student-note">
+    <div class="notes-table">
+      <h3>Liste des étudiants</h3>
+      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+        <tr>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Note</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+          List<Users> students = (List<Users>) request.getAttribute("students");
+          if (students != null && !students.isEmpty()) {
+            for (Users student : students) {
+        %>
+        <tr>
+          <td><%= student.getUserName() %></td>
+          <td><%= student.getUserLastName() %></td>
+          <td><%= student.getUserEmail() %></td>
+          <td>
+            <input type="number" name="grade_<%= student.getUserId() %>"
+                   min="0" max="20" step="0.1" placeholder="Note" required>
+          </td>
+        </tr>
+        <%
+          }
+        } else {
+        %>
+        <tr>
+          <td colspan="4" style="text-align: center;">Aucun étudiant trouvé</td>
+        </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
 
-      <label>Appréciation</label>
-      <textarea name="appreciation" class="text-area"></textarea>
+    <button type="submit" class="submit-button" style="margin-top: 20px;">Valider toutes les notes</button>
+  </form>
 
-      <button type="submit" class="submit-button">Validez</button>
-    </form>
-  </div>
 
-  <!-- liste des notes -->
+  <!-- liste des notes
   <div class="notes-table">
     <table border="1" cellpadding="10" cellspacing="0" width="100%">
       <tr>
@@ -225,7 +226,7 @@
         <th>Note</th>
         <th>Appréciation</th>
       </tr>
-      <!-- données -->
+      données
       <tr>
         <td>Contrôle 1</td>
         <td>1</td>
@@ -233,7 +234,7 @@
         <td>Bien</td>
       </tr>
     </table>
-  </div>
+  </div>  -->
 </div>
 </body>
 </html>

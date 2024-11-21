@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
-    private static final String STUDENT_TABLE = "etudiant";
-    private static final String STUDENT_ID = "idEtudiant";
-    private static final String CLASS_ID = "idClasse";
+    private static final String STUDENT_TABLE = "student";
+    private static final String STUDENT_ID = "studentId";
+    private static final String CLASS_ID = "classId";
+    private static final String MAJOR_ID = "majorId";
 
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
@@ -25,7 +26,6 @@ public class StudentDAO {
 
             while (resultSet.next()) {
                 Student student = new Student();
-                // Add more fields as per your table structure
                 students.add(student);
             }
         } catch (SQLException e) {
@@ -49,11 +49,11 @@ public class StudentDAO {
         }
     }
 
-    public static void addStudentInTable(int studentID, Integer classID) {
+    public static void addStudentInTable(int studentID, Integer classID, Integer majorId) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
-            String query = "INSERT INTO " + STUDENT_TABLE + " VALUES (?, ?)";
+            String query = "INSERT INTO " + STUDENT_TABLE + " VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, studentID);
@@ -63,6 +63,13 @@ public class StudentDAO {
             }
             else {
                 preparedStatement.setInt(2, classID.intValue());
+            }
+
+            if(majorId == null) {
+                preparedStatement.setNull(3, Types.INTEGER);
+            }
+            else {
+                preparedStatement.setInt(3, majorId.intValue());
             }
 
             preparedStatement.executeUpdate();

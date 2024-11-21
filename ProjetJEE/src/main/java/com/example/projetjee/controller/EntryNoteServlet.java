@@ -16,16 +16,7 @@ public class EntryNoteServlet extends HttpServlet {
     int teacherID = 8;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        // get all disciplines and classes
-        List<String> disciplines = TeacherDAO.getAllDiscipline(teacherID);
-        List<String> classes = TeacherDAO.getAllClasses(teacherID);
-
-        System.out.println("Disciplines: " + disciplines);
-        System.out.println("Classes: " + classes);
-
-        // set them in Attributes
-        request.setAttribute("disciplines",disciplines);
-        request.setAttribute("classes", classes);
+        setCommonAttributes(request);
 
         try {
             request.getRequestDispatcher("WEB-INF/jsp/pages/addGrade.jsp").forward(request, response);
@@ -39,7 +30,6 @@ public class EntryNoteServlet extends HttpServlet {
         String discipline = request.getParameter("discipline");
         String className = request.getParameter("class");
 
-        System.out.println("flag2");
         System.out.println("Discipline: " + discipline + " ; Class: " + className);
 
         // Validate the criteria
@@ -54,8 +44,19 @@ public class EntryNoteServlet extends HttpServlet {
             request.setAttribute("students", null);
         }
 
+        // reset the communes attributes before going back to the jsp
+        setCommonAttributes(request);
         // Forward the request to the JSP page to display the results
         request.getRequestDispatcher("WEB-INF/jsp/pages/addGrade.jsp").forward(request, response);
+    }
+
+    private void setCommonAttributes(HttpServletRequest request) {
+        // get disciplines and classes and set them as attributes
+        List<String> disciplines = TeacherDAO.getAllDiscipline(teacherID);
+        List<String> classes = TeacherDAO.getAllClasses(teacherID);
+
+        request.setAttribute("disciplines", disciplines);
+        request.setAttribute("classes", classes);
     }
 
     @Override

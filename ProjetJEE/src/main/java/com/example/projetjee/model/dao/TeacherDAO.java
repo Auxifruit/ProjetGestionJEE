@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherDAO {
-    private static final String TEACHER_TABLE = "enseignant";
-    private static final String TEACHER_ID = "idEnseignant";
+    private static final String TEACHER_TABLE = "teacher";
+    private static final String TEACHER_ID = "teacherID";
 
     public static List<Teacher> getAllTeachers() {
         List<Teacher> teacherList = new ArrayList<>();
@@ -105,7 +105,6 @@ public class TeacherDAO {
 
             while (resultSet.next()) {
                 String className = resultSet.getString("classesName");
-                System.out.println("Class found: " + className); // Logs
                 classesList.add(className);
             }
 

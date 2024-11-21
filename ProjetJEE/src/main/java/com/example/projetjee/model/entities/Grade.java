@@ -9,6 +9,9 @@ public class Grade {
     @Column(name = "gradeId")
     private int gradeId;
     @Basic
+    @Column(name = "gradeName")
+    private String gradeName;
+    @Basic
     @Column(name = "gradeValue")
     private Double gradeValue;
     @Basic
@@ -30,6 +33,14 @@ public class Grade {
 
     public void setGradeId(int gradeId) {
         this.gradeId = gradeId;
+    }
+
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
     }
 
     public Double getGradeValue() {
@@ -80,6 +91,7 @@ public class Grade {
         Grade grade = (Grade) o;
 
         if (gradeId != grade.gradeId) return false;
+        if (gradeName != null ? !gradeName.equals(grade.gradeName) : grade.gradeName != null) return false;
         if (gradeValue != null ? !gradeValue.equals(grade.gradeValue) : grade.gradeValue != null) return false;
         if (gradeCoefficient != null ? !gradeCoefficient.equals(grade.gradeCoefficient) : grade.gradeCoefficient != null)
             return false;
@@ -93,6 +105,7 @@ public class Grade {
     @Override
     public int hashCode() {
         int result = gradeId;
+        result = 31 * result + (gradeName != null ? gradeName.hashCode() : 0);
         result = 31 * result + (gradeValue != null ? gradeValue.hashCode() : 0);
         result = 31 * result + (gradeCoefficient != null ? gradeCoefficient.hashCode() : 0);
         result = 31 * result + (studentId != null ? studentId.hashCode() : 0);

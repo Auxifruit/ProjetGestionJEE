@@ -5,9 +5,7 @@ import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UserDAO {
     private static final String USER_TABLE = "users";
@@ -17,7 +15,7 @@ public class UserDAO {
     private static final String USER_NAME = "userName";
     private static final String USER_EMAIL = "userEmail";
     private static final String USER_BIRTHDATE = "userBirthdate";
-    private static final String ID_ROLE = "roleId";
+    private static final String ROLE_ID = "roleId";
 
     /**
      * Method to get a list of all the users
@@ -32,7 +30,7 @@ public class UserDAO {
             String query = "SELECT * FROM " + USER_TABLE;
 
             if (roleFilter != null && roleFilter != "") {
-                query += " WHERE " + ID_ROLE + " = " + roleFilter;
+                query += " WHERE " + ROLE_ID + " = " + roleFilter;
             }
 
             ResultSet resultSet = statement.executeQuery(query);
@@ -43,7 +41,7 @@ public class UserDAO {
                 user.setUserLastName(resultSet.getString(USER_LASTNAME));
                 user.setUserName(resultSet.getString(USER_NAME));
                 user.setUserEmail(resultSet.getString(USER_EMAIL));
-                user.setRoleId(resultSet.getInt(ID_ROLE));
+                user.setRoleId(resultSet.getInt(ROLE_ID));
 
                 userList.add(user);
             }
@@ -52,6 +50,30 @@ public class UserDAO {
         }
 
         return userList;
+    }
+
+    public static boolean addUserInTable(String userPassword, String userLastName, String userName, String userEmail, String userBirthdate, int roleId) {
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "INSERT INTO " + USER_TABLE + "(" + USER_PASSWORD + ", " + USER_LASTNAME + ", " + USER_NAME + ", " + USER_EMAIL + ", " + USER_BIRTHDATE + ", " + ROLE_ID + ") VALUES (?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, userPassword);
+            preparedStatement.setString(2, userLastName);
+            preparedStatement.setString(3, userName);
+            preparedStatement.setString(4, userEmail);
+            preparedStatement.setString(5, userBirthdate);
+            preparedStatement.setInt(6, roleId);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Une erreur est survenue lors de l'ajout d'un utilisateur dans la base de donnée");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -119,7 +141,7 @@ public class UserDAO {
         try {
             Connection connection = DatabaseManager.getConnection();
 
-            String query = "SELECT " + ID_ROLE + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
+            String query = "SELECT " + ROLE_ID + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, userId);
@@ -127,7 +149,7 @@ public class UserDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                roleId = resultSet.getInt(ID_ROLE);
+                roleId = resultSet.getInt(ROLE_ID);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,11 +158,39 @@ public class UserDAO {
         return roleId;
     }
 
+    public static Integer getUserIdByEmail(String userMail) {
+        if(userMail == null || userMail.isEmpty()) {
+            return null;
+        }
+
+        Integer userId = null;
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT " + USER_ID + " FROM " + USER_TABLE + " WHERE " + USER_EMAIL + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, userMail);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                userId = resultSet.getInt(USER_ID);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return userId;
+    }
+
     public static boolean modifyUserRole(int userID, int oldRoleID, int newRoleID) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
-            String query = "UPDATE " + USER_TABLE + " SET " + ID_ROLE + " = ? WHERE " + USER_ID + " = ?";
+            String query = "UPDATE " + USER_TABLE + " SET " + ROLE_ID + " = ? WHERE " + USER_ID + " = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, newRoleID);
@@ -178,5 +228,56 @@ public class UserDAO {
             return false;
         }
 
+    }
+
+    public static boolean isEmailInTable(String email) {
+        if(email == null || email.isEmpty()) {
+            return false;
+        }
+        boolean isIn = true;
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT COUNT(*) FROM " + USER_TABLE + " WHERE " + USER_EMAIL + " LIKE(?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                isIn = count != 0;
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isIn;
+    }
+
+    public static Integer userConnection(String userEmail, String userPassword) {
+        Integer userId = null;
+        try {
+            // Établir la connexion à la base de données
+            Connection connection = DatabaseManager.getConnection();
+            String sql = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_EMAIL + " = ? AND " + USER_PASSWORD + " = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, userEmail);
+            statement.setString(2, userPassword);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                userId = resultSet.getInt(USER_ID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return userId;
     }
 }

@@ -48,7 +48,7 @@ public class StudentDAO {
         }
     }
 
-    public static void addStudentInTable(int studentID, Integer classID, Integer majorId) {
+    public static boolean addStudentInTable(int studentID, Integer classID, Integer majorId) {
         try {
             Connection connection = DatabaseManager.getConnection();
 
@@ -74,7 +74,9 @@ public class StudentDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
 }

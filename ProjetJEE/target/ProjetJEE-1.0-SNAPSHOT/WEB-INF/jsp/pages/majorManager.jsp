@@ -20,7 +20,7 @@
 <%
     Integer userId = (Integer) session.getAttribute("user");
     if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
-        response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+        response.sendRedirect("index.jsp");
         return;
     }
 

@@ -29,7 +29,7 @@
   } else {
     if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
 %>
-  <a href="${pageContext.request.contextPath}/studentSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
+  <a href="${pageContext.request.contextPath}/userSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
   <%
     }
   %>

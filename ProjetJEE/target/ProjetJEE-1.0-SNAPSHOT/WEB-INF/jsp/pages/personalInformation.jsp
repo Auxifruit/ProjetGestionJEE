@@ -7,7 +7,7 @@
 <%
   Integer userId = (Integer) session.getAttribute("user");
   if (userId == null) {
-    response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+    response.sendRedirect("index.jsp");
     return;
   }
 
@@ -16,7 +16,7 @@
 
   // Vérifier que l'utilisateur existe
   if (user == null) {
-    response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+    response.sendRedirect("index.jsp");
     return;
   }
 %>

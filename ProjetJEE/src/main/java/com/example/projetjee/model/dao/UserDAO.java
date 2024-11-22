@@ -5,7 +5,9 @@ import com.example.projetjee.util.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDAO {
     private static final String USER_TABLE = "users";
@@ -184,6 +186,73 @@ public class UserDAO {
         }
 
         return userId;
+    }
+
+    /**
+     * Method to get the user's class by his id
+     * @return the user's class
+     */
+    public static List<Map<String, Object>> getAllUsersWithClasses() {
+        List<Map<String, Object>> usersWithClasses = new ArrayList<>();
+
+        String query = "SELECT u.userId, u.userName, u.userLastName, u.userEmail, u.userBirthdate, c.classId, c.className " +
+                "FROM users u " +
+                "JOIN student s ON u.userId = s.studentId " +
+                "JOIN classes c ON s.classId = c.classId";
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Map<String, Object> userWithClass = new HashMap<>();
+                userWithClass.put("userId", resultSet.getInt("userId"));
+                userWithClass.put("userName", resultSet.getString("userName"));
+                userWithClass.put("userLastName", resultSet.getString("userLastName"));
+                userWithClass.put("userEmail", resultSet.getString("userEmail"));
+
+                // Conversion de la date
+                userWithClass.put("userBirthdate", resultSet.getString("userBirthdate"));
+
+                userWithClass.put("classId", resultSet.getInt("classId"));
+                userWithClass.put("className", resultSet.getString("className"));
+                usersWithClasses.add(userWithClass);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getAllUsersWithClasses:");
+            e.printStackTrace();
+        }
+
+        return usersWithClasses;
+    }
+
+    /**
+     * Method to get all distinct class names from the Classes table.
+     * @return a list of class names.
+     */
+    public static List<String> getAllClassNames() {
+        List<String> classNames = new ArrayList<>();
+
+        // Requête SQL pour récupérer les noms de classes distincts
+        String query = "SELECT DISTINCT className FROM Classes";  // Assure-toi que 'className' est la bonne colonne dans la table 'Classes'
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                // Ajouter le nom de classe à la liste
+                classNames.add(resultSet.getString("className"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("AllClass");
+            e.printStackTrace();  // Gérer l'exception si quelque chose ne va pas avec la requête
+        }
+
+        return classNames;
     }
 
     public static boolean modifyUserRole(int userID, int oldRoleID, int newRoleID) {

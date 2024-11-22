@@ -10,12 +10,19 @@
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <br>
 <head>
     <title>Suppression séance</title>
 </head>
 <body>
 <%
+  Integer userId = (Integer) session.getAttribute("user");
+  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+    return;
+  }
+
   List<Lesson> lessonsList = (List<Lesson>) request.getAttribute("lessons");
 
   if (lessonsList == null || lessonsList.isEmpty()) {

@@ -4,6 +4,7 @@
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.LessonClassesDAO" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%--
 Created by IntelliJ IDEA.
   User: CYTech Student
@@ -19,6 +20,12 @@ Created by IntelliJ IDEA.
 <body>
 <h1>Assignation des séances à des Classs</h1>
 <%
+    Integer userId = (Integer) session.getAttribute("user");
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+        response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+        return;
+    }
+
     Lesson lesson = (Lesson) request.getAttribute("lesson");
 
     if (lesson == null) {

@@ -1,3 +1,5 @@
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -7,16 +9,21 @@
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
+  String role = null;
+  if(userId != null) {
+    role = RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId));
+  }
 %>
 <h1><%= "Hello World!" %></h1>
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a></br>
-<a href="${pageContext.request.contextPath}/changeRole-servlet">Gestion des rôles</a></br>
-<a href="${pageContext.request.contextPath}/lessonManager-servlet">Gérer les séances</a></br>
-<a href="${pageContext.request.contextPath}/subjectManager-servlet">Gérer les matières</a></br>
-<a href="${pageContext.request.contextPath}/courseManager-servlet">Gérer les cours</a></br>
-<a href="${pageContext.request.contextPath}/majorManager-servlet">Gérer les filières</a></br>
-<a href="${pageContext.request.contextPath}/classesManager-servlet">Gérer les classes</a></br>
+<%
+  if(userId != null && "administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+%>
+  <a href="${pageContext.request.contextPath}/goToAdminPage-servlet">Page admin</a></br>
+<%
+  }
+%>
 <a href="${pageContext.request.contextPath}/studentSchedule-servlet?studentId=2">Emplois du temps de l'étudiant n°2</a></br>
 <%
   if(userId == null) {

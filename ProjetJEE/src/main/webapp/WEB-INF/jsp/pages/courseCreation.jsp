@@ -1,7 +1,9 @@
 <%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Course" %>
-<%@ page import="com.example.projetjee.model.dao.SubjectDAO" %><%--
+<%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 12/11/2024
@@ -16,6 +18,12 @@
 <body>
 <h1>Création d'un nouveau cours</h1>
 <%
+    Integer userId = (Integer) session.getAttribute("user");
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+        response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+        return;
+    }
+
     List<Course> coursList = (List<Course>) request.getAttribute("courses");
     List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
 

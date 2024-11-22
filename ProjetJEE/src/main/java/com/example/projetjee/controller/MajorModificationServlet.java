@@ -60,9 +60,7 @@ public class MajorModificationServlet extends HttpServlet {
             return;
         }
 
-        Major major = MajorDAO.getMajor(majorId);
-
-        if(major.getMajorName().equals(majorNewName)) {
+        if(MajorDAO.getMajorNameById(majorId).equals(majorNewName)) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un nom différent.");
             doGet(request, response);
             return;

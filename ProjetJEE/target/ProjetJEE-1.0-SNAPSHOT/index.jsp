@@ -16,15 +16,19 @@
 <a href="${pageContext.request.contextPath}/subjectManager-servlet">Gérer les matières</a></br>
 <a href="${pageContext.request.contextPath}/courseManager-servlet">Gérer les cours</a></br>
 <a href="${pageContext.request.contextPath}/majorManager-servlet">Gérer les filières</a></br>
+<a href="${pageContext.request.contextPath}/classesManager-servlet">Gérer les classes</a></br>
 <a href="${pageContext.request.contextPath}/studentSchedule-servlet?studentId=2">Emplois du temps de l'étudiant n°2</a></br>
-<a href="${pageContext.request.contextPath}/login">Connexion</a></br>
-<a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 <%
-  if(userId != null) {
+  if(userId == null) {
+%>
+  <a href="${pageContext.request.contextPath}/login">Connexion</a></br>
+<%
+  } else {
 %>
   <a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
 <%
   }
 %>
+<a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 </body>
 </html>

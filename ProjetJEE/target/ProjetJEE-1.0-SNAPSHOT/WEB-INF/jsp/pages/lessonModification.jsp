@@ -12,6 +12,7 @@
 <%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <br>
 <head>
     <title>Modification séance</title>
@@ -19,6 +20,12 @@
 <body>
 <h1>Modification d'une séance</h1>
 <%
+  Integer userId = (Integer) session.getAttribute("user");
+  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+    return;
+  }
+
   Lesson lesson = (Lesson) request.getAttribute("lesson");
 
   if (lesson == null) {

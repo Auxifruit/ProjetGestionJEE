@@ -9,6 +9,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <html>
 <head>
     <title>Liste Userss</title>
@@ -17,6 +18,12 @@
 <h1>List des Userss</h1>
 
 <%
+    Integer userId = (Integer) session.getAttribute("user");
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
+
     List<Users> userList = (List<Users>) request.getAttribute("users");
 
     if(userList == null || userList.isEmpty()) {

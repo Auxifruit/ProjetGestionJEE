@@ -9,10 +9,6 @@
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  String role = null;
-  if(userId != null) {
-    role = RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId));
-  }
 %>
 <h1><%= "Hello World!" %></h1>
 <br/>
@@ -24,18 +20,23 @@
 <%
   }
 %>
-<a href="${pageContext.request.contextPath}/studentSchedule-servlet?studentId=2">Emplois du temps de l'étudiant n°2</a></br>
 <%
   if(userId == null) {
 %>
   <a href="${pageContext.request.contextPath}/login">Connexion</a></br>
+  <a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 <%
   } else {
+    if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
 %>
+  <a href="${pageContext.request.contextPath}/studentSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
+  <%
+    }
+  %>
+  <a href="${pageContext.request.contextPath}/personalInformation-servlet">Informations personnelles</a></br>
   <a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
 <%
   }
 %>
-<a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 </body>
 </html>

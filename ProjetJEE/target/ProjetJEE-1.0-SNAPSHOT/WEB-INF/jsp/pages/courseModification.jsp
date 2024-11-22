@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
+<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -17,6 +19,12 @@
 <body>
 <h1>Modification d'un cours</h1>
 <%
+    Integer userId = (Integer) session.getAttribute("user");
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+        response.sendRedirect(request.getContextPath() + "/returnToIndex-servlet");
+        return;
+    }
+
     Course course = (Course) request.getAttribute("course");
     List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
 

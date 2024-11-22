@@ -175,6 +175,8 @@
       <input type="text" name="gradeCoefficient" class="input-field" required>
     </div>
 
+    <input type="hidden" name="courseId" value="<%=request.getAttribute("courseId")%>">
+
     <div class="notes-table">
       <h3>Liste des étudiants</h3>
       <table style="width: 100%; border-collapse: collapse; text-align: left;">

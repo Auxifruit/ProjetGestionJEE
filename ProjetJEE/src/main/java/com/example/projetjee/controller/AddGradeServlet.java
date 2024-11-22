@@ -69,7 +69,7 @@ public class AddGradeServlet extends HttpServlet {
                 }
             }
 
-            response.sendRedirect(request.getContextPath() + "/addGrade.jsp");
+            request.getRequestDispatcher("/WEB-INF/jsp/pages/addGradeDone.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

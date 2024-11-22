@@ -243,4 +243,40 @@ public class CourseDAO {
 
         return isIn;
     }
+
+    // get coursID with courseName and a className
+    public static String getCourseId(String courseName, String className) {
+        String courseId = null;
+
+        if (courseName.isEmpty() || className.isEmpty()) {
+            return courseId;
+        }
+
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT DISTINCT c." + COURSE_ID +
+                    " FROM " + COURSE_TABLE + " c " +
+                    "INNER JOIN Lesson l ON l." + COURSE_ID + " = c." + COURSE_ID + " " +
+                    "INNER JOIN LessonClass lc ON lc.lessonId = l.lessonId " +
+                    "INNER JOIN Classes cl ON cl.classesId = lc.classesId " +
+                    "WHERE c." + COURSE_NAME + " = ? " +
+                    "AND cl.classesName = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, courseName);
+            preparedStatement.setString(2, className);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                courseId = resultSet.getString(COURSE_ID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return courseId;
+    }
 }

@@ -1,9 +1,7 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Classes;
-import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.DatabaseManager;
-import com.example.projetjee.util.DateUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

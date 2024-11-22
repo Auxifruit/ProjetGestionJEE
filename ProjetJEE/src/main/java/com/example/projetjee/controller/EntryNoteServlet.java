@@ -5,11 +5,14 @@ import java.util.List;
 
 import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.TeacherDAO;
+import com.example.projetjee.model.entities.Course;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+
+import static com.example.projetjee.model.dao.CourseDAO.getCourseId;
 
 @WebServlet(name = "EntryNoteServlet", value = "/entry-note-servlet")
 public class EntryNoteServlet extends HttpServlet {
@@ -43,6 +46,8 @@ public class EntryNoteServlet extends HttpServlet {
             // If no valid criteria, set an empty list or null
             request.setAttribute("students", null);
         }
+        // set the CourseId, with the CourseName(Discipline) to sent it in parameters when we create a grade
+        request.setAttribute("courseId", getCourseId(discipline,className));
 
         // reset the communes attributes before going back to the jsp
         setCommonAttributes(request);

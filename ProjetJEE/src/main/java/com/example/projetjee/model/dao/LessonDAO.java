@@ -70,36 +70,6 @@ public class LessonDAO {
         return null;
     }
 
-    public static List<Lesson> getClassLessonFromStudentId(Integer studentId) {
-        List<Lesson> classLesson = new ArrayList<>();
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT l.lessonId, l.lessonStartDate, l.lessonEndDate, l.courseId, l.teacherId FROM Lesson l JOIN LessonClass lc ON l.lessonId = lc.lessonId JOIN Student s ON lc.classId = s.classId WHERE s.studentId = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, studentId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Lesson lesson = new Lesson();
-
-                lesson.setLessonId(resultSet.getInt(LESSON_ID));
-                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
-
-                classLesson.add(lesson);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return classLesson;
-    }
-
     public static boolean addLessonInTable(Integer lessonId, String lessonStartDate, String lessonsEndDate, int lessonCourseId, int lessonTeacherId) {
         try {
             Connection connection = DatabaseManager.getConnection();
@@ -177,6 +147,66 @@ public class LessonDAO {
         }
 
         return true;
+    }
+
+    public static List<Lesson> getStudentLessonFromId(Integer studentId) {
+        List<Lesson> studentLesson = new ArrayList<>();
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT l.lessonId, l.lessonStartDate, l.lessonEndDate, l.courseId, l.teacherId FROM Lesson l JOIN LessonClass lc ON l.lessonId = lc.lessonId JOIN Student s ON lc.classId = s.classId WHERE s.studentId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, studentId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Lesson lesson = new Lesson();
+
+                lesson.setLessonId(resultSet.getInt(LESSON_ID));
+                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
+                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
+                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
+                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
+
+                studentLesson.add(lesson);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return studentLesson;
+    }
+
+    public static List<Lesson> getTeacherLessonFromId(Integer teacherId) {
+        List<Lesson> teacherLesson = new ArrayList<>();
+        try {
+            Connection connection = DatabaseManager.getConnection();
+
+            String query = "SELECT * FROM " + LESSON_TABLE + " WHERE " + LESSON_TEACHER_ID + " = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, teacherId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Lesson lesson = new Lesson();
+
+                lesson.setLessonId(resultSet.getInt(LESSON_ID));
+                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
+                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
+                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
+                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
+
+                teacherLesson.add(lesson);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return teacherLesson;
     }
 
     public static String getLessonStartDate(int lessonId) {

@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class MajorDAO {
-    private static final String MAJOR_TABLE = "major";
+    private static final String MAJOR_TABLE = "Major";
     private static final String MAJOR_ID = "majorId";
     private static final String MAJOR_NAME = "majorName";
 

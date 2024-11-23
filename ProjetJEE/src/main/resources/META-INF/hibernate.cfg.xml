@@ -1,15 +1,19 @@
 <hibernate-configuration>
     <session-factory>
+        <!-- Propriétés de connexion -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/cydatabase</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">cytech0001</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <!-- Configuration des logs et du schéma -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="hibernate.format_sql">true </property>
+        <property name="hibernate.format_sql">true</property>
         <property name="hibernate.use_sql_comments">true</property>
 
+        <!-- Mapping des classes -->
         <mapping class="com.example.projetjee.model.entities.Administrator"/>
         <mapping class="com.example.projetjee.model.entities.Classes"/>
         <mapping class="com.example.projetjee.model.entities.Course"/>
@@ -20,7 +24,7 @@
         <mapping class="com.example.projetjee.model.entities.Possiblerole"/>
         <mapping class="com.example.projetjee.model.entities.Student"/>
         <mapping class="com.example.projetjee.model.entities.Subjects"/>
-	<mapping class="com.example.projetjee.model.entities.Teacher"/>
-	<mapping class="com.example.projetjee.model.entities.Users"/>
+        <mapping class="com.example.projetjee.model.entities.Teacher"/>
+        <mapping class="com.example.projetjee.model.entities.Users"/>
     </session-factory>
 </hibernate-configuration>

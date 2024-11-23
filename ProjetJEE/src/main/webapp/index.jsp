@@ -14,7 +14,7 @@
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a></br>
 <%
-  if(userId != null && "administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId != null && "administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
 %>
   <a href="${pageContext.request.contextPath}/goToAdminPage-servlet">Page admin</a></br>
 <%
@@ -27,7 +27,7 @@
   <a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 <%
   } else {
-    if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
 %>
   <a href="${pageContext.request.contextPath}/userSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
   <%

@@ -4,6 +4,8 @@ import com.example.projetjee.model.dao.MajorDAO;
 import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.Major;
+import com.example.projetjee.model.entities.Student;
+import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -48,22 +50,37 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        /*
+        // A MODIFIER PLUS TARD
         if(UserDAO.isEmailInTable(email) == true) {
             request.setAttribute("error", "Erreur : Cette adresse e-mail est déjà utilisée.");
             doGet(request, response);
             return;
         }
+        */
 
-        if(UserDAO.addUserInTable(password, lastName, firstName, email, birthdate, 1) == false) {
+        Users user = new Users();
+        user.setUserPassword(password);
+        user.setUserLastName(lastName);
+        user.setUserName(firstName);
+        user.setUserEmail(email);
+        user.setUserBirthdate(birthdate);
+        user.setRoleId(1);
+
+        if(UserDAO.addUserInTable(user) == false) {
             request.setAttribute("error", "Erreur : Erreur lors de l'inscription.");
             doGet(request, response);
             return;
         }
 
-        int userId = UserDAO.getUserIdByEmail(email);
+        user = UserDAO.getUserByEmail(email);
         int majorId = Integer.parseInt(majorIdString);
 
-        if(StudentDAO.addStudentInTable(userId, null, majorId) == false) {
+        Student student = new Student();
+        student.setStudentId(user.getUserId());
+        student.setMajorId(majorId);
+
+        if(StudentDAO.addStudentInTable(student) == false) {
             request.setAttribute("error", "Erreur : Erreur lors de l'affectation du rôle étudiant, veuillez contacter un administrateur pour vous aider.");
             doGet(request, response);
             return;

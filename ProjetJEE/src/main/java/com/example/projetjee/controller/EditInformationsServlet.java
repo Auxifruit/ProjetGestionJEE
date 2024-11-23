@@ -1,5 +1,6 @@
 package com.example.projetjee.controller;
 
+import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.example.projetjee.model.dao.UserDAO;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet("/editInformations")
 public class EditInformationsServlet extends HttpServlet {
@@ -42,19 +42,20 @@ public class EditInformationsServlet extends HttpServlet {
             return;
         }
 
+        Users user = new Users();
+        user.setUserPassword(password);
+        user.setUserLastName(lastName);
+        user.setUserName(name);
+        user.setUserEmail(email);
+        user.setUserBirthdate(birthDate);
+
         // Mise à jour des informations dans la base de données
-        try {
-            boolean updateSuccessful = UserDAO.updateUserInDatabase(userId, email, lastName, name, birthDate, password);
+        boolean updateSuccessful = UserDAO.modifyUserFromTable(user);
 
-            if (updateSuccessful) {
-                request.setAttribute("message", "Les informations ont été mises à jour avec succès.");
-            } else {
-                request.setAttribute("message", "Échec de la mise à jour des informations.");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            request.setAttribute("message", "Erreur lors de la mise à jour des informations : " + e.getMessage());
+        if (updateSuccessful) {
+            request.setAttribute("message", "Les informations ont été mises à jour avec succès.");
+        } else {
+            request.setAttribute("message", "Échec de la mise à jour des informations.");
         }
 
         // Rediriger vers la page JSP

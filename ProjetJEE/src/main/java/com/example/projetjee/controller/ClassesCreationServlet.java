@@ -1,9 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.ClasseDAO;
-import com.example.projetjee.model.dao.MajorDAO;
 import com.example.projetjee.model.entities.Classes;
-import com.example.projetjee.model.entities.Major;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -38,13 +36,19 @@ public class ClassesCreationServlet extends HttpServlet {
             return;
         }
 
+        /*
+        // A MODIFIER
         if(ClasseDAO.isClassesInTable(classesName) == true) {
             request.setAttribute("erreur", "Erreur : La classe existe déjà.");
             doGet(request, response);
             return;
         }
+        */
 
-        if(ClasseDAO.addClassesInTable(classesName) == true) {
+        Classes classe = new Classes();
+        classe.setClassName(classesName);
+
+        if(ClasseDAO.addClasseInTable(classe) == true) {
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
         }
         else {

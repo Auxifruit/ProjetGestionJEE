@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet(name = "subjectModificationServlet", value = "/subjectModification-servlet")
 public class SubjectModificationServlet extends HttpServlet {
@@ -24,7 +23,7 @@ public class SubjectModificationServlet extends HttpServlet {
         }
 
         int subjectId = Integer.parseInt(subjectIdString);
-        Subjects subject = SubjectDAO.getSubject(subjectId);
+        Subjects subject = SubjectDAO.getSubjectById(subjectId);
 
         try {
             request.setAttribute("subject", subject);
@@ -53,13 +52,13 @@ public class SubjectModificationServlet extends HttpServlet {
 
         int subjectId = Integer.parseInt(subjectIdString);
 
-        if(SubjectDAO.isSubjectInTable(SubjectDAO.getSubjectNameById(subjectId)) == false) {
+        if(SubjectDAO.getSubjectById(subjectId) == null) {
             request.setAttribute("erreur", "Erreur : La matière n'existe pas.");
             doGet(request, response);
             return;
         }
 
-        Subjects subject = SubjectDAO.getSubject(subjectId);
+        Subjects subject = SubjectDAO.getSubjectById(subjectId);
 
         if(subject.getSubjectName().equals(subjectNewName)) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un nouveau différent.");
@@ -67,7 +66,9 @@ public class SubjectModificationServlet extends HttpServlet {
             return;
         }
 
-        if(SubjectDAO.modifySubjectFromTable(subjectId, subjectNewName) == true) {
+        subject.setSubjectName(subjectNewName);
+
+        if(SubjectDAO.modifySubjectFromTable(subject) == true) {
             request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {

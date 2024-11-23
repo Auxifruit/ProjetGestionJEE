@@ -18,7 +18,7 @@ public class CourseCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Course> courseList = CourseDAO.getAllCourses();
-        List<Subjects> subjectList = SubjectDAO.getAllSubject();
+        List<Subjects> subjectList = SubjectDAO.getAllSubjects();
 
         request.setAttribute("courses", courseList);
         request.setAttribute("subjects", subjectList);
@@ -49,13 +49,20 @@ public class CourseCreationServlet extends HttpServlet {
 
         int subjectId = Integer.parseInt(subjectIdString);
 
+        /*
+        // A MODIFIER
         if(CourseDAO.isCourseInTable(courseName, subjectId) == true) {
             request.setAttribute("erreur", "Erreur : Le cours existe déjà.");
             doGet(request, response);
             return;
         }
+        */
 
-        if(CourseDAO.addCourseInTable(courseName, subjectId) == true) {
+        Course course = new Course();
+        course.setCourseName(courseName);
+        course.setSubjectId(subjectId);
+
+        if(CourseDAO.addCourseInTable(course) == true) {
             request.getRequestDispatcher("courseManager-servlet").forward(request, response);
         }
         else {

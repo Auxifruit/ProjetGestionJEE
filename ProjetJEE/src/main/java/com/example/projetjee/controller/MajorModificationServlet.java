@@ -1,9 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.MajorDAO;
-import com.example.projetjee.model.dao.SubjectDAO;
 import com.example.projetjee.model.entities.Major;
-import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +23,7 @@ public class MajorModificationServlet extends HttpServlet {
         }
 
         int majorIdId = Integer.parseInt(majorIdString);
-        Major major = MajorDAO.getMajor(majorIdId);
+        Major major = MajorDAO.getMajorById(majorIdId);
 
         try {
             request.setAttribute("major", major);
@@ -53,20 +51,23 @@ public class MajorModificationServlet extends HttpServlet {
         }
 
         int majorId = Integer.parseInt(majorIdString);
+        Major major = MajorDAO.getMajorById(majorId);
 
-        if(MajorDAO.isMajorInTable(MajorDAO.getMajorNameById(majorId)) == false) {
+        if(major == null) {
             request.setAttribute("erreur", "Erreur : La filière n'existe pas.");
             doGet(request, response);
             return;
         }
 
-        if(MajorDAO.getMajorNameById(majorId).equals(majorNewName)) {
+        if(major.getMajorName().equals(majorNewName)) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un nom différent.");
             doGet(request, response);
             return;
         }
 
-        if(MajorDAO.modifyMajorFromTable(majorId, majorNewName) == true) {
+        major.setMajorName(majorNewName);
+
+        if(MajorDAO.modifyMajorFromTable(major) == true) {
             request.getRequestDispatcher("majorManager-servlet").forward(request, response);
         }
         else {

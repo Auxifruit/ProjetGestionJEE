@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "lessonModificationServlet", value = "/lessonModification-servlet")
@@ -24,7 +23,7 @@ public class LessonModificationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String lessonIdString = request.getParameter("lessonId");
         List<Course> courseList = CourseDAO.getAllCourses();
-        List<Teacher> teacherList = TeacherDAO.getAllTeachers();
+        List<Teacher> teacherList = TeacherDAO.getAllTeacher();
 
         if(lessonIdString == null || lessonIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une séance.");
@@ -33,7 +32,7 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         int lessonId = Integer.parseInt(lessonIdString);
-        Lesson lesson = LessonDAO.getLesson(lessonId);
+        Lesson lesson = LessonDAO.getLessonById(lessonId);
 
         try {
             request.setAttribute("courses", courseList);
@@ -67,7 +66,7 @@ public class LessonModificationServlet extends HttpServlet {
         }
 
         int lessonId = Integer.parseInt(lessonIdString);
-        Lesson lesson = LessonDAO.getLesson(lessonId);
+        Lesson lesson = LessonDAO.getLessonById(lessonId);
 
         if(newStartDate == null || newStartDate.isEmpty()) {
             newStartDate = lesson.getLessonStartDate().toString();
@@ -116,7 +115,12 @@ public class LessonModificationServlet extends HttpServlet {
             return;
         }
 
-        if(LessonDAO.modifyLessonInTable(lessonId, newStartDate, newEndDate, newCourseId, newTeacherId) == true) {
+        lesson.setLessonStartDate(Timestamp.valueOf(newStartDate));
+        lesson.setLessonEndDate(Timestamp.valueOf(newEndDate));
+        lesson.setCourseId(newCourseId);
+        lesson.setTeacherId(newTeacherId);
+
+        if(LessonDAO.modifyLessonFromTable(lesson) == true) {
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {

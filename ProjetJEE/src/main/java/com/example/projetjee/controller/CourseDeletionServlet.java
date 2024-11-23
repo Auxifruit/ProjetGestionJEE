@@ -29,7 +29,7 @@ public class CourseDeletionServlet extends HttpServlet {
 
         int courseId = Integer.parseInt(courseIdString);
 
-        if(CourseDAO.isCourseInTable(courseId) == false) {
+        if(CourseDAO.getCourseById(courseId) == null) {
             request.setAttribute("erreur", "Erreur : Le cours n'existe pas.");
             request.getRequestDispatcher("courseManager-servlet").forward(request, response);
             return;

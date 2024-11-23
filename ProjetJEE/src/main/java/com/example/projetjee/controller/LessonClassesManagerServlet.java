@@ -29,7 +29,7 @@ public class LessonClassesManagerServlet extends HttpServlet {
 
         int lessonId = Integer.parseInt(lessonIdString);
 
-        Lesson lesson = LessonDAO.getLesson(lessonId);
+        Lesson lesson = LessonDAO.getLessonById(lessonId);
         availableClassesList = ClasseDAO.getAvailableClassesForLesson(lesson.getLessonId());
 
         request.setAttribute("lesson", lesson);

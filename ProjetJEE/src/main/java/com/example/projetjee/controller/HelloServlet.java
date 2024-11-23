@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import com.example.projetjee.model.dao.StudentDAO;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {

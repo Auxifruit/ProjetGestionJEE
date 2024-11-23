@@ -1,6 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.LessonClassesDAO;
+import com.example.projetjee.model.entities.Lessonclass;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,7 +35,11 @@ public class LessonClassesAssignationServlet extends HttpServlet {
             return;
         }
 
-        if(LessonClassesDAO.addLessonClassInTable(lessonId, classeId) == true) {
+        Lessonclass lessonclass = new Lessonclass();
+        lessonclass.setLessonId(lessonId);
+        lessonclass.setClassId(classeId);
+
+        if(LessonClassesDAO.addLessonClassInTable(lessonclass) == true) {
             request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
         }
         else {

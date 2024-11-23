@@ -15,7 +15,7 @@ import java.util.List;
 public class SubjectCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Subjects> subjectList = SubjectDAO.getAllSubject();
+        List<Subjects> subjectList = SubjectDAO.getAllSubjects();
 
         request.setAttribute("subjects", subjectList);
 
@@ -36,13 +36,18 @@ public class SubjectCreationServlet extends HttpServlet {
             return;
         }
 
+        /*
+        // A MODIFIER PLUS TARD
         if(SubjectDAO.isSubjectInTable(subjectName) == true) {
             request.setAttribute("erreur", "Erreur : La matière existe déjà.");
             doGet(request, response);
             return;
-        }
+        }*/
 
-        if(SubjectDAO.addSubjectInTable(subjectName) == true) {
+        Subjects subject = new Subjects();
+        subject.setSubjectName(subjectName);
+
+        if(SubjectDAO.addSubjectInTable(subject) == true) {
             request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {

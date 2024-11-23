@@ -39,13 +39,14 @@ public class ChangeRoleServlet extends HttpServlet {
         }
 
         int userId = Integer.parseInt(userParam);
+        Users user = UserDAO.getUserById(userId);
 
-        if (newRoleID == UserDAO.getRoleIdByUserID(userId)) {
+        if (newRoleID == user.getRoleId()) {
             request.setAttribute("erreur", "Erreur : L'Users a déjà ce rôle.");
             doGet(request, response);
         }
 
-        if(UserDAO.modifyUserRole(userId, UserDAO.getRoleIdByUserID(userId), newRoleID) == true) {
+        if(UserDAO.modifyUserRole(user, user.getRoleId(), newRoleID) == true) {
             doGet(request, response);
         }
         else {

@@ -28,7 +28,7 @@ public class UserScheduleServlet extends HttpServlet {
 
         int userId = Integer.parseInt(userIdString);
         Map<LocalDate, List<Lesson>> lessonsByDay = new TreeMap<>();
-        String role = RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId));
+        String role = RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId());
 
         List<Lesson> lessonList;
 
@@ -41,8 +41,6 @@ public class UserScheduleServlet extends HttpServlet {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
-
-
 
         for (Lesson lesson : lessonList) {
             LocalDate date = lesson.getLessonStartDate().toLocalDateTime().toLocalDate();

@@ -29,13 +29,13 @@ public class ClassesDeletionServlet extends HttpServlet {
 
         int classId = Integer.parseInt(classIdString);
 
-        if(ClasseDAO.isClassesInTable(ClasseDAO.getClassesNameById(classId)) == false) {
+        if(ClasseDAO.getClasseById(classId) == null) {
             request.setAttribute("erreur", "Erreur : La filière n'existe pas.");
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
             return;
         }
 
-        if(ClasseDAO.deleteClassesFromTable(classId) == true) {
+        if(ClasseDAO.deleteClasseFromTable(classId) == true) {
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
         }
         else {

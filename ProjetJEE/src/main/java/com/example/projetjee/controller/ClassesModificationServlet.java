@@ -23,7 +23,7 @@ public class ClassesModificationServlet extends HttpServlet {
         }
 
         int classId = Integer.parseInt(classIdString);
-        Classes classe = ClasseDAO.getClasse(classId);
+        Classes classe = ClasseDAO.getClasseById(classId);
 
         try {
             request.setAttribute("classe", classe);
@@ -51,20 +51,23 @@ public class ClassesModificationServlet extends HttpServlet {
         }
 
         int classesId = Integer.parseInt(classesIdString);
+        Classes classe = ClasseDAO.getClasseById(classesId);
 
-        if(ClasseDAO.isClassesInTable(ClasseDAO.getClassesNameById(classesId)) == false) {
+        if(classe == null) {
             request.setAttribute("erreur", "Erreur : La classe n'existe pas.");
             doGet(request, response);
             return;
         }
 
-        if(ClasseDAO.getClassesNameById(classesId).equals(classesNewName)) {
+        if(classe.getClassName().equals(classesNewName)) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un nom différent.");
             doGet(request, response);
             return;
         }
 
-        if(ClasseDAO.modifyClassesFromTable(classesId, classesNewName) == true) {
+        classe.setClassName(classesNewName);
+
+        if(ClasseDAO.modifyClassFromTable(classe) == true) {
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
         }
         else {

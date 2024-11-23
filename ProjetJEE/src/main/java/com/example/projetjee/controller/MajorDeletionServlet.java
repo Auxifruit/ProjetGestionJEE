@@ -1,7 +1,6 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.MajorDAO;
-import com.example.projetjee.model.dao.SubjectDAO;
 import com.example.projetjee.model.entities.Major;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,8 +29,9 @@ public class MajorDeletionServlet extends HttpServlet {
         }
 
         int majorId = Integer.parseInt(majorIdString);
+        Major major = MajorDAO.getMajorById(majorId);
 
-        if(MajorDAO.isMajorInTable(MajorDAO.getMajorNameById(majorId)) == false) {
+        if(major == null) {
             request.setAttribute("erreur", "Erreur : La filière n'existe pas.");
             request.getRequestDispatcher("majorManager-servlet").forward(request, response);
             return;

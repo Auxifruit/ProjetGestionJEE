@@ -1,8 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.LessonClassesDAO;
-import com.example.projetjee.model.entities.Classes;
-import com.example.projetjee.model.entities.Lesson;
+import com.example.projetjee.model.entities.Lessonclass;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -29,9 +28,9 @@ public class LessonClassesUnassignationServlet extends HttpServlet {
         }
 
         int classeId = Integer.parseInt(classeIdString);
+        Lessonclass lessonclass = LessonClassesDAO.getLessonClassByLessonIdAndClassId(lessonId, classeId);
 
-
-        if(LessonClassesDAO.deleteLessonClassInTable(lessonId, classeId) == true) {
+        if(LessonClassesDAO.deleteLessonclassFromTable(lessonclass.getId()) == true) {
             request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
         }
         else {

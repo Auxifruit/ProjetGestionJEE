@@ -1,9 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.MajorDAO;
-import com.example.projetjee.model.dao.SubjectDAO;
 import com.example.projetjee.model.entities.Major;
-import com.example.projetjee.model.entities.Subjects;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -38,13 +36,19 @@ public class MajorCreationServlet extends HttpServlet {
             return;
         }
 
+        /*
+        // A MODIFIER
         if(MajorDAO.isMajorInTable(majorName) == true) {
             request.setAttribute("erreur", "Erreur : La filière existe déjà.");
             doGet(request, response);
             return;
         }
+        */
 
-        if(MajorDAO.addMajorInTable(majorName) == true) {
+        Major major = new Major();
+        major.setMajorName(majorName);
+
+        if(MajorDAO.addMajorInTable(major) == true) {
             request.getRequestDispatcher("majorManager-servlet").forward(request, response);
         }
         else {

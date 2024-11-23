@@ -14,15 +14,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @WebServlet(name = "lessonCreationServlet", value = "/lessonCreation-servlet")
 public class LessonCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Lesson> lessonList = LessonDAO.getAllLessons();
+        List<Lesson> lessonList = LessonDAO.getAllLesson();
         List<Course> courseList = CourseDAO.getAllCourses();
-        List<Teacher> teacherList = TeacherDAO.getAllTeachers();
+        List<Teacher> teacherList = TeacherDAO.getAllTeacher();
 
         request.setAttribute("lessons", lessonList);
         request.setAttribute("courses", courseList);
@@ -77,7 +78,13 @@ public class LessonCreationServlet extends HttpServlet {
             return;
         }
 
-        if(LessonDAO.addLessonInTable(null, startDate, endDate, courseId, teacherId) == true) {
+        Lesson lesson = new Lesson();
+        lesson.setLessonStartDate(Timestamp.valueOf(startDate));
+        lesson.setLessonEndDate(Timestamp.valueOf(endDate));
+        lesson.setCourseId(courseId);
+        lesson.setTeacherId(teacherId);
+
+        if(LessonDAO.addLessonInTable(lesson) == true) {
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {

@@ -18,7 +18,7 @@ public class CourseModificationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String courseIdString = request.getParameter("courseId");
-        List<Subjects> subjectList = SubjectDAO.getAllSubject();
+        List<Subjects> subjectList = SubjectDAO.getAllSubjects();
 
         if(courseIdString == null || courseIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir un cours.");
@@ -27,7 +27,7 @@ public class CourseModificationServlet extends HttpServlet {
         }
 
         int courseId = Integer.parseInt(courseIdString);
-        Course course = CourseDAO.getCourses(courseId);
+        Course course = CourseDAO.getCourseById(courseId);
 
         try {
             request.setAttribute("course", course);
@@ -57,7 +57,7 @@ public class CourseModificationServlet extends HttpServlet {
         }
 
         int courseId = Integer.parseInt(courseIdString);
-        Course course = CourseDAO.getCourses(courseId);
+        Course course = CourseDAO.getCourseById(courseId);
 
         if(newCourseName == null || newCourseName.isEmpty()) {
             newCourseName = course.getCourseName();
@@ -72,13 +72,19 @@ public class CourseModificationServlet extends HttpServlet {
             newCourseSubjectId = Integer.parseInt(newCourseSubjectIdString);
         }
 
+        /*
+        // A MODIFIER
         if(CourseDAO.isCourseInTable(newCourseName, newCourseSubjectId) == true) {
             request.setAttribute("erreur", "Erreur : Le cours existe déjà.");
             doGet(request, response);
             return;
         }
+        */
 
-        if(CourseDAO.modifyCourseInTable(courseId, newCourseName, newCourseSubjectId) == true) {
+        course.setCourseName(newCourseName);
+        course.setSubjectId(newCourseSubjectId);
+
+        if(CourseDAO.modifyCourseFromTable(course) == true) {
             request.getRequestDispatcher("courseManager-servlet").forward(request, response);
         }
         else {

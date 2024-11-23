@@ -13,7 +13,7 @@ import java.util.List;
 public class LessonManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Lesson> lessonList = LessonDAO.getAllLessons();
+        List<Lesson> lessonList = LessonDAO.getAllLesson();
 
         request.setAttribute("lessons", lessonList);
 

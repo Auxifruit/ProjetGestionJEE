@@ -26,9 +26,11 @@ public class StudentDAO {
         Transaction tx = null;
         boolean success = false;
 
+        System.out.println("addStudent : " + student.getStudentId());
+
         try {
             tx = session.beginTransaction();
-            if (!session.contains(student)) {
+            if (student.getStudentId() == 0) {
                 session.persist(student);
             } else {
                 session.merge(student);

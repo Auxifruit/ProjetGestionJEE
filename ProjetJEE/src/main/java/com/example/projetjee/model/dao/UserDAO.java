@@ -221,12 +221,36 @@ public class UserDAO {
 
         try {
             tx = session.beginTransaction();
+            int userID = user.getUserId();
 
             // Modifier le rôle de l'utilisateur
             user.setRoleId(newRoleID);
             UserDAO.modifyUserFromTable(user);
 
-            int userID = user.getUserId();
+            boolean flag = false;
+
+            switch (newRoleID) {
+                case 1:
+                    Student student = new Student();
+                    student.setStudentId(userID);
+                    student.setClassId(null);
+                    student.setMajorId(null);
+
+                    flag = StudentDAO.addStudentInTable(student);
+                    break;
+                case 2:
+                    Teacher teacher = new Teacher();
+                    teacher.setTeacherId(userID);
+
+                    flag = TeacherDAO.addTeacherInTable(teacher);
+                    break;
+                case 3:
+                    Administrator admin = new Administrator();
+                    admin.setAdministratorId(userID);
+
+                    flag = AdminDAO.addAdminInTable(admin);
+                    break;
+            }
 
             // Supprimer l'utilisateur de l'ancien rôle
             switch (oldRoleID) {
@@ -238,30 +262,6 @@ public class UserDAO {
                     break;
                 case 3:
                     AdminDAO.deleteAdminFromTable(userID);
-                    break;
-            }
-
-            boolean flag = false;
-
-            switch (newRoleID) {
-                case 1:
-                    Student student = new Student();
-                    student.setStudentId(userID);
-                    student.setClassId(null);
-                    student.setMajorId(null);
-
-                    System.out.println(student.getStudentId());
-                    flag = StudentDAO.addStudentInTable(student);
-                    break;
-                case 2:
-                    Teacher teacher = new Teacher();
-                    teacher.setTeacherId(userID);
-                    flag = TeacherDAO.addTeacherInTable(teacher);
-                    break;
-                case 3:
-                    Administrator admin = new Administrator();
-                    admin.setAdministratorId(userID);
-                    flag = AdminDAO.addAdminInTable(admin);
                     break;
             }
 

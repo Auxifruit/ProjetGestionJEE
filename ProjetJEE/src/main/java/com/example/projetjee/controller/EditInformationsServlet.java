@@ -42,7 +42,7 @@ public class EditInformationsServlet extends HttpServlet {
             return;
         }
 
-        Users user = new Users();
+        Users user = UserDAO.getUserById(userId);
         user.setUserPassword(password);
         user.setUserLastName(lastName);
         user.setUserName(name);

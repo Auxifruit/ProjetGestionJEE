@@ -156,56 +156,45 @@ public class UserDAO {
     }
 
     public static boolean modifyUserRole(int userID, int oldRoleID, int newRoleID) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
+        user.setRoleId(newRoleID);
 
-            String query = "UPDATE " + USER_TABLE + " SET " + ROLE_ID + " = ? WHERE " + USER_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        UserDAO.modifyUserFromTable(user);
 
-            preparedStatement.setInt(1, newRoleID);
-            preparedStatement.setInt(2, userID);
+        int userID = user.getUserId();
 
-            preparedStatement.executeUpdate();
-
-            switch (oldRoleID) {
-                case 1:
-                    StudentDAO.deleteStudentFromTable(userID);
-                    break;
-                case 2:
-                    TeacherDAO.deleteTeacherFromTable(userID);
-                    break;
-                case 3:
-                    AdminDAO.deleteAdminById(userID);
-                    break;
-            }
-
-            switch (newRoleID) {
-                case 1:
-                    Student student = new Student();
-                    student.setStudentId(userID);
-
-                    StudentDAO.addStudentInTable(student);
-                    break;
-                case 2:
-                    Teacher teacher = new Teacher();
-                    teacher.setTeacherId(userID);
-
-                    TeacherDAO.addTeacherInTable(teacher);
-                    break;
-                case 3:
-                    Administrator admin = new Administrator();
-                    admin.setAdministratorId(userID);
-
-                    AdminDAO.addAdminInTable(userID);
-                    break;
-            }
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        switch (oldRoleID) {
+            case 1:
+                StudentDAO.deleteStudentFromTable(userID);
+                break;
+            case 2:
+                TeacherDAO.deleteTeacherFromTable(userID);
+                break;
+            case 3:
+                AdminDAO.deleteAdminFromTable(userID);
+                break;
         }
 
+        switch (newRoleID) {
+            case 1:
+                Student student = new Student();
+                student.setStudentId(userID);
+
+                StudentDAO.addStudentInTable(student);
+                break;
+            case 2:
+                Teacher teacher = new Teacher();
+                teacher.setTeacherId(userID);
+
+                TeacherDAO.addTeacherInTable(teacher);
+                break;
+            case 3:
+                Administrator admin = new Administrator();
+                admin.setAdministratorId(userID);
+
+                AdminDAO.addAdminInTable(userID);
+                break;
+        }
+        return true;
     }
 
     public static boolean isEmailInTable(String email) {

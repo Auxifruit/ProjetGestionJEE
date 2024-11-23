@@ -3,27 +3,28 @@ package com.example.projetjee.model.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="users")
 public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "userId")
     private int userId;
-    @Basic
+
     @Column(name = "userPassword")
     private String userPassword;
-    @Basic
+
     @Column(name = "userLastName")
     private String userLastName;
-    @Basic
+
     @Column(name = "userName")
     private String userName;
-    @Basic
+
     @Column(name = "userEmail")
     private String userEmail;
-    @Basic
+
     @Column(name = "userBirthdate")
     private String userBirthdate;
-    @Basic
+
     @Column(name = "roleId")
     private Integer roleId;
 

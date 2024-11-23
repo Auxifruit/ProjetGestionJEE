@@ -3,6 +3,7 @@ package com.example.projetjee.model.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "administrator")
 public class Administrator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

@@ -3,15 +3,17 @@ package com.example.projetjee.model.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="student")
 public class Student {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "studentId")
     private int studentId;
-    @Basic
-    @Column(name = "classId")
+
+    @Column(name = "classesId")
     private Integer classId;
-    @Basic
+
     @Column(name = "majorId")
     private Integer majorId;
 

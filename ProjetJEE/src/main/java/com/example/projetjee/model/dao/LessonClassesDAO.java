@@ -19,7 +19,7 @@ public class LessonClassesDAO {
 
     public static List<Lessonclass> getAllLessonClasses() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Lessonclass> lessonclasses = session.createQuery("FROM " + LESSON_CLASS_TABLE, Teacher.class).list();
+        List<Lessonclass> lessonclasses = session.createQuery("FROM " + LESSON_CLASS_TABLE, Lessonclass.class).list();
         session.close();
         return lessonclasses;
     }

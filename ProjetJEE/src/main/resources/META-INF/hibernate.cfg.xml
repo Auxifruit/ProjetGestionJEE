@@ -19,5 +19,8 @@
         <mapping class="com.example.projetjee.model.entities.Major"/>
         <mapping class="com.example.projetjee.model.entities.Possiblerole"/>
         <mapping class="com.example.projetjee.model.entities.Student"/>
+        <mapping class="com.example.testhbernate.model.entities.Subjects"/>
+		<mapping class="com.example.testhbernate.model.entities.Teacher"/>
+		<mapping class="com.example.testhbernate.model.entities.Users"/>
     </session-factory>
 </hibernate-configuration>

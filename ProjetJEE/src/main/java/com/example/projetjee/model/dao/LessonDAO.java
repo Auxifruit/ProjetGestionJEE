@@ -113,8 +113,8 @@ public class LessonDAO {
 
             // Créer la requête HQL pour récupérer les leçons associées à l'étudiant
             String hql = "SELECT l FROM Lesson l " +
-                    "JOIN l.LessonClass lc " +
-                    "JOIN lc.student s " +
+                    "JOIN Lessonclass lc ON l.lessonId = lc.lessonId " +
+                    "JOIN Student s ON lc.classId = s.classId " +
                     "WHERE s.studentId = :studentId";
 
             // Créer la query HQL

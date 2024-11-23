@@ -44,7 +44,9 @@ public class LessonClassesDAO {
             List<Integer> classIdList = query.list();
 
             for(Integer classId : classIdList) {
-                availableClasses.add(ClasseDAO.getClasseById(classId));
+                if(classId != null) {
+                    availableClasses.add(ClasseDAO.getClasseById(classId));
+                }
             }
 
         } catch (Exception e) {

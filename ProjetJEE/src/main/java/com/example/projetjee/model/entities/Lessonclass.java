@@ -3,23 +3,26 @@ package com.example.projetjee.model.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "lessonclass")
 public class Lessonclass {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lessonClassId")
     private int lessonClassId;
-    @Basic
-    @Column(name = "lessonId")
+
+    @JoinColumn(name = "lessonId", nullable = false)
     private Integer lessonId;
-    @Basic
-    @Column(name = "classId")
+
+    @JoinColumn(name = "classesId", nullable = false)
     private Integer classId;
 
-    public int getLessonClassId() {
+    // Getters et Setters
+    public int getId() {
         return lessonClassId;
     }
 
-    public void setLessonClassId(int lessonClassId) {
+    public void setId(int lessonClassId) {
         this.lessonClassId = lessonClassId;
     }
 
@@ -39,25 +42,4 @@ public class Lessonclass {
         this.classId = classId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Lessonclass that = (Lessonclass) o;
-
-        if (lessonClassId != that.lessonClassId) return false;
-        if (lessonId != null ? !lessonId.equals(that.lessonId) : that.lessonId != null) return false;
-        if (classId != null ? !classId.equals(that.classId) : that.classId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = lessonClassId;
-        result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
-        result = 31 * result + (classId != null ? classId.hashCode() : 0);
-        return result;
-    }
 }

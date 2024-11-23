@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 
@@ -21,16 +22,13 @@ public class DateUtil {
     }
 
     public static Timestamp dateStringToTimestamp(String dateString) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-            Date parsedDate = dateFormat.parse(dateString);
-            return new Timestamp(parsedDate.getTime());
+        LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Timestamp timestamp = Timestamp.valueOf(localDateTime);
+
+        return timestamp;
     }
 
     public static String dateFormat(String dateString) {

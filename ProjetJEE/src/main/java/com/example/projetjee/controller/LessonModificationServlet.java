@@ -70,7 +70,7 @@ public class LessonModificationServlet extends HttpServlet {
 
         if(newStartDate == null || newStartDate.isEmpty()) {
             newStartDate = lesson.getLessonStartDate().toString();
-            newStartDate = newStartDate.split("\\.")[0].replace(" ", "T");
+            newStartDate = newStartDate.substring(0, 16);
         }
         else {
             dateModified = true;
@@ -78,7 +78,7 @@ public class LessonModificationServlet extends HttpServlet {
 
         if(newEndDate == null || newEndDate.isEmpty()) {
             newEndDate = lesson.getLessonEndDate().toString();
-            newEndDate = newEndDate.split("\\.")[0].replace(" ", "T");
+            newEndDate = newEndDate.substring(0, 16);
         }
         else {
             dateModified = true;
@@ -115,8 +115,8 @@ public class LessonModificationServlet extends HttpServlet {
             return;
         }
 
-        lesson.setLessonStartDate(Timestamp.valueOf(newStartDate));
-        lesson.setLessonEndDate(Timestamp.valueOf(newEndDate));
+        lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(newStartDate));
+        lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(newEndDate));
         lesson.setCourseId(newCourseId);
         lesson.setTeacherId(newTeacherId);
 

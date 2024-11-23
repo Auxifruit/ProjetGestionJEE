@@ -79,8 +79,8 @@ public class LessonCreationServlet extends HttpServlet {
         }
 
         Lesson lesson = new Lesson();
-        lesson.setLessonStartDate(Timestamp.valueOf(startDate));
-        lesson.setLessonEndDate(Timestamp.valueOf(endDate));
+        lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(startDate));
+        lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(endDate));
         lesson.setCourseId(courseId);
         lesson.setTeacherId(teacherId);
 

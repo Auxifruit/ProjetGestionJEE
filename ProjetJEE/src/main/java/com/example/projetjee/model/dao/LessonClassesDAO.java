@@ -1,15 +1,14 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Classes;
 import com.example.projetjee.model.entities.Lesson;
-import com.example.projetjee.util.DatabaseManager;
 import com.example.projetjee.model.entities.Lessonclass;
-import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class LessonClassesDAO {
     private static String LESSON_CLASS_TABLE = "LessonClass";
@@ -24,23 +23,58 @@ public class LessonClassesDAO {
         return lessonclasses;
     }
 
-    public static void addLessonClassInTable(Lessonclass lessonclass) {
+    public static Lessonclass getLessonClassByLessonIdAndClassId(int lessonId, int classId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(lessonclass);
-        tx.commit();
+        Lessonclass lessonclass = session.createQuery("from " + LESSON_CLASS_TABLE + " where " + LESSON_ID + " = :lessonId AND " + CLASS_ID + " = :classId", Lessonclass.class).setParameter("lessonId", lessonId).setParameter("classId", classId).getSingleResultOrNull();
         session.close();
+        return lessonclass;
     }
 
-    public static void deleteTeacherFromTable(int lessonclassId) {
+    public static boolean addLessonClassInTable(Lessonclass lessonclass) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        Lessonclass lessonclass = session.get(Lessonclass.class, lessonclassId);
-        if (lessonclass != null) {
-            session.remove(lessonclass);
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.persist(lessonclass);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        tx.commit();
-        session.close();
+
+        return success;
+    }
+
+    public static boolean deleteLessonclassFromTable(int lessonclassId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            Lesson lesson = session.get(Lesson.class, lessonclassId);
+            if (lesson != null) {
+                session.remove(lesson);
+                success = true;
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 
     public static boolean canClassParticipate(int classId, int lessonId) {
@@ -56,9 +90,9 @@ public class LessonClassesDAO {
 
             String hql = """
             SELECT COUNT(l)
-            FROM LessonClass lc
+            FROM Lessonclass lc
             JOIN lc.lesson l
-            WHERE lc.classId = :classId
+            WHERE lc.lessonClassId = :classId
               AND l.lessonId != :lessonId
               AND (
                   (l.lessonStartDate < :lessonEndDate AND l.lessonEndDate > :lessonStartDate)

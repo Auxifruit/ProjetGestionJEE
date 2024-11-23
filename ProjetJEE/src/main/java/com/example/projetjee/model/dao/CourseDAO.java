@@ -1,6 +1,7 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Course;
+import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -19,7 +20,7 @@ public class CourseDAO {
         return null;
     }
 
-    public static Course getCourse(int courseId) {
+    public static Course getCourseById(int courseId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
             return session.get(Course.class, courseId);
@@ -29,83 +30,82 @@ public class CourseDAO {
         return null;
     }
 
-    public static boolean addCourse(String courseName, int subjectId) {
-        if (courseName == null || courseName.isEmpty() || subjectId <= 0) {
-            return false;
-        }
+    public static boolean addCourseInTable(Course course) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Course course = new Course();
-            course.setCourseName(courseName);
-            course.setSubjectId(subjectId);
-
-            session.save(course);
-            transaction.commit();
-            return true;
+        try {
+            tx = session.beginTransaction();
+            session.persist(course);
+            tx.commit();
+            success = true;
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return false;
+
+        return success;
     }
 
-    public static boolean deleteCourse(int courseId) {
-        if (courseId <= 0) {
-            return false;
-        }
+    public static boolean deleteCourseFromTable(int courseId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Course course = session.get(Course.class, courseId);
-            if (course != null) {
-                session.delete(course);
-                transaction.commit();
-                return true;
+        try {
+            tx = session.beginTransaction();
+            Lesson lesson = session.get(Lesson.class, courseId);
+            if (lesson != null) {
+                session.remove(lesson);
+                success = true;
             }
+            tx.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return false;
+
+        return success;
     }
 
-    public static boolean modifyCourse(int courseId, String newCourseName, int newSubjectId) {
-        if (courseId <= 0 || newCourseName == null || newCourseName.isEmpty() || newSubjectId <= 0) {
-            return false;
-        }
+    public static boolean modifyCourseFromTable(Course course) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Course course = session.get(Course.class, courseId);
-            if (course != null) {
-                course.setCourseName(newCourseName);
-                course.setSubjectId(newSubjectId);
-
-                session.update(course);
-                transaction.commit();
-                return true;
-            }
+        try {
+            tx = session.beginTransaction();
+            session.merge(course);
+            tx.commit();
+            success = true;
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return false;
+
+        return success;
     }
 
     public static String getCourseName(int courseId) {
-        Course course = getCourse(courseId);
+        Course course = getCourseById(courseId);
         return course != null ? course.getCourseName() : null;
     }
 
     public static int getCourseSubjectId(int courseId) {
-        Course course = getCourse(courseId);
+        Course course = getCourseById(courseId);
         return course != null ? course.getSubjectId() : -1;
     }
 

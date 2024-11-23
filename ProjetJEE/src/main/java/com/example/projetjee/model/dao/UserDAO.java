@@ -4,12 +4,11 @@ import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.model.entities.Users;
 import com.example.projetjee.util.HibernateUtil;
-import com.example.progetjee.model.entities.Administrator;
+import com.example.projetjee.model.entities.Administrator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +24,36 @@ public class UserDAO {
     private static final String USER_BIRTHDATE = "userBirthdate";
     private static final String ROLE_ID = "roleId";
 
-    public static List<Users> getAllUsers() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Users> users = session.createQuery("FROM " + USER_TABLE, Users.class).list();
-        session.close();
-        return users;
+    public static List<Users> getAllUsers(String roleFilter) {
+        List<Users> userList = null;
+
+        // Ouverture d'une session Hibernate
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            // Création de la requête de base
+            String hql = "FROM Users";
+
+            // Si un filtre de rôle est fourni, ajouter une clause WHERE
+            if (roleFilter != null && !roleFilter.isEmpty()) {
+                hql += " WHERE roleId = :roleId";
+            }
+
+            // Création de la requête Hibernate
+            Query<Users> query = session.createQuery(hql, Users.class);
+
+            // Si un filtre est appliqué, on ajoute le paramètre à la requête
+            if (roleFilter != null && !roleFilter.isEmpty()) {
+                query.setParameter("roleId", Integer.parseInt(roleFilter));
+            }
+
+            // Exécution de la requête et récupération des résultats
+            userList = query.list();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return userList;
     }
 
 
@@ -40,15 +64,29 @@ public class UserDAO {
         return user;
     }
 
-    public static void saveUser(Users user) {
+    public static boolean addUserInTable(Users user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(user);
-        tx.commit();
-        session.close();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.persist(user);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 
-    public static void deleteUser(int userId) {
+    public static void deleteUserFromTable(int userId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         Users user = session.get(Users.class, userId);
@@ -59,12 +97,33 @@ public class UserDAO {
         session.close();
     }
 
-    public static void modifyUser(Users user) {
+    public static boolean modifyUserFromTable(Users user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(user);
-        tx.commit();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.merge(user);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
+    }
+
+    public static Users getUserByEmail(String mail) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Users user = session.createQuery("from Users where " + USER_EMAIL + " = :mail", Users.class).setParameter("mail", mail).getSingleResultOrNull();
         session.close();
+        return user;
     }
 
     /**
@@ -155,7 +214,7 @@ public class UserDAO {
         return classNames;
     }
 
-    public static boolean modifyUserRole(int userID, int oldRoleID, int newRoleID) {
+    public static boolean modifyUserRole(Users user, int oldRoleID, int newRoleID) {
         user.setRoleId(newRoleID);
 
         UserDAO.modifyUserFromTable(user);

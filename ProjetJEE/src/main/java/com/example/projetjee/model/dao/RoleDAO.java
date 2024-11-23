@@ -1,15 +1,9 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.util.DatabaseManager;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class RoleDAO {
     private static final String ROLE_TABLE = "possibleRole";

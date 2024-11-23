@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 
 public class AdminDAO {
 
-    public static void deleteAdminById(int adminID) {
+    public static void deleteAdminFromTable(int adminID) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

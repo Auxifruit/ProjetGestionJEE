@@ -5,6 +5,8 @@ import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 public class MajorDAO {
     private static final String MAJOR_TABLE = "major";
     private static final String MAJOR_ID = "majorId";
@@ -24,31 +26,73 @@ public class MajorDAO {
         return major;
     }
 
-    public static void addMajorInTable(Major major) {
+    public static boolean addMajorInTable(Major major) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(major);
-        tx.commit();
-        session.close();
-    }
+        Transaction tx = null;
+        boolean success = false;
 
-    public static void deleteMajorFromTable(int majorId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        Major major = session.get(Major.class, majorId);
-        if (major != null) {
-            session.remove(major);
+        try {
+            tx = session.beginTransaction();
+            session.persist(major);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        tx.commit();
-        session.close();
+
+        return success;
     }
 
-    public static void modifyMajorFromTable(Major major) {
+    public static boolean deleteMajorFromTable(int majorId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(major);
-        tx.commit();
-        session.close();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            Major major = session.get(Major.class, majorId);
+            if (major != null) {
+                session.remove(major);
+                success = true;
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
+    }
+
+    public static boolean modifyMajorFromTable(Major major) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.merge(major);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 
 }

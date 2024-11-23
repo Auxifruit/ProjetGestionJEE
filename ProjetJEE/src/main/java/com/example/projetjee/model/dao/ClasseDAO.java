@@ -1,21 +1,101 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Classes;
+import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.List;
 
 public class ClasseDAO {
+    public static List<Classes> getAllClasses() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-    public static Classes getClasse(int classeId) {
+            return session.createQuery("FROM Classes ", Classes.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Classes getClasseById(int classeId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Classes.class, classeId);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean addClasseInTable(Classes classe) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.persist(classe);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
+    }
+
+    public static boolean deleteClasseFromTable(int classId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            Lesson lesson = session.get(Lesson.class, classId);
+            if (lesson != null) {
+                session.remove(lesson);
+                success = true;
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
+    }
+
+    public static boolean modifyClassFromTable(Classes classe) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.merge(classe);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 
     public static List<Classes> getAvailableClassesForLesson(int idLesson) {

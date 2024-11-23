@@ -5,6 +5,8 @@ import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 public class TeacherDAO {
     private static final String TEACHER_TABLE = "teacher";
     private static final String TEACHER_ID = "teacherId";

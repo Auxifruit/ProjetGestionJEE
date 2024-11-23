@@ -5,6 +5,8 @@ import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 public class SubjectDAO {
     private static final String SUBJECT_TABLE = "Subjects";
     private static final String SUBJECT_ID = "subjectId";
@@ -24,30 +26,75 @@ public class SubjectDAO {
         return subject;
     }
 
-    public static void addSubjectInTable(Subjects subject) {
+    public static boolean addSubjectInTable(Subjects subject) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(subject);
-        tx.commit();
-        session.close();
-    }
+        Transaction tx = null;
+        boolean success = false;
 
-    public static void deleteSubjectFromTable(int subjectId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        Subjects subject = session.get(Subjects.class, subjectId);
-        if (subject != null) {
-            session.remove(subject);
+        try {
+            tx = session.beginTransaction();
+            session.persist(subject);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            success = false;
+        } finally {
+            session.close();
         }
-        tx.commit();
-        session.close();
+
+        return success;
     }
 
-    public static void modifySubjectFromTable(Subjects subject) {
+    public static boolean deleteSubjectFromTable(int subjectId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(subject);
-        tx.commit();
-        session.close();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            Subjects subject = session.get(Subjects.class, subjectId);
+            if (subject != null) {
+                session.remove(subject);
+                success = true;
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            success = false;
+        } finally {
+            session.close();
+        }
+
+        return success;
+    }
+
+    public static boolean modifySubjectFromTable(Subjects subject) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.merge(subject);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            success = false;
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 }

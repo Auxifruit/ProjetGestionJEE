@@ -1,11 +1,11 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Student;
-import com.example.projetjee.model.entities.Student;
-import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.List;
 
 public class StudentDAO {
     private static final String STUDENT_TABLE = "student";
@@ -20,12 +20,26 @@ public class StudentDAO {
         return students;
     }
 
-    public static void addStudentInTable(Student student) {
+    public static boolean addStudentInTable(Student student) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(student);
-        tx.commit();
-        session.close();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            session.persist(student);
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 
     public static void deleteStudentFromTable(int studentId) {

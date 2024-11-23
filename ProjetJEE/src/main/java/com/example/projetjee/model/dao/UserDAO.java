@@ -135,9 +135,9 @@ public class UserDAO {
 
         // HQL query to fetch the user and class details
         String hql = "SELECT u.userId, u.userName, u.userLastName, u.userEmail, u.userBirthdate, c.classId, c.className " +
-                "FROM " + USER_TABLE + " u " +
-                "JOIN u.students s " +
-                "JOIN s.class c";  // Assuming User has a relationship to Student, and Student has a relationship to Class
+                "FROM Users u " +
+                "JOIN Student s ON u.userId = s.studentId " +
+                "JOIN Classes c ON s.classId = c.classId";
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -264,8 +264,6 @@ public class UserDAO {
                     AdminDAO.deleteAdminFromTable(userID);
                     break;
             }
-
-            System.out.println("Flag : " + flag);
 
             tx.commit();
             success = true;

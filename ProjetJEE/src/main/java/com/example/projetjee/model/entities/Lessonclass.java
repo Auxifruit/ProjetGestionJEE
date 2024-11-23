@@ -11,13 +11,11 @@ public class Lessonclass {
     @Column(name = "lessonClassId")
     private int lessonClassId;
 
-    @ManyToOne
     @JoinColumn(name = "lessonId", nullable = false)
-    private Lesson lesson;
+    private Integer lessonId;
 
-    @ManyToOne
     @JoinColumn(name = "classesId", nullable = false)
-    private Classes classes;
+    private Integer classId;
 
     // Getters et Setters
     public int getId() {
@@ -28,19 +26,20 @@ public class Lessonclass {
         this.lessonClassId = lessonClassId;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public Integer getLessonId() {
+        return lessonId;
     }
 
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
+    public void setLessonId(Integer lessonId) {
+        this.lessonId = lessonId;
     }
 
-    public Classes getClasses() {
-        return classes;
+    public Integer getClassId() {
+        return classId;
     }
 
-    public void setClass(Classes classes) {
-        this.classes = classes;
+    public void setClassId(Integer classId) {
+        this.classId = classId;
     }
+
 }

@@ -1,43 +1,46 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.util.DatabaseManager;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.example.projetjee.model.entities.Administrator;
+import com.example.projetjee.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AdminDAO {
-    private static final String ADMIN_TABLE = "administrator";
-    private static final String ADMIN_ID = "administratorId";
 
     public static void deleteAdminById(int adminID) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
 
-            String query = "DELETE FROM " + ADMIN_TABLE + " WHERE " + ADMIN_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, adminID);
+            Administrator admin = session.get(Administrator.class, adminID);
+            if (admin != null) {
+                session.delete(admin);
+            }
 
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
     }
 
     public static void addAdminInTable(int adminID) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
 
-            String query = "INSERT INTO " + ADMIN_TABLE + " VALUES(?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            Administrator admin = new Administrator();
+            admin.setAdministratorId(adminID);
 
-            preparedStatement.setInt(1, adminID);
+            session.save(admin);
 
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
     }

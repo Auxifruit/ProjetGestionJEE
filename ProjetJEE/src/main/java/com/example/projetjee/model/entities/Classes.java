@@ -1,17 +1,21 @@
 package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
+@Table(name = "classes")
 public class Classes {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "classId")
     private int classId;
-    @Basic
-    @Column(name = "className")
+
+    @Column(name = "className", nullable = false)
     private String className;
 
+    // Getters et Setters
     public int getClassId() {
         return classId;
     }
@@ -28,23 +32,25 @@ public class Classes {
         this.className = className;
     }
 
+    // Méthodes equals et hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Classes classes = (Classes) o;
-
-        if (classId != classes.classId) return false;
-        if (className != null ? !className.equals(classes.className) : classes.className != null) return false;
-
-        return true;
+        return classId == classes.classId && Objects.equals(className, classes.className);
     }
 
     @Override
     public int hashCode() {
-        int result = classId;
-        result = 31 * result + (className != null ? className.hashCode() : 0);
-        return result;
+        return Objects.hash(classId, className);
+    }
+
+    @Override
+    public String toString() {
+        return "Classes{" +
+                "classId=" + classId +
+                ", className='" + className + '\'' +
+                '}';
     }
 }

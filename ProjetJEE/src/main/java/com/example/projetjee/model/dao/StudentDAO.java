@@ -1,5 +1,6 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Major;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
@@ -15,7 +16,7 @@ public class StudentDAO {
 
     public static List<Student> getAllStudent() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Student> students = session.createQuery("FROM " + STUDENT_TABLE, Student.class).list();
+        List<Student> students = session.createQuery("FROM Student ", Student.class).list();
         session.close();
         return students;
     }
@@ -27,7 +28,11 @@ public class StudentDAO {
 
         try {
             tx = session.beginTransaction();
-            session.persist(student);
+            if (!session.contains(student)) {
+                session.persist(student);
+            } else {
+                session.merge(student);
+            }
             tx.commit();
             success = true;
         } catch (Exception e) {
@@ -42,15 +47,29 @@ public class StudentDAO {
         return success;
     }
 
-    public static void deleteStudentFromTable(int studentId) {
+    public static boolean deleteStudentFromTable(int studentId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        Student student = session.get(Student.class, studentId);
-        if (student != null) {
-            session.remove(student);
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            Student student = session.get(Student.class, studentId);
+            if (student != null) {
+                session.remove(student);
+                success = true;
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        tx.commit();
-        session.close();
+
+        return success;
     }
 
 }

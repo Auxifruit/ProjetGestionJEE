@@ -18,12 +18,30 @@ public class TeacherDAO {
         return teachers;
     }
 
-    public static void addTeacherInTable(Teacher teacher) {
+    public static boolean addTeacherInTable(Teacher teacher) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(teacher);
-        tx.commit();
-        session.close();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            if (!session.contains(teacher)) {
+                session.persist(teacher);
+            } else {
+                session.merge(teacher);
+            }
+            tx.commit();
+            success = true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return success;
     }
 
     public static void deleteTeacherFromTable(int teacherId) {

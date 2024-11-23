@@ -26,22 +26,29 @@ public class AdminDAO {
         }
     }
 
-    public static void addAdminInTable(int adminID) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+    public static boolean addAdminInTable(Administrator administrator) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
 
-            Administrator admin = new Administrator();
-            admin.setAdministratorId(adminID);
-
-            session.save(admin);
-
-            transaction.commit();
+        try {
+            tx = session.beginTransaction();
+            if (!session.contains(administrator)) {
+                session.persist(administrator);
+            } else {
+                session.merge(administrator);
+            }
+            tx.commit();
+            success = true;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (tx != null) {
+                tx.rollback();
             }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
+
+        return success;
     }
 }

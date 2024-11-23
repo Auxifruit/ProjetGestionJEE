@@ -18,7 +18,7 @@
 <h1>Liste des cours</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -43,7 +43,7 @@
             <td><%= course.getCourseName() %></td>
             <td>
                 <%
-                    String subjectName = SubjectDAO.getSubjectNameById(course.getSubjectId());
+                    String subjectName = SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName();
                     if(subjectName == null || subjectName.isEmpty()) {
                 %>
                         <p>Pas de matière</p>
@@ -51,7 +51,7 @@
                     }
                     else {
                 %>
-                        <%= SubjectDAO.getSubjectNameById(course.getSubjectId())%>
+                        <%= subjectName %>
                 <%
                     }
                 %>

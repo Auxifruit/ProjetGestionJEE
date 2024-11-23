@@ -19,7 +19,7 @@
 <h1>Création d'un nouveau cours</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -42,7 +42,7 @@
     %>
     <tr>
         <td><%= course.getCourseName() %></td>
-        <td><%= SubjectDAO.getSubjectNameById(course.getSubjectId()) %></td>
+        <td><%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></td>
     </tr>
     <%
         }

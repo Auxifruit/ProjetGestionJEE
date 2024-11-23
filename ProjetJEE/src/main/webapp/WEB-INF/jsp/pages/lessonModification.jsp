@@ -13,6 +13,7 @@
 <%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Users" %>
 <br>
 <head>
     <title>Modification séance</title>
@@ -21,7 +22,7 @@
 <h1>Modification d'une séance</h1>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
     response.sendRedirect("index.jsp");
     return;
   }
@@ -55,7 +56,7 @@ Il n'y a pas d'Teacher associé à la séance</p>
 <%
 } else {
 %>
-<%= " " + UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></p>
+<%= " " + UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></p>
 <%
   }
 %>
@@ -109,8 +110,10 @@ Il n'y a pas d'Teacher associé à la séance</p>
   <option value="">Ne pas modifier l'Teacher</option>
   <%
     for (Teacher teacher : teacherList) {
-      String teacherLastName = UserDAO.getLastNameById(teacher.getTeacherId());
-      String teacherName = UserDAO.getNameById(teacher.getTeacherId());
+      Users user = UserDAO.getUserById(teacher.getTeacherId());
+
+      String teacherLastName = user.getUserLastName();
+      String teacherName = user.getUserName();
 
       if(teacherLastName != null || teacherName != null) {
   %>

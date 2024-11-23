@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class DateUtil {
@@ -13,6 +14,25 @@ public class DateUtil {
         try {
             LocalDateTime startDate = LocalDateTime.parse(startDateString);
             LocalDateTime endDate = LocalDateTime.parse(endDateString);
+
+            if (!startDate.toLocalDate().equals(endDate.toLocalDate())) {
+                return false;
+            }
+
+            LocalDateTime validStartDate = startDate.withHour(8).withMinute(30).withSecond(0).withNano(0);
+            if (startDate.isBefore(validStartDate)) {
+                return false;
+            }
+
+            LocalDateTime validEndDate = endDate.withHour(19).withMinute(45).withSecond(0).withNano(0);
+            if (endDate.isAfter(validEndDate)) {
+                return false;
+            }
+
+            long minutesBetween = ChronoUnit.MINUTES.between(startDate, endDate);
+            if (minutesBetween > 180) {
+                return false;
+            }
 
             return startDate.isBefore(endDate);
         } catch (DateTimeParseException e) {

@@ -13,7 +13,7 @@ public class TeacherDAO {
 
     public static List<Teacher> getAllTeacher() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Teacher> teachers = session.createQuery("FROM " + TEACHER_TABLE, Teacher.class).list();
+        List<Teacher> teachers = session.createQuery("FROM Teacher ", Teacher.class).list();
         session.close();
         return teachers;
     }

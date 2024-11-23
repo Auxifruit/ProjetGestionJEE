@@ -1,5 +1,6 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Classes;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.model.entities.Lessonclass;
 import com.example.projetjee.util.HibernateUtil;
@@ -8,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LessonClassesDAO {
@@ -21,6 +23,35 @@ public class LessonClassesDAO {
         List<Lessonclass> lessonclasses = session.createQuery("FROM " + LESSON_CLASS_TABLE, Lessonclass.class).list();
         session.close();
         return lessonclasses;
+    }
+
+    public static List<Classes> getLessonClasses(int lessonId) {
+        List<Classes> availableClasses = new ArrayList<>();
+
+        // Ouverture d'une session Hibernate
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            // Requête HQL pour récupérer les classes associées à un lessonId
+            String hql = "SELECT classId FROM Lessonclass WHERE lessonId = :lessonId";
+
+            // Création de la requête Hibernate
+            Query<Integer> query = session.createQuery(hql, Integer.class);
+
+            // Définition du paramètre
+            query.setParameter("lessonId", lessonId);
+
+            // Exécution de la requête et récupération des résultats
+            List<Integer> classIdList = query.list();
+
+            for(Integer classId : classIdList) {
+                availableClasses.add(ClasseDAO.getClasseById(classId));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return availableClasses;
     }
 
     public static Lessonclass getLessonClassByLessonIdAndClassId(int lessonId, int classId) {
@@ -83,28 +114,26 @@ public class LessonClassesDAO {
 
         try {
             // Récupérer la leçon pour les dates
-            Lesson lesson = session.find(Lesson.class, lessonId);
-            if (lesson == null) {
-                return false; // Si la leçon n'existe pas, impossible de vérifier
-            }
+            Lesson lesson = LessonDAO.getLessonById(lessonId);
 
             String hql = """
-            SELECT COUNT(l)
-            FROM Lessonclass lc
-            JOIN lc.lesson l
-            WHERE lc.lessonClassId = :classId
-              AND l.lessonId != :lessonId
+            SELECT COUNT(*)
+            FROM Lessonclass sc
+            JOIN Lesson s
+            WHERE sc.classId = :classId
+              AND s.lessonId != :excludedLessonId
               AND (
-                  (l.lessonStartDate < :lessonEndDate AND l.lessonEndDate > :lessonStartDate)
-                  OR (l.lessonStartDate >= :lessonStartDate AND l.lessonEndDate <= :lessonEndDate)
-              )
+                    (s.lessonStartDate < :startDate AND s.lessonEndDate > :endDate)
+                 OR (s.lessonStartDate < :startDate AND s.lessonEndDate > :endDate)
+                 OR (s.lessonStartDate >= :startDate AND s.lessonEndDate <= :endDate)
+                  )
             """;
 
             Query<Long> query = session.createQuery(hql, Long.class);
             query.setParameter("classId", classId);
-            query.setParameter("lessonId", lessonId);
-            query.setParameter("lessonStartDate", lesson.getLessonStartDate());
-            query.setParameter("lessonEndDate", lesson.getLessonEndDate());
+            query.setParameter("excludedLessonId", lessonId);
+            query.setParameter("startDate", lesson.getLessonStartDate());
+            query.setParameter("endDate", lesson.getLessonEndDate());
 
             Long count = query.uniqueResult();
             canParticipate = count == 0; // Pas de conflit, participation possible

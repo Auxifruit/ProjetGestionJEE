@@ -58,9 +58,9 @@ public class ClasseDAO {
 
         try {
             tx = session.beginTransaction();
-            Lesson lesson = session.get(Lesson.class, classId);
-            if (lesson != null) {
-                session.remove(lesson);
+            Classes classe = session.get(Classes.class, classId);
+            if (classe != null) {
+                session.remove(classe);
                 success = true;
             }
             tx.commit();

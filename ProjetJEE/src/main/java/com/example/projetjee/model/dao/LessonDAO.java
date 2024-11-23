@@ -1,12 +1,14 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Lesson;
+import com.example.projetjee.util.DateUtil;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,7 +166,7 @@ public class LessonDAO {
             session = HibernateUtil.getSessionFactory().openSession();
 
             // Créer la requête HQL pour vérifier les conflits de leçons
-            String hql = "SELECT COUNT(l) FROM Lesson l " +
+            String hql = "SELECT COUNT(*) FROM Lesson l " +
                     "WHERE l.teacherId = :teacherId " +
                     "AND (:lessonId IS NULL OR l.lessonId != :lessonId) " +
                     "AND ( " +
@@ -176,9 +178,9 @@ public class LessonDAO {
             // Créer la query HQL
             Query<Long> query = session.createQuery(hql, Long.class);
             query.setParameter("teacherId", teacherId);
-            query.setParameter("lessonId", lessonId); // Peut être NULL
-            query.setParameter("lessonStartDate", lessonStartDate);
-            query.setParameter("lessonEndDate", lessonEndDate);
+            query.setParameter("lessonId", lessonId);
+            query.setParameter("lessonStartDate", DateUtil.dateStringToTimestamp(lessonStartDate));
+            query.setParameter("lessonEndDate", DateUtil.dateStringToTimestamp(lessonEndDate));
 
             // Exécuter la requête et obtenir le nombre de leçons conflictuelles
             long count = query.uniqueResult(); // Retourne un long, le nombre de résultats

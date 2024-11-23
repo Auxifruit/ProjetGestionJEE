@@ -1,62 +1,37 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Teacher;
-import com.example.projetjee.util.DatabaseManager;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.projetjee.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class TeacherDAO {
     private static final String TEACHER_TABLE = "teacher";
     private static final String TEACHER_ID = "teacherId";
 
-    public static List<Teacher> getAllTeachers() {
-        List<Teacher> teacherList = new ArrayList<>();
-        try {
-            Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM " + TEACHER_TABLE;
-
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                Teacher teacher = new Teacher();
-                teacher.setTeacherId(resultSet.getInt(TEACHER_ID));
-
-                teacherList.add(teacher);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return teacherList;
+    public static List<Teacher> getAllTeacher() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Teacher> teachers = session.createQuery("FROM " + TEACHER_TABLE, Teacher.class).list();
+        session.close();
+        return teachers;
     }
 
-    public static void deleteTeacherById(int teacherID) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM " + TEACHER_TABLE + " WHERE " + TEACHER_ID + " = " + teacherID);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void addTeacherInTable(Teacher teacher) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(teacher);
+        tx.commit();
+        session.close();
     }
 
-    public static void addTeacherInTable(int teacherID) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "INSERT INTO " + TEACHER_TABLE + " VALUES (?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, teacherID);
-            
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static void deleteTeacherFromTable(int teacherId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        Teacher teacher = session.get(Teacher.class, teacherId);
+        if (teacher != null) {
+            session.remove(teacher);
         }
+        tx.commit();
+        session.close();
     }
 }

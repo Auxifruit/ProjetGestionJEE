@@ -1,12 +1,16 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Lesson;
-import com.example.projetjee.util.DatabaseManager;
+import com.example.projetjee.util.HibernateUtil;
 import com.example.projetjee.util.DateUtil;
+import com.example.projetjee.model.entities.Major;
+import com.example.projetjee.util.HibernateUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LessonDAO {
     private static final String LESSON_TABLE = "Lesson";
@@ -16,371 +20,141 @@ public class LessonDAO {
     private static final String LESSON_COURSE_ID = "courseId";
     private static final String LESSON_TEACHER_ID = "teacherId";
 
-    public static List<Lesson> getAllLessons() {
-        List<Lesson> lessons = new ArrayList<>();
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT * FROM " + LESSON_TABLE;
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Lesson lesson = new Lesson();
-
-                lesson.setLessonId(resultSet.getInt(LESSON_ID));
-                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
-
-                lessons.add(lesson);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static List<Lesson> getAllLesson() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Lesson> lessons = session.createQuery("FROM " + LESSON_TABLE, Lesson.class).list();
+        session.close();
         return lessons;
     }
 
-    public static Lesson getLesson(int LessonId) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT * FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, LessonId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            Lesson lesson = new Lesson();
-
-            if (resultSet.next()) {
-                lesson.setLessonId(resultSet.getInt(LESSON_ID));
-                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
-            }
-            return lesson;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Lesson getLessonById(int lessonId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Lesson lesson = session.get(Lesson.class, lessonId);
+        session.close();
+        return lesson;
     }
 
-    public static boolean addLessonInTable(Integer lessonId, String lessonStartDate, String lessonsEndDate, int lessonCourseId, int lessonTeacherId) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "INSERT INTO " + LESSON_TABLE + " VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            if(lessonId == null) {
-                preparedStatement.setNull(1, Types.INTEGER);
-            }
-            else {
-                preparedStatement.setInt(1, lessonId.intValue());
-            }
-
-            preparedStatement.setString(2, lessonStartDate);
-            preparedStatement.setString(3, lessonsEndDate);
-            preparedStatement.setInt(4, lessonCourseId);
-            preparedStatement.setInt(5, lessonTeacherId);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
+    public static void addLessonInTable(Lesson lesson) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(lesson);
+        tx.commit();
+        session.close();
     }
 
-    public static boolean deleteLessonFromTable(int lessonId) {
-        if(lessonId <= 0) {
-            return false;
+    public static void deleteLessonFromTable(int lessonId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        Lesson lesson = session.get(Lesson.class, lessonId);
+        if (lesson != null) {
+            session.remove(lesson);
         }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "DELETE FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, lessonId);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
+        tx.commit();
+        session.close();
     }
 
-    public static boolean modifyLessonInTable(int lessonId, String startDate, String endDate, int courseId, int teacherId) {
-        if(lessonId <= 0) {
-            return false;
-        }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "UPDATE " + LESSON_TABLE + " SET " + LESSON_START_DATE + " = ?, " + LESSON_END_DATE + " = ?," + LESSON_COURSE_ID + " = ?, " + LESSON_TEACHER_ID + " = ? WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, startDate);
-            preparedStatement.setString(2, endDate);
-            preparedStatement.setInt(3, courseId);
-            preparedStatement.setInt(4, teacherId);
-            preparedStatement.setInt(5, lessonId);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
+    public static void modifyLessonFromTable(Lesson lesson) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.merge(lesson);
+        tx.commit();
+        session.close();
     }
 
     public static List<Lesson> getStudentLessonFromId(Integer studentId) {
-        List<Lesson> studentLesson = new ArrayList<>();
+        List<Lesson> studentLessons = new ArrayList<>();
+        Session session = null;
+
         try {
-            Connection connection = DatabaseManager.getConnection();
+            // Ouvrir une session Hibernate
+            session = HibernateUtil.getSessionFactory().openSession();
 
-            String query = "SELECT l.lessonId, l.lessonStartDate, l.lessonEndDate, l.courseId, l.teacherId FROM Lesson l JOIN LessonClass lc ON l.lessonId = lc.lessonId JOIN Student s ON lc.classId = s.classId WHERE s.studentId = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            // Créer la requête HQL pour récupérer les leçons associées à l'étudiant
+            String hql = "SELECT l FROM Lesson l " +
+                    "JOIN l.LessonClass lc " +
+                    "JOIN lc.student s " +
+                    "WHERE s.studentId = :studentId";
 
-            preparedStatement.setInt(1, studentId);
+            // Créer la query HQL
+            Query<Lesson> query = session.createQuery(hql, Lesson.class);
+            query.setParameter("studentId", studentId); // Définir le paramètre studentId
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Lesson lesson = new Lesson();
-
-                lesson.setLessonId(resultSet.getInt(LESSON_ID));
-                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
-
-                studentLesson.add(lesson);
-            }
-        } catch (SQLException e) {
+            // Exécuter la requête et obtenir la liste des leçons
+            studentLessons = query.list();
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+        } finally {
+            if (session != null) {
+                session.close(); // Fermer la session Hibernate
+            }
         }
-        return studentLesson;
+
+        return studentLessons;
     }
+
 
     public static List<Lesson> getTeacherLessonFromId(Integer teacherId) {
         List<Lesson> teacherLesson = new ArrayList<>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         try {
-            Connection connection = DatabaseManager.getConnection();
+            // Utilisation de HQL pour récupérer les leçons associées à un enseignant
+            String hql = "FROM Lesson l WHERE l.teacherId = :teacherId";
+            Query query = session.createQuery(hql);
+            query.setParameter("teacherId", teacherId); // Bind du paramètre teacherId à la requête
 
-            String query = "SELECT * FROM " + LESSON_TABLE + " WHERE " + LESSON_TEACHER_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            teacherLesson = query.list(); // Exécution de la requête et récupération des résultats
 
-            preparedStatement.setInt(1, teacherId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Lesson lesson = new Lesson();
-
-                lesson.setLessonId(resultSet.getInt(LESSON_ID));
-                lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_START_DATE)));
-                lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(resultSet.getString(LESSON_END_DATE)));
-                lesson.setCourseId(resultSet.getInt(LESSON_COURSE_ID));
-                lesson.setTeacherId(resultSet.getInt(LESSON_TEACHER_ID));
-
-                teacherLesson.add(lesson);
-            }
-        } catch (SQLException e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            return null;
+        } finally {
+            session.close(); // Toujours fermer la session après utilisation
         }
+
         return teacherLesson;
     }
 
-    public static String getLessonStartDate(int lessonId) {
-        String lessonStartDate = null;
-        if(lessonId <= 0) {
-            return lessonStartDate;
-        }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + LESSON_START_DATE + " FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, lessonId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                lessonStartDate = resultSet.getString(LESSON_START_DATE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lessonStartDate;
-    }
-
-    public static String getLessonEndDate(int lessonId) {
-        String lessonEndDate = null;
-        if(lessonId <= 0) {
-            return lessonEndDate;
-        }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + LESSON_END_DATE + " FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, lessonId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                lessonEndDate = resultSet.getString(LESSON_END_DATE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lessonEndDate;
-    }
-
-    public static int getLessonCourseId(int lessonId) {
-        int lessonCourseId = -1;
-        if(lessonId <= 0) {
-            return lessonCourseId;
-        }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + LESSON_COURSE_ID + " FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, lessonId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                lessonCourseId = resultSet.getInt(LESSON_COURSE_ID);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lessonCourseId;
-    }
-
-    public static int getLessonTeacherId(int lessonId) {
-        int lessonTeacherId = -1;
-        if(lessonId <= 0) {
-            return lessonTeacherId;
-        }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + LESSON_TEACHER_ID + " FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, lessonId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                lessonTeacherId = resultSet.getInt(LESSON_TEACHER_ID);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lessonTeacherId;
-    }
-
-    public static boolean isLessonInTable(int lessonId) {
-        if(lessonId <= 0) {
-            return true;
-        }
-
-        boolean isIn = true;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT COUNT(*) FROM " + LESSON_TABLE + " WHERE " + LESSON_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, lessonId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                isIn = count != 0;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return true;
-        }
-
-        return isIn;
-    }
 
     public static boolean isLessonPossible(Integer lessonId, int teacherId, String lessonStartDate, String lessonEndDate) {
         boolean isPossible = true;
-
-        String query = "SELECT COUNT(*) FROM " + LESSON_TABLE + " WHERE " + LESSON_TEACHER_ID +" = ? AND (? IS NULL OR " + LESSON_ID + " != ?) AND ("
-                + "(" + LESSON_START_DATE + " < ? AND " + LESSON_END_DATE + " > ?) "
-                + "OR (" + LESSON_START_DATE + " BETWEEN ? AND ?) "
-                + "OR (" + LESSON_END_DATE + " BETWEEN ? AND ?))";
+        Session session = null;
 
         try {
-            Connection connection = DatabaseManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            // Ouvrir une session Hibernate
+            session = HibernateUtil.getSessionFactory().openSession();
 
-            preparedStatement.setInt(1, teacherId);
-            if (lessonId == null) {
-                preparedStatement.setNull(2, java.sql.Types.INTEGER); // Aucun ID à exclure
-                preparedStatement.setNull(3, java.sql.Types.INTEGER);
-            } else {
-                preparedStatement.setInt(2, lessonId); // Exclusion de l'ID de la séance
-                preparedStatement.setInt(3, lessonId);
-            }
-            preparedStatement.setString(4, lessonStartDate);
-            preparedStatement.setString(5, lessonEndDate);
-            preparedStatement.setString(6, lessonStartDate);
-            preparedStatement.setString(7, lessonEndDate);
-            preparedStatement.setString(8, lessonStartDate);
-            preparedStatement.setString(9, lessonEndDate);
+            // Créer la requête HQL pour vérifier les conflits de leçons
+            String hql = "SELECT COUNT(l) FROM Lesson l " +
+                    "WHERE l.teacherId = :teacherId " +
+                    "AND (:lessonId IS NULL OR l.lessonId != :lessonId) " +
+                    "AND ( " +
+                    "(l.lessonStartDate < :lessonEndDate AND l.lessonEndDate > :lessonStartDate) " +
+                    "OR (l.lessonStartDate BETWEEN :lessonStartDate AND :lessonEndDate) " +
+                    "OR (l.lessonEndDate BETWEEN :lessonStartDate AND :lessonEndDate) " +
+                    ")";
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                isPossible = count == 0;
-            }
+            // Créer la query HQL
+            Query<Long> query = session.createQuery(hql, Long.class);
+            query.setParameter("teacherId", teacherId);
+            query.setParameter("lessonId", lessonId); // Peut être NULL
+            query.setParameter("lessonStartDate", lessonStartDate);
+            query.setParameter("lessonEndDate", lessonEndDate);
 
-        } catch (SQLException e) {
+            // Exécuter la requête et obtenir le nombre de leçons conflictuelles
+            long count = query.uniqueResult(); // Retourne un long, le nombre de résultats
+
+            // Si le compte est 0, alors la leçon est possible
+            isPossible = (count == 0);
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            isPossible = false; // Si une erreur se produit, retourner false
+        } finally {
+            if (session != null) {
+                session.close(); // Fermer la session Hibernate
+            }
         }
 
         return isPossible;
     }
+
 }

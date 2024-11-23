@@ -1,173 +1,53 @@
 package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Subjects;
-import com.example.projetjee.util.DatabaseManager;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.projetjee.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class SubjectDAO {
     private static final String SUBJECT_TABLE = "Subjects";
     private static final String SUBJECT_ID = "subjectId";
     private static final String SUBJECT_NAME = "subjectName";
 
-    public static List<Subjects> getAllSubject() {
-        List<Subjects> subjects = new ArrayList<>();
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT * FROM " + SUBJECT_TABLE;
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Subjects subject = new Subjects();
-                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
-                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
-
-                subjects.add(subject);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static List<Subjects> getAllSubjects() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Subjects> subjects = session.createQuery("FROM " + SUBJECT_TABLE, Subjects.class).list();
+        session.close();
         return subjects;
     }
 
-    public static Subjects getSubject(int subjectId) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT * FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, subjectId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            Subjects subject = new Subjects();
-
-            if (resultSet.next()) {
-                subject.setSubjectId(resultSet.getInt(SUBJECT_ID));
-                subject.setSubjectName(resultSet.getString(SUBJECT_NAME));
-            }
-            return subject;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Subjects getSubjectById(int subjectId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Subjects subject = session.get(Subjects.class, subjectId);
+        session.close();
+        return subject;
     }
 
-    public static boolean addSubjectInTable(String subjectName) {
-        if(subjectName == null || subjectName.isEmpty()) {
-            return false;
-        }
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "INSERT INTO " + SUBJECT_TABLE + "(" + SUBJECT_NAME + ") VALUES (?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, subjectName);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Une erreur est survenue lors de l'ajout d'une matière dans la base de donnée");
-            return false;
-        }
-        return true;
+    public static void addSubjectInTable(Subjects subject) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(subject);
+        tx.commit();
+        session.close();
     }
 
-    public static boolean deleteSubjectFromTable(int subjectId) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "DELETE FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, subjectId);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Une erreur est survenue lors de la suppression de la matière de la base de donnée");
-            return false;
+    public static void deleteSubjectFromTable(int subjectId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        Subjects subject = session.get(Subjects.class, subjectId);
+        if (subject != null) {
+            session.remove(subject);
         }
-        return true;
+        tx.commit();
+        session.close();
     }
 
-    public static boolean modifySubjectFromTable(int subjectId, String subjectNewName) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "UPDATE " + SUBJECT_TABLE + " SET " + SUBJECT_NAME + " = ? WHERE " + SUBJECT_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, subjectNewName);
-            preparedStatement.setInt(2, subjectId);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Une erreur est survenue lors de la modification de la matière de la base de donnée");
-            return false;
-        }
-        return true;
-    }
-
-    public static String getSubjectNameById(int subjectId) {
-        String subjectName = " ";
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + SUBJECT_NAME + " FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, subjectId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                subjectName = resultSet.getString(SUBJECT_NAME);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return subjectName;
-    }
-
-    public static boolean isSubjectInTable(String subjectName) {
-        if(subjectName == null || subjectName.isEmpty()) {
-            return false;
-        }
-        boolean isIn = true;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT COUNT(*) FROM " + SUBJECT_TABLE + " WHERE " + SUBJECT_NAME + " LIKE(?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, subjectName);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                isIn = count != 0;
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return isIn;
+    public static void modifySubjectFromTable(Subjects subject) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.merge(subject);
+        tx.commit();
+        session.close();
     }
 }

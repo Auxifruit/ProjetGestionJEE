@@ -1,7 +1,13 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Student;
+import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.model.entities.Users;
-import com.example.projetjee.util.DatabaseManager;
+import com.example.projetjee.util.HibernateUtil;
+import com.example.progetjee.model.entities.Administrator;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,173 +25,46 @@ public class UserDAO {
     private static final String USER_BIRTHDATE = "userBirthdate";
     private static final String ROLE_ID = "roleId";
 
-    /**
-     * Method to get a list of all the users
-     * @param roleFilter the role we want the list to be full of
-     * @return a list of all the users according to the role filter
-     */
-    public static List<Users> getAllUsers(String roleFilter) {
-        List<Users> userList = new ArrayList<>();
-        try {
-            Connection connection = DatabaseManager.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM " + USER_TABLE;
-
-            if (roleFilter != null && roleFilter != "") {
-                query += " WHERE " + ROLE_ID + " = " + roleFilter;
-            }
-
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                Users user = new Users();
-                user.setUserId(resultSet.getInt(USER_ID));
-                user.setUserLastName(resultSet.getString(USER_LASTNAME));
-                user.setUserName(resultSet.getString(USER_NAME));
-                user.setUserEmail(resultSet.getString(USER_EMAIL));
-                user.setRoleId(resultSet.getInt(ROLE_ID));
-
-                userList.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return userList;
+    public static List<Users> getAllUsers() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Users> users = session.createQuery("FROM " + USER_TABLE, Users.class).list();
+        session.close();
+        return users;
     }
 
-    public static boolean addUserInTable(String userPassword, String userLastName, String userName, String userEmail, String userBirthdate, int roleId) {
-        try {
-            Connection connection = DatabaseManager.getConnection();
 
-            String query = "INSERT INTO " + USER_TABLE + "(" + USER_PASSWORD + ", " + USER_LASTNAME + ", " + USER_NAME + ", " + USER_EMAIL + ", " + USER_BIRTHDATE + ", " + ROLE_ID + ") VALUES (?,?,?,?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, userPassword);
-            preparedStatement.setString(2, userLastName);
-            preparedStatement.setString(3, userName);
-            preparedStatement.setString(4, userEmail);
-            preparedStatement.setString(5, userBirthdate);
-            preparedStatement.setInt(6, roleId);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Une erreur est survenue lors de l'ajout d'un utilisateur dans la base de donnée");
-            return false;
-        }
-        return true;
+    public static Users getUserById(int userId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Users user = session.get(Users.class, userId);
+        session.close();
+        return user;
     }
 
-    /**
-     * Method to get the user's last name by his id
-     * @param userId the user's id
-     * @return the user's last name
-     */
-    public static String getLastNameById(int userId) {
-        String lastName = null;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + USER_LASTNAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = " + userId;
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                lastName = resultSet.getString(USER_LASTNAME);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lastName;
+    public static void saveUser(Users user) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(user);
+        tx.commit();
+        session.close();
     }
 
-    /**
-     * Method to get the user's name by his id
-     * @param userId the user's id
-     * @return the user's name
-     */
-    public static String getNameById(int userId) {
-        String name = null;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + USER_NAME + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, userId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                name = resultSet.getString(USER_NAME);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static void deleteUser(int userId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        Users user = session.get(Users.class, userId);
+        if (user != null) {
+            session.remove(user);
         }
-
-        return name;
+        tx.commit();
+        session.close();
     }
 
-    /**
-     * Method to get the user's role by his id
-     * @param userId the user's id
-     * @return the user's role id
-     */
-    public static int getRoleIdByUserID(int userId) {
-        int roleId = -1;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + ROLE_ID + " FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, userId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                roleId = resultSet.getInt(ROLE_ID);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return roleId;
-    }
-
-    public static Integer getUserIdByEmail(String userMail) {
-        if(userMail == null || userMail.isEmpty()) {
-            return null;
-        }
-
-        Integer userId = null;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT " + USER_ID + " FROM " + USER_TABLE + " WHERE " + USER_EMAIL + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, userMail);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                userId = resultSet.getInt(USER_ID);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return userId;
+    public static void modifyUser(Users user) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.merge(user);
+        tx.commit();
+        session.close();
     }
 
     /**
@@ -195,33 +74,46 @@ public class UserDAO {
     public static List<Map<String, Object>> getAllUsersWithClasses() {
         List<Map<String, Object>> usersWithClasses = new ArrayList<>();
 
-        String query = "SELECT u.userId, u.userName, u.userLastName, u.userEmail, u.userBirthdate, c.classId, c.className " +
-                "FROM users u " +
-                "JOIN student s ON u.userId = s.studentId " +
-                "JOIN classes c ON s.classId = c.classId";
+        // HQL query to fetch the user and class details
+        String hql = "SELECT u.userId, u.userName, u.userLastName, u.userEmail, u.userBirthdate, c.classId, c.className " +
+                "FROM " + USER_TABLE + " u " +
+                "JOIN u.students s " +
+                "JOIN s.class c";  // Assuming User has a relationship to Student, and Student has a relationship to Class
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
 
         try {
-            Connection connection = DatabaseManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            transaction = session.beginTransaction();
 
-            while (resultSet.next()) {
+            // Create the query
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+            List<Object[]> resultList = query.getResultList();
+
+            // Loop through the results and map them into a list of maps
+            for (Object[] result : resultList) {
                 Map<String, Object> userWithClass = new HashMap<>();
-                userWithClass.put("userId", resultSet.getInt("userId"));
-                userWithClass.put("userName", resultSet.getString("userName"));
-                userWithClass.put("userLastName", resultSet.getString("userLastName"));
-                userWithClass.put("userEmail", resultSet.getString("userEmail"));
-
-                // Conversion de la date
-                userWithClass.put("userBirthdate", resultSet.getString("userBirthdate"));
-
-                userWithClass.put("classId", resultSet.getInt("classId"));
-                userWithClass.put("className", resultSet.getString("className"));
+                userWithClass.put("userId", result[0]);
+                userWithClass.put("userName", result[1]);
+                userWithClass.put("userLastName", result[2]);
+                userWithClass.put("userEmail", result[3]);
+                userWithClass.put("userBirthdate", result[4]);
+                userWithClass.put("classId", result[5]);
+                userWithClass.put("className", result[6]);
                 usersWithClasses.add(userWithClass);
             }
-        } catch (SQLException e) {
+
+            // Commit the transaction
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();  // Rollback the transaction if an error occurs
+            }
             System.out.println("Error in getAllUsersWithClasses:");
             e.printStackTrace();
+        } finally {
+            session.close();  // Always close the session to release resources
         }
 
         return usersWithClasses;
@@ -234,22 +126,30 @@ public class UserDAO {
     public static List<String> getAllClassNames() {
         List<String> classNames = new ArrayList<>();
 
-        // Requête SQL pour récupérer les noms de classes distincts
-        String query = "SELECT DISTINCT className FROM Classes";  // Assure-toi que 'className' est la bonne colonne dans la table 'Classes'
+        // HQL query to fetch distinct class names
+        String hql = "SELECT DISTINCT c.className FROM Classes c";  // Nous utilisons l'entité "Class"
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
 
         try {
-            Connection connection = DatabaseManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            transaction = session.beginTransaction();
 
-            while (resultSet.next()) {
-                // Ajouter le nom de classe à la liste
-                classNames.add(resultSet.getString("className"));
+            // Exécuter la requête HQL pour récupérer les noms de classe distincts
+            Query<String> query = session.createQuery(hql, String.class);
+            classNames = query.getResultList();  // Récupérer les résultats de la requête
+
+            // Commit de la transaction
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();  // Rollback de la transaction en cas d'erreur
             }
-
-        } catch (SQLException e) {
-            System.out.println("AllClass");
-            e.printStackTrace();  // Gérer l'exception si quelque chose ne va pas avec la requête
+            System.out.println("Error in getAllClassNames:");
+            e.printStackTrace();
+        } finally {
+            session.close();  // Toujours fermer la session pour libérer les ressources
         }
 
         return classNames;
@@ -269,10 +169,10 @@ public class UserDAO {
 
             switch (oldRoleID) {
                 case 1:
-                    StudentDAO.deleteStudentById(userID);
+                    StudentDAO.deleteStudentFromTable(userID);
                     break;
                 case 2:
-                    TeacherDAO.deleteTeacherById(userID);
+                    TeacherDAO.deleteTeacherFromTable(userID);
                     break;
                 case 3:
                     AdminDAO.deleteAdminById(userID);
@@ -281,12 +181,21 @@ public class UserDAO {
 
             switch (newRoleID) {
                 case 1:
-                    StudentDAO.addStudentInTable(userID, null, null);
+                    Student student = new Student();
+                    student.setStudentId(userID);
+
+                    StudentDAO.addStudentInTable(student);
                     break;
                 case 2:
-                    TeacherDAO.addTeacherInTable(userID);
+                    Teacher teacher = new Teacher();
+                    teacher.setTeacherId(userID);
+
+                    TeacherDAO.addTeacherInTable(teacher);
                     break;
                 case 3:
+                    Administrator admin = new Administrator();
+                    admin.setAdministratorId(userID);
+
                     AdminDAO.addAdminInTable(userID);
                     break;
             }
@@ -300,28 +209,42 @@ public class UserDAO {
     }
 
     public static boolean isEmailInTable(String email) {
-        if(email == null || email.isEmpty()) {
-            return false;
+        if (email == null || email.isEmpty()) {
+            return false; // Si l'email est null ou vide, on retourne false
         }
-        boolean isIn = true;
+
+        boolean isIn = false;  // Par défaut, on suppose que l'email n'existe pas
+
+        // HQL query pour vérifier si l'email existe dans la table Users
+        String hql = "SELECT COUNT(u) FROM Users u WHERE u.userEmail = :email";
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
 
         try {
-            Connection connection = DatabaseManager.getConnection();
+            transaction = session.beginTransaction();
 
-            String query = "SELECT COUNT(*) FROM " + USER_TABLE + " WHERE " + USER_EMAIL + " LIKE(?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            // Créer la requête HQL pour compter les utilisateurs avec l'email donné
+            Query<Long> query = session.createQuery(hql, Long.class);
+            query.setParameter("email", email);  // Paramétrage de l'email dans la requête
 
-            preparedStatement.setString(1, email);
+            // Récupérer le nombre d'utilisateurs avec cet email
+            long count = query.uniqueResult();  // Cela renvoie un seul résultat (le nombre d'occurrences)
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            // Si le compte est supérieur à 0, l'email existe dans la table
+            isIn = count > 0;
 
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                isIn = count != 0;
+            // Commit de la transaction
+            transaction.commit();
 
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();  // Rollback de la transaction en cas d'erreur
             }
-        } catch (SQLException e) {
+            System.out.println("Error in isEmailInTable:");
             e.printStackTrace();
+        } finally {
+            session.close();  // Toujours fermer la session pour libérer les ressources
         }
 
         return isIn;
@@ -329,76 +252,31 @@ public class UserDAO {
 
     public static Integer userConnection(String userEmail, String userPassword) {
         Integer userId = null;
+        Session session = null;
+
         try {
-            // Établir la connexion à la base de données
-            Connection connection = DatabaseManager.getConnection();
-            String sql = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_EMAIL + " = ? AND " + USER_PASSWORD + " = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            // Ouvrir une session Hibernate
+            session = HibernateUtil.getSessionFactory().openSession();
 
-            statement.setString(1, userEmail);
-            statement.setString(2, userPassword);
-            ResultSet resultSet = statement.executeQuery();
+            // Créer la requête HQL pour rechercher un utilisateur par email et mot de passe
+            String hql = "SELECT u.userId FROM Users u WHERE u.userEmail = :email AND u.userPassword = :password";
 
-            if (resultSet.next()) {
-                userId = resultSet.getInt(USER_ID);
-            }
+            // Créer la requête
+            Query<Integer> query = session.createQuery(hql, Integer.class);
+            query.setParameter("email", userEmail); // Paramétrer l'email
+            query.setParameter("password", userPassword); // Paramétrer le mot de passe
 
-        } catch (SQLException e) {
+            // Exécuter la requête et obtenir le résultat
+            userId = query.uniqueResult(); // Récupérer l'ID de l'utilisateur
+
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if (session != null) {
+                session.close(); // Fermer la session pour libérer les ressources
+            }
         }
         return userId;
-    }
-
-    public static Users getUserById(int userId) {
-        Users user = null;
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-
-            String query = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_ID + " = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, userId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                user = new Users();
-                user.setUserId(resultSet.getInt(USER_ID));
-                user.setUserLastName(resultSet.getString(USER_LASTNAME));
-                user.setUserName(resultSet.getString(USER_NAME));
-                user.setUserEmail(resultSet.getString(USER_EMAIL));
-                user.setUserBirthdate(resultSet.getDate(USER_BIRTHDATE).toString());
-                user.setUserPassword(resultSet.getString(USER_PASSWORD));
-                user.setRoleId(resultSet.getInt(ROLE_ID));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return user;
-    }
-
-    public static boolean updateUserInDatabase(int userId, String email, String lastName, String name, String birthDate, String password) throws SQLException {
-        String sql = "UPDATE " + USER_TABLE + " SET " + USER_EMAIL + " = ?, " + USER_LASTNAME + " = ?, " + USER_NAME + " = ?, " +
-                USER_BIRTHDATE + " = ?, " + USER_PASSWORD + " = ? WHERE " + USER_ID + " = ?";
-
-        try {
-            Connection connection = DatabaseManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setString(1, email);
-            statement.setString(2, lastName);
-            statement.setString(3, name);
-            statement.setString(4, birthDate);
-            statement.setString(5, password);
-            statement.setInt(6, userId);
-
-            return statement.executeUpdate() > 0; // Renvoie true si au moins une ligne est mise à jour
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

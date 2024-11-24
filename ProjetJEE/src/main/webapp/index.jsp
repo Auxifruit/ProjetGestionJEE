@@ -1,5 +1,6 @@
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -14,7 +15,7 @@
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a></br>
 <%
-  if(userId != null && "administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
+  if(userId != null && Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
 %>
   <a href="${pageContext.request.contextPath}/goToAdminPage-servlet">Page admin</a></br>
 <%
@@ -27,7 +28,7 @@
   <a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 <%
   } else {
-    if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
+    if(!Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
 %>
   <a href="${pageContext.request.contextPath}/userSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
   <%

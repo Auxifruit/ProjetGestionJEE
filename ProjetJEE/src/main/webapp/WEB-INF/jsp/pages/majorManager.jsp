@@ -47,7 +47,7 @@
     </table>
     </br>
     <button type="submit" formaction="majorModification-servlet">Modifier</button>
-    <button type="submit" formaction="majorDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="majorDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
 </form>
 <%
     }
@@ -63,4 +63,13 @@
     }
 %>
 </body>
+<script>
+    function confirmDelete(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer la filière ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

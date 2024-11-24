@@ -57,7 +57,7 @@
     </table>
     </br>
     <button type="submit" formaction="lessonModification-servlet">Modifier</button>
-    <button type="submit" formaction="lessonDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="lessonDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
     <button type="submit" formaction="lessonClassesManager-servlet">Assigner une ou plusieurs classes à la séance</button>
 </form>
 <form action="lessonCreation-servlet" method="get">
@@ -75,4 +75,13 @@
     }
 %>
 </body>
+<script>
+    function confirmDelete(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer la séance ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

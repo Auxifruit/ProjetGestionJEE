@@ -123,7 +123,7 @@ Il n'y a pas d'Teacher associé à la séance</p>
 </select>
 <input name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
 </br></br>
-<button type="submit">Valider</button>
+<button type="submit" onclick="confirmModify(event)">Valider</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
   if(messageErreur != null && !messageErreur.isEmpty()) {
@@ -135,4 +135,13 @@ Il n'y a pas d'Teacher associé à la séance</p>
   }
 %>
 </body>
+<script>
+  function confirmModify(event) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir modifier la séance ?");
+
+    if (!confirmation) {
+      event.preventDefault();
+    }
+  }
+</script>
 </html>

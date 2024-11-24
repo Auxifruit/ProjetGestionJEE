@@ -75,7 +75,7 @@
     <label>Choix du nom du cours : </label>
     <input type="text" name="courseName" required/>
     </br></br>
-    <button type="submit">Créer</button>
+    <button type="submit" onclick="confirmCreate(event)">Créer</button>
 </form>
 <%
     }
@@ -89,4 +89,13 @@
     }
 %>
 </body>
+<script>
+    function confirmCreate(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir créer le cours ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

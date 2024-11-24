@@ -64,7 +64,7 @@
     <input type="text" name="newCourseName"/>
     <input name="courseId" value="<%= course.getCourseId() %>" style="visibility: hidden">
     </br></br>
-    <button type="submit">Modifier</button>
+    <button type="submit" onclick="confirmModify(event)">Modifier</button>
 </form>
 <%
     }
@@ -79,4 +79,13 @@
     }
 %>
 </body>
+<script>
+    function confirmModify(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir modifier le cours ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

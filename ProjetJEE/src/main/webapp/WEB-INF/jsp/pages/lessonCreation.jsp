@@ -111,7 +111,7 @@
   %>
 </select>
 </br></br>
-<button type="submit">Valider</button>
+<button type="submit" onclick="confirmCreate(event)">Valider</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
   if(messageErreur != null && !messageErreur.isEmpty()) {
@@ -123,4 +123,13 @@
   }
 %>
 </body>
+<script>
+  function confirmCreate(event) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir créer la séance ?");
+
+    if (!confirmation) {
+      event.preventDefault();
+    }
+  }
+</script>
 </html>

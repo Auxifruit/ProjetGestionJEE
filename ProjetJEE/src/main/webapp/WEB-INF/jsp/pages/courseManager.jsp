@@ -64,7 +64,7 @@
     </table>
     </br>
     <button type="submit" formaction="courseModification-servlet">Modifier</button>
-    <button type="submit" formaction="courseDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="courseDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
 </form>
 <form action="courseCreation-servlet" method="get">
     <button type="submit">Créer</button>
@@ -81,4 +81,13 @@
     }
 %>
 </body>
+<script>
+    function confirmDelete(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer le cours ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

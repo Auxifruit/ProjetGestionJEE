@@ -37,7 +37,7 @@
     <input name="subjectId" value="<%= subject.getSubjectId() %>" style="visibility: hidden">
 
     </br></br>
-    <button type="submit">Modifier</button>
+    <button type="submit" onclick="confirmModify(event)">Modifier</button>
 </form>
 <%
     }
@@ -50,4 +50,13 @@
     }
 %>
 </body>
+<script>
+    function confirmModify(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir modifier la matière ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

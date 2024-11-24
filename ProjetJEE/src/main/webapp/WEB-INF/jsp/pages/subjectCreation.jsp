@@ -52,7 +52,7 @@
     <label>Nom de la nouvelle matière : </label>
     <input type="text" name="newSubject" required/>
     </br></br>
-    <button type="submit">Créer</button>
+    <button type="submit" onclick="confirmCreate(event)">Créer</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
     if (messageErreur != null && !messageErreur.isEmpty()) {
@@ -63,4 +63,13 @@
     }
 %>
 </body>
+<script>
+    function confirmCreate(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir créer la matière ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

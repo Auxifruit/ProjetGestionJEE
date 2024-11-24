@@ -83,7 +83,7 @@ Created by IntelliJ IDEA.
 </table>
     <input type="text" name="classesId" value="<%= classe.getClassId() %>" style="visibility: hidden">
     </br>
-    <button type="submit">Assigner</button>
+    <button type="submit" onclick="confirmAction(event, 'assign')">Assigner</button>
 </form>
 <%
     }
@@ -134,7 +134,7 @@ Created by IntelliJ IDEA.
     </table>
     <input type="text" name="classesId" value="<%= classe.getClassId() %>" style="visibility: hidden">
     </br>
-    <button type="submit">Désassigner</button>
+    <button type="submit" onclick="confirmAction(event, 'unassign')">Désassigner</button>
 </form>
 <%
     }
@@ -148,4 +148,23 @@ Created by IntelliJ IDEA.
 }
 %>
 </body>
+<script>
+    function confirmAction(event, action) {
+        let confirmationMessage = '';
+
+        if (action === 'assign') {
+            confirmationMessage = "Êtes-vous sûr de vouloir assigner cet étudiant à cette classe ?";
+        } else if (action === 'unassign') {
+            confirmationMessage = "Êtes-vous sûr de vouloir désassigner cet étudiant à cette classe ?";
+        } else {
+            confirmationMessage = "Êtes-vous sûr de vouloir effectuer cette action ?";
+        }
+
+        const confirmation = confirm(confirmationMessage);
+
+        if (!confirmation) {
+            event.preventDefault(); // Annule l'envoi du formulaire si l'utilisateur annule
+        }
+    }
+</script>
 </html>

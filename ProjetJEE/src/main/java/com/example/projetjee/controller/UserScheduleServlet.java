@@ -1,7 +1,6 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.LessonDAO;
-import com.example.projetjee.model.dao.RoleDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.model.entities.Role;

@@ -3,10 +3,8 @@ package com.example.projetjee.controller;
 import com.example.projetjee.model.dao.MajorDAO;
 import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.model.entities.Major;
-import com.example.projetjee.model.entities.Role;
-import com.example.projetjee.model.entities.Student;
-import com.example.projetjee.model.entities.Users;
+import com.example.projetjee.model.dao.UserToValidateDAO;
+import com.example.projetjee.model.entities.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -42,39 +40,41 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String birthdate = request.getParameter("birthdate");
+        Role role = Role.valueOf(request.getParameter("role"));
         String majorIdString = request.getParameter("major");
 
         if((firstName == null || firstName.isEmpty()) || (lastName == null || lastName.isEmpty()) || (email == null || email.isEmpty())
-                || (password == null || password.isEmpty()) || (birthdate == null || birthdate.isEmpty()) || (majorIdString == null || majorIdString.isEmpty())) {
+                || (password == null || password.isEmpty()) || (birthdate == null || birthdate.isEmpty()) || (role.equals(Role.student) && (majorIdString == null || majorIdString.isEmpty()))) {
             request.setAttribute("error", "Erreur : Veuillez remplir tous les champs.");
             doGet(request, response);
             return;
         }
 
-        Users user = new Users();
-        user.setUserPassword(password);
-        user.setUserLastName(lastName);
-        user.setUserName(firstName);
-        user.setUserEmail(email);
-        user.setUserBirthdate(birthdate);
-        user.setUserRole(Role.student);
-
-        String error = UserDAO.addUserInTable(user);
-        if(error != null) {
-            request.setAttribute("error", error);
+        if(UserDAO.isEmailInTable(email) == true) {
+            request.setAttribute("error", "Erreur : L'email est déjà utilisée.");
             doGet(request, response);
             return;
         }
 
-        user = UserDAO.getUserByEmail(email);
-        int majorId = Integer.parseInt(majorIdString);
+        Userstovalidate user = new Userstovalidate();
+        user.setUserToValidatePassword(password);
+        user.setUserToValidateLastName(lastName);
+        user.setUserToValidateName(firstName);
+        user.setUserToValidateEmail(email);
+        user.setUserToValidateBirthdate(birthdate);
+        user.setUserToValidateRole(role);
 
-        Student student = new Student();
-        student.setStudentId(user.getUserId());
-        student.setMajorId(majorId);
+        if(majorIdString != null && !majorIdString.isEmpty()) {
+            int majorId = Integer.parseInt(majorIdString);
+            user.setUserToValidateMajorId(majorId);
+        }
+        else {
+            user.setUserToValidateMajorId(null);
+        }
 
-        if(StudentDAO.addStudentInTable(student) == false) {
-            request.setAttribute("error", "Erreur : Erreur lors de l'affectation du rôle étudiant, veuillez contacter un administrateur pour vous aider.");
+        String error = UserToValidateDAO.addUserstovalidateInTable(user);
+        if(error != null) {
+            request.setAttribute("error", error);
             doGet(request, response);
             return;
         }

@@ -72,15 +72,6 @@ public class CourseModificationServlet extends HttpServlet {
             newCourseSubjectId = Integer.parseInt(newCourseSubjectIdString);
         }
 
-        /*
-        // A MODIFIER
-        if(CourseDAO.isCourseInTable(newCourseName, newCourseSubjectId) == true) {
-            request.setAttribute("erreur", "Erreur : Le cours existe déjà.");
-            doGet(request, response);
-            return;
-        }
-        */
-
         course.setCourseName(newCourseName);
         course.setSubjectId(newCourseSubjectId);
 

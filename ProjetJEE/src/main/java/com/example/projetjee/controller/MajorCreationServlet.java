@@ -36,15 +36,6 @@ public class MajorCreationServlet extends HttpServlet {
             return;
         }
 
-        /*
-        // A MODIFIER
-        if(MajorDAO.isMajorInTable(majorName) == true) {
-            request.setAttribute("erreur", "Erreur : La filière existe déjà.");
-            doGet(request, response);
-            return;
-        }
-        */
-
         Major major = new Major();
         major.setMajorName(majorName);
 

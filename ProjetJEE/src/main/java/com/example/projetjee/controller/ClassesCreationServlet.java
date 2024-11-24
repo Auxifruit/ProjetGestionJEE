@@ -36,15 +36,6 @@ public class ClassesCreationServlet extends HttpServlet {
             return;
         }
 
-        /*
-        // A MODIFIER
-        if(ClasseDAO.isClassesInTable(classesName) == true) {
-            request.setAttribute("erreur", "Erreur : La classe existe déjà.");
-            doGet(request, response);
-            return;
-        }
-        */
-
         Classes classe = new Classes();
         classe.setClassName(classesName);
 

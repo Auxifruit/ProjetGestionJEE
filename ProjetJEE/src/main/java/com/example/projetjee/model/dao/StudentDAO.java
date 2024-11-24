@@ -1,11 +1,15 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Course;
 import com.example.projetjee.model.entities.Major;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.util.HibernateUtil;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
@@ -21,12 +25,20 @@ public class StudentDAO {
         return students;
     }
 
+    public static Student getStudentById(int studentId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            return session.get(Student.class, studentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static boolean addStudentInTable(Student student) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         boolean success = false;
-
-        System.out.println("addStudent : " + student.getStudentId());
 
         try {
             tx = session.beginTransaction();
@@ -72,6 +84,61 @@ public class StudentDAO {
         }
 
         return success;
+    }
+
+    public static String modifyStudentFromTable(Student student) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.merge(student);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return "Erreur : Erreur lors de la modification de l'étudiant";
+        } finally {
+            session.close();
+        }
+
+        return null;
+    }
+
+    public static List<Student> getStudentListWithoutClasses() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Student> studentListWithoutClasses = new ArrayList<>();
+
+        try {
+            String hql = "FROM Student s WHERE s.classId IS NULL";
+            Query<Student> query = session.createQuery(hql, Student.class);
+
+            studentListWithoutClasses = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors de la récupération des étudiants sans classe.");
+        }
+        return studentListWithoutClasses;
+    }
+
+    public static List<Student> getStudentListFromClassesId(int classId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Student> studentListFromClasses = new ArrayList<>();
+
+        try {
+            String hql = "FROM Student s WHERE s.classId = :classId";
+            Query<Student> query = session.createQuery(hql, Student.class);
+
+            query.setParameter("classId", classId);
+
+            studentListFromClasses = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors de la récupération des étudiants de la classe.");
+        }
+        return studentListFromClasses;
     }
 
 }

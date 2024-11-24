@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS CYDataBase;
+CREATE DATABASE CYDataBase;
 
 
 # Suppression des tables dans l'ordre
@@ -17,82 +17,79 @@ DROP TABLE users;
 DROP TABLE possibleRole;
 */
 
-USE CYDataBase;
-
-
-CREATE TABLE IF NOT EXISTS PossibleRole (
+CREATE TABLE PossibleRole (
 	roleId INT AUTO_INCREMENT PRIMARY KEY,
-    roleName VARCHAR(50)
+    roleName VARCHAR(50) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS Major (
+CREATE TABLE Major (
 	majorId INT AUTO_INCREMENT PRIMARY KEY,
-    majorName VARCHAR(50)
+    majorName VARCHAR(50) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS Users (
+CREATE TABLE Users (
 	userId INT AUTO_INCREMENT PRIMARY KEY,
     userPassword VARCHAR(50),
     userLastName VARCHAR(50),
     userName VARCHAR(50),
-    userEmail VARCHAR(50),
+    userEmail VARCHAR(50) UNIQUE,
     userBirthdate VARCHAR(50),
     roleId int,
-
+    
     FOREIGN KEY (roleId) REFERENCES PossibleRole(roleId) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Administrator (
+CREATE TABLE Administrator (
     administratorId INT,
-
+    
     FOREIGN KEY (administratorId) REFERENCES Users(userId) ON DELETE CASCADE,
-
+	
     PRIMARY KEY (administratorId)
 );
 
-CREATE TABLE IF NOT EXISTS Teacher (
+CREATE TABLE Teacher (
     teacherId INT,
-
+    
     FOREIGN KEY (teacherId) REFERENCES Users(userId) ON DELETE CASCADE,
-
+    
     PRIMARY KEY (teacherId)
 );
 
 
-CREATE TABLE IF NOT EXISTS Classes(
+CREATE TABLE Classes(
 	classId INT AUTO_INCREMENT PRIMARY KEY,
-    className VARCHAR(50)
+    className VARCHAR(50) UNIQUE
 );
 
 
-CREATE TABLE IF NOT EXISTS Student (
-    studentId INT,
-    classId INT,
+CREATE TABLE Student (
+    studentId INT NOT NULL,
+    classId INT, 
     majorId INT,
-
+    
 	FOREIGN KEY  (studentId) REFERENCES Users(userId) ON DELETE CASCADE,
     FOREIGN KEY  (classId) REFERENCES Classes(classId) ON DELETE SET NULL,
     FOREIGN KEY  (majorId) REFERENCES Major(majorId) ON DELETE SET NULL,
-
+    
     PRIMARY KEY (studentId)
 );
 
 
 
-CREATE TABLE IF NOT EXISTS Subjects(
+CREATE TABLE Subjects(
 	subjectId INT AUTO_INCREMENT PRIMARY KEY,
-    subjectName VARCHAR(50)
+    subjectName VARCHAR(50) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS Course(
+CREATE TABLE Course(
 	courseId INT AUTO_INCREMENT PRIMARY KEY,
-    courseName VARCHAR(50),
+    courseName VARCHAR(50) UNIQUE,
     subjectId INT,
-
+    
     FOREIGN KEY (subjectId) REFERENCES Subjects(subjectId) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS Grade (
+CREATE TABLE Grade (
     gradeId INT PRIMARY KEY,
     gradeName VARCHAR(50),
     gradeValue DOUBLE,
@@ -106,18 +103,18 @@ CREATE TABLE IF NOT EXISTS Grade (
     FOREIGN KEY (teacherId) REFERENCES Teacher(teacherId) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS Lesson (
+CREATE TABLE Lesson (
 	lessonId INT AUTO_INCREMENT PRIMARY KEY,
 	lessonStartDate DATETIME,
     lessonEndDate DATETIME,
     courseId INT,
 	teacherId int,
-
+    
     FOREIGN KEY (courseId) REFERENCES Course(courseId) ON DELETE CASCADE,
     FOREIGN KEY (teacherId) REFERENCES Teacher(teacherId) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS LessonClass (
+CREATE TABLE LessonClass (
 	lessonClassId INT AUTO_INCREMENT PRIMARY KEY,
     lessonId INT,
     classId INT,

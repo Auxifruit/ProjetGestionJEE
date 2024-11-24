@@ -103,7 +103,7 @@ Created by IntelliJ IDEA.
 <%
     } else {
 %>
-<h3>Class(s) participantes(s) : </h3>
+<h3>Classe(s) participantes(s) : </h3>
 <form action="lessonClassesUnassignation-servlet" method="post">
     <table border="1">
         <tr>

@@ -27,7 +27,7 @@ INSERT INTO PossibleRole VALUES (2, "teacher");
 INSERT INTO PossibleRole VALUES (3, "administrator");
 */
 
-
+USE CYDataBase;
 
 CREATE TABLE Major (
 	majorId INT AUTO_INCREMENT PRIMARY KEY,

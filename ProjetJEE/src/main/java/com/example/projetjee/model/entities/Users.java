@@ -3,30 +3,30 @@ package com.example.projetjee.model.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="users")
 public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "userId")
     private int userId;
-
+    @Basic
     @Column(name = "userPassword")
     private String userPassword;
-
+    @Basic
     @Column(name = "userLastName")
     private String userLastName;
-
+    @Basic
     @Column(name = "userName")
     private String userName;
-
-    @Column(name = "userEmail", unique = true)
+    @Basic
+    @Column(name = "userEmail")
     private String userEmail;
-
+    @Basic
     @Column(name = "userBirthdate")
     private String userBirthdate;
-
-    @Column(name = "roleId")
-    private Integer roleId;
+    @Basic
+    @Column(name = "userRole")
+    @Enumerated(EnumType.STRING)
+    private Role userRole;
 
     public int getUserId() {
         return userId;
@@ -76,12 +76,12 @@ public class Users {
         this.userBirthdate = userBirthdate;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public Role getUserRole() {
+        return userRole;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setUserRole(Role userRole) {
+        this.userRole = userRole;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Users {
         if (userEmail != null ? !userEmail.equals(users.userEmail) : users.userEmail != null) return false;
         if (userBirthdate != null ? !userBirthdate.equals(users.userBirthdate) : users.userBirthdate != null)
             return false;
-        if (roleId != null ? !roleId.equals(users.roleId) : users.roleId != null) return false;
+        if (userRole != null ? !userRole.equals(users.userRole) : users.userRole != null) return false;
 
         return true;
     }
@@ -111,7 +111,7 @@ public class Users {
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (userEmail != null ? userEmail.hashCode() : 0);
         result = 31 * result + (userBirthdate != null ? userBirthdate.hashCode() : 0);
-        result = 31 * result + (roleId != null ? roleId.hashCode() : 0);
+        result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
         return result;
     }
 }

@@ -1,5 +1,6 @@
 CREATE DATABASE CYDataBase;
 
+USE CYDataBase;
 
 # Suppression des tables dans l'ordre
 /*
@@ -27,7 +28,7 @@ INSERT INTO PossibleRole VALUES (2, "teacher");
 INSERT INTO PossibleRole VALUES (3, "administrator");
 */
 
-USE CYDataBase;
+
 
 CREATE TABLE Major (
 	majorId INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,6 +43,19 @@ CREATE TABLE Users (
     userEmail VARCHAR(50) UNIQUE,
     userBirthdate VARCHAR(50),
     userRole ENUM("student","teacher","administrator")
+);
+
+CREATE TABLE UsersToValidate (
+	userToValidateId INT AUTO_INCREMENT PRIMARY KEY,
+    userToValidatePassword VARCHAR(50),
+    userToValidateLastName VARCHAR(50),
+    userToValidateName VARCHAR(50),
+    userToValidateEmail VARCHAR(50) UNIQUE,
+    userToValidateBirthdate VARCHAR(50),
+    userToValidateRole ENUM("student","teacher","administrator"),
+    userToValidateMajorId INT,
+    
+    FOREIGN KEY  (userToValidateMajorId) REFERENCES Major(majorId) ON DELETE SET NULL
 );
 
 CREATE TABLE Administrator (
@@ -60,12 +74,10 @@ CREATE TABLE Teacher (
     PRIMARY KEY (teacherId)
 );
 
-
 CREATE TABLE Classes(
 	classId INT AUTO_INCREMENT PRIMARY KEY,
     className VARCHAR(50) UNIQUE
 );
-
 
 CREATE TABLE Student (
     studentId INT NOT NULL,
@@ -78,8 +90,6 @@ CREATE TABLE Student (
     
     PRIMARY KEY (studentId)
 );
-
-
 
 CREATE TABLE Subjects(
 	subjectId INT AUTO_INCREMENT PRIMARY KEY,
@@ -190,6 +200,7 @@ SELECT * FROM grade;
 SELECT * FROM administrator;
 SELECT * FROM teacher;
 SELECT * FROM users;
+SELECT * FROM userstovalidate;
 SELECT * FROM student;
 SELECT * FROM major;
 

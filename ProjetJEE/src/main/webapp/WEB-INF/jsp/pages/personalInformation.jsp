@@ -42,7 +42,7 @@
       nom: "<%= user.getUserLastName() %>",
       prenom: "<%= user.getUserName() %>",
       dateNaissance: "<%= user.getUserBirthdate() %>",
-      motDePasse: "<%= user.getUserPassword() %>"
+      motDePasse: ""
     };
 
     function toggleEditMode(isEditable) {
@@ -87,7 +87,7 @@
 
   <label>Mot de passe :</label>
   <div>
-    <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getUserPassword() %>" readonly>
+    <input type="password" id="motDePasse" name="motDePasse" value="" readonly>
   </div>
 
   <!-- Boutons -->

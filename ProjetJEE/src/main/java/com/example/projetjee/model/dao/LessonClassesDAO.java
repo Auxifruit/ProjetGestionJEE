@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LessonClassesDAO {
-    private static String LESSON_CLASS_TABLE = "LessonClass";
+    private static String LESSON_CLASS_TABLE = "Lessonclass";
     private static String LESSON_CLASS_ID = "lessonClassId";
     private static String LESSON_ID = "lessonId";
     private static String CLASS_ID = "classId";
 
     public static List<Lessonclass> getAllLessonClasses() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Lessonclass> lessonclasses = session.createQuery("FROM " + LESSON_CLASS_TABLE, Lessonclass.class).list();
+        List<Lessonclass> lessonclasses = session.createQuery("FROM Lessonclass ", Lessonclass.class).list();
         session.close();
         return lessonclasses;
     }
@@ -58,7 +58,7 @@ public class LessonClassesDAO {
 
     public static Lessonclass getLessonClassByLessonIdAndClassId(int lessonId, int classId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Lessonclass lessonclass = session.createQuery("from " + LESSON_CLASS_TABLE + " where " + LESSON_ID + " = :lessonId AND " + CLASS_ID + " = :classId", Lessonclass.class).setParameter("lessonId", lessonId).setParameter("classId", classId).getSingleResultOrNull();
+        Lessonclass lessonclass = session.createQuery("From Lessonclass where " + LESSON_ID + " = :lessonId AND " + CLASS_ID + " = :classId", Lessonclass.class).setParameter("lessonId", lessonId).setParameter("classId", classId).getSingleResultOrNull();
         session.close();
         return lessonclass;
     }
@@ -92,9 +92,9 @@ public class LessonClassesDAO {
 
         try {
             tx = session.beginTransaction();
-            Lesson lesson = session.get(Lesson.class, lessonclassId);
-            if (lesson != null) {
-                session.remove(lesson);
+            Lessonclass lessonclass = session.get(Lessonclass.class, lessonclassId);
+            if (lessonclass != null) {
+                session.remove(lessonclass);
                 success = true;
             }
             tx.commit();

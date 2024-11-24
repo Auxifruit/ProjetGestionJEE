@@ -6,6 +6,7 @@ import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.Major;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Users;
+import com.example.projetjee.util.HashPswdUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,34 +20,6 @@ import java.util.List;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-
-    public static String hashPassword(String password) {
-        try {
-            // Créer une instance de MessageDigest pour SHA-256
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-
-            // Convertir le mot de passe en tableau de bytes
-            byte[] encodedHash = digest.digest(password.getBytes());
-
-            // Convertir le tableau de bytes en chaîne hexadécimale
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : encodedHash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-
-            // Renvoyer une version tronquée à 50 caractères
-            return hexString.substring(0, 49);
-
-        } catch (NoSuchAlgorithmException e) {
-            // Gérer l'erreur si l'algorithme n'est pas disponible
-            throw new RuntimeException("Erreur : Algorithme SHA-256 non disponible", e);
-        }
-    }
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,7 +46,7 @@ public class RegisterServlet extends HttpServlet {
         String birthdate = request.getParameter("birthdate");
         String majorIdString = request.getParameter("major");
 
-        String hashedPassword = hashPassword(password);
+        String hashedPassword = HashPswdUtil.hashPassword(password);
 
         if((firstName == null || firstName.isEmpty()) || (lastName == null || lastName.isEmpty()) || (email == null || email.isEmpty())
                 || (password == null || password.isEmpty()) || (birthdate == null || birthdate.isEmpty()) || (majorIdString == null || majorIdString.isEmpty())) {

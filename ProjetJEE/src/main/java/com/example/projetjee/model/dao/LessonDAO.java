@@ -34,26 +34,25 @@ public class LessonDAO {
         return lesson;
     }
 
-    public static boolean addLessonInTable(Lesson lesson) {
+    public static String addLessonInTable(Lesson lesson) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.persist(lesson);
             tx.commit();
-            success = true;
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de l'ajout de la séance";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static boolean deleteLessonFromTable(int lessonId) {
@@ -81,26 +80,25 @@ public class LessonDAO {
         return success;
     }
 
-    public static boolean modifyLessonFromTable(Lesson lesson) {
+    public static String modifyLessonFromTable(Lesson lesson) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.merge(lesson);
             tx.commit();
-            success = true;
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de la modification de la séance";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static List<Lesson> getStudentLessonFromId(Integer studentId) {

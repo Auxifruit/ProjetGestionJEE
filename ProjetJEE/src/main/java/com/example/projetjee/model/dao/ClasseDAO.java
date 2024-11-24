@@ -3,6 +3,7 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Classes;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.HibernateUtil;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -29,26 +30,27 @@ public class ClasseDAO {
         return null;
     }
 
-    public static boolean addClasseInTable(Classes classe) {
+    public static String addClasseInTable(Classes classe) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.persist(classe);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : La classe existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de l'ajout de la classe.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static boolean deleteClasseFromTable(int classId) {
@@ -76,26 +78,27 @@ public class ClasseDAO {
         return success;
     }
 
-    public static boolean modifyClassFromTable(Classes classe) {
+    public static String modifyClassFromTable(Classes classe) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.merge(classe);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : La classe existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de la modification de la classe.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static List<Classes> getAvailableClassesForLesson(int idLesson) {

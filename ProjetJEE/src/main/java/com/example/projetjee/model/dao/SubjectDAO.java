@@ -2,6 +2,7 @@ package com.example.projetjee.model.dao;
 
 import com.example.projetjee.model.entities.Subjects;
 import com.example.projetjee.util.HibernateUtil;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -26,27 +27,27 @@ public class SubjectDAO {
         return subject;
     }
 
-    public static boolean addSubjectInTable(Subjects subject) {
+    public static String addSubjectInTable(Subjects subject) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.persist(subject);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : La matière existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
-            success = false;
+            return "Erreur : Erreur lors de la création de la matière.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static boolean deleteSubjectFromTable(int subjectId) {
@@ -75,26 +76,26 @@ public class SubjectDAO {
         return success;
     }
 
-    public static boolean modifySubjectFromTable(Subjects subject) {
+    public static String modifySubjectFromTable(Subjects subject) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.merge(subject);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : La matière existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
-            success = false;
+            return "Erreur : Erreur lors de la modification de la matière.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 }

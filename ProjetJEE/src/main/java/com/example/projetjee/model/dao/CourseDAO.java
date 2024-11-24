@@ -3,6 +3,7 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Course;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.HibernateUtil;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -30,26 +31,27 @@ public class CourseDAO {
         return null;
     }
 
-    public static boolean addCourseInTable(Course course) {
+    public static String addCourseInTable(Course course) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.persist(course);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : Le cours existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de l'ajout du cours.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static boolean deleteCourseFromTable(int courseId) {
@@ -59,9 +61,9 @@ public class CourseDAO {
 
         try {
             tx = session.beginTransaction();
-            Lesson lesson = session.get(Lesson.class, courseId);
-            if (lesson != null) {
-                session.remove(lesson);
+            Course course = session.get(Course.class, courseId);
+            if (course != null) {
+                session.remove(course);
                 success = true;
             }
             tx.commit();
@@ -77,26 +79,27 @@ public class CourseDAO {
         return success;
     }
 
-    public static boolean modifyCourseFromTable(Course course) {
+    public static String modifyCourseFromTable(Course course) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.merge(course);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : Le cours existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de la modification du cours";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static String getCourseName(int courseId) {

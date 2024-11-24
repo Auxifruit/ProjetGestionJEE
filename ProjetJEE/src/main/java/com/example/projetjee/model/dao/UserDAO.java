@@ -5,6 +5,7 @@ import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.model.entities.Users;
 import com.example.projetjee.util.HibernateUtil;
 import com.example.projetjee.model.entities.Administrator;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -64,26 +65,27 @@ public class UserDAO {
         return user;
     }
 
-    public static boolean addUserInTable(Users user) {
+    public static String addUserInTable(Users user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.persist(user);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : Le mail existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de l'inscription.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static void deleteUserFromTable(int userId) {
@@ -97,26 +99,27 @@ public class UserDAO {
         session.close();
     }
 
-    public static boolean modifyUserFromTable(Users user) {
+    public static String modifyUserFromTable(Users user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
 
         try {
             tx = session.beginTransaction();
             session.merge(user);
             tx.commit();
-            success = true;
+        } catch (PersistenceException e) {
+            return "Erreur : Le mail existe déjà.";
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return "Erreur : Erreur lors de la modification des informations.";
         } finally {
             session.close();
         }
 
-        return success;
+        return null;
     }
 
     public static Users getUserByEmail(String mail) {

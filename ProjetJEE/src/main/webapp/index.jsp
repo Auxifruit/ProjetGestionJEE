@@ -35,6 +35,7 @@
     }
   %>
   <a href="${pageContext.request.contextPath}/personalInformation-servlet">Informations personnelles</a></br>
+  <a href="${pageContext.request.contextPath}/entry-note-servlet?userId=<%= userId.intValue() %>">Saisie de note</a></br>
   <a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
 <%
   }

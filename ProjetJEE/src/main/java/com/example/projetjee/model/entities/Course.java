@@ -10,9 +10,11 @@ public class Course {
     @Column(name = "courseId")
     private int courseId;
 
+    @Basic
     @Column(name = "courseName")
     private String courseName;
 
+    @Basic
     @Column(name = "subjectId")
     private Integer subjectId;
 

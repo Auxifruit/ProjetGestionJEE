@@ -27,7 +27,7 @@
         return;
     }
 
-    String role = RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId));
+    String role = RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId());
     boolean isTeacher = "teacher".equals(role);
 
     Map<LocalDate, List<Lesson>> lessonList = (Map<LocalDate, List<Lesson>>) request.getAttribute("lessonList");
@@ -99,7 +99,7 @@
                     </td>
                     <% if(!isTeacher) {
                     %>
-                        <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+                        <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
                     <%
                         }
                     %>
@@ -184,7 +184,7 @@
                 </td>
                 <% if(!isTeacher) {
                 %>
-                <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+                <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
                 <%
                     }
                 %>

@@ -19,7 +19,7 @@
 <h1>Suppression d'un cours</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -43,7 +43,7 @@
     %>
     <tr>
         <td><%= course.getCourseName() %></td>
-        <td><%= SubjectDAO.getSubjectNameById(course.getSubjectId()) %></td>
+        <td><%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></td>
         <td><input type="radio" name="courseId" value="<%= course.getCourseId() %>" required></td>
     </tr>
     <%

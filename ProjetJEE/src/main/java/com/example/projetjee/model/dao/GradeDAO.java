@@ -3,6 +3,7 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Grade;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -34,4 +35,38 @@ public class GradeDAO {
         }
         return null;
     }
+
+    public static boolean insertGrade(Grade grade) {
+        // Open a session from Hibernate session factory
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            // Start a transaction
+            tx = session.beginTransaction();
+
+            // Persist the grade object (insert it into the database)
+            session.persist(grade);
+
+            // Commit the transaction to apply changes
+            tx.commit();
+            success = true;
+
+        } catch (Exception e) {
+            // In case of any error, rollback the transaction
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace(); // Print the exception for debugging
+        } finally {
+            // Close the session after completing the operation
+            session.close();
+        }
+
+        // Return true if the insertion was successful, otherwise false
+        return success;
+    }
+
+
 }

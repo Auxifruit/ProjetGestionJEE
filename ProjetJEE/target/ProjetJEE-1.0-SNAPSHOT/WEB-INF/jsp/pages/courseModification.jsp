@@ -20,7 +20,7 @@
 <h1>Modification d'un cours</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -36,7 +36,7 @@
 %>
 <h3>Anciennes informations</h3>
 <p>Ancien nom : <%= course.getCourseName() %></p>
-<p>Ancienne matière : <%= SubjectDAO.getSubjectNameById(course.getSubjectId()) %></p>
+<p>Ancienne matière : <%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></p>
 
 <form action="courseModification-servlet" method="post">
 

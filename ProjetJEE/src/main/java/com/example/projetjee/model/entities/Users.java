@@ -2,6 +2,8 @@ package com.example.projetjee.model.entities;
 
 import jakarta.persistence.*;
 
+import java.sql.Date;
+
 @Entity
 @Table(name="users")
 public class Users {
@@ -10,21 +12,26 @@ public class Users {
     @Column(name = "userId")
     private int userId;
 
+    @Basic
     @Column(name = "userPassword")
     private String userPassword;
 
+    @Basic
     @Column(name = "userLastName")
     private String userLastName;
 
+    @Basic
     @Column(name = "userName")
     private String userName;
 
+    @Basic
     @Column(name = "userEmail")
     private String userEmail;
 
+    @Basic
     @Column(name = "userBirthdate")
     private String userBirthdate;
-
+    @Basic
     @Column(name = "roleId")
     private Integer roleId;
 
@@ -70,6 +77,10 @@ public class Users {
 
     public String getUserBirthdate() {
         return userBirthdate;
+    }
+
+    public void setUserBirthdate(Date userBirthdate) {
+        this.userBirthdate = String.valueOf(userBirthdate);
     }
 
     public void setUserBirthdate(String userBirthdate) {

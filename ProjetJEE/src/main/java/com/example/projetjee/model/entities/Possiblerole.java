@@ -11,6 +11,7 @@ public class Possiblerole {
     @Column(name = "roleId")
     private int roleId;
 
+    @Basic
     @Column(name = "roleName")
     private String roleName;
 

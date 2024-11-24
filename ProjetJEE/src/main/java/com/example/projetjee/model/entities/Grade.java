@@ -10,32 +10,43 @@ public class Grade {
     @Column(name = "gradeId")
     private int gradeId;
 
+    @Basic
     @Column(name = "gradeValue")
     private Double gradeValue;
 
+    @Basic
     @Column(name = "gradeCoefficient")
     private Integer gradeCoefficient;
 
+    @Basic
     @Column(name = "studentId")
     private Integer studentId;
 
+    @Basic
     @Column(name = "courseId")
     private Integer courseId;
 
+    @Basic
     @Column(name = "teacherId")
     private Integer teacherId;
 
     private String studentFirstName;
     private String studentLastName;
     private String subjectName;
+    @Basic
+    @Column(name = "gradeName")
+    private String gradeName;
 
     public String getStudentFirstName() { return studentFirstName; }
+
     public void setStudentFirstName(String studentFirstName) { this.studentFirstName = studentFirstName; }
 
     public String getStudentLastName() { return studentLastName; }
+
     public void setStudentLastName(String studentLastName) { this.studentLastName = studentLastName; }
 
     public String getSubjectName() { return subjectName; }
+
     public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
 
     public int getGradeId() {
@@ -113,5 +124,13 @@ public class Grade {
         result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
         result = 31 * result + (teacherId != null ? teacherId.hashCode() : 0);
         return result;
+    }
+
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
     }
 }

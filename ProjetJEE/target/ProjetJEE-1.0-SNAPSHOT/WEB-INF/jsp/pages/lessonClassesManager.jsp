@@ -21,7 +21,7 @@ Created by IntelliJ IDEA.
 <h1>Assignation des séances à des Classs</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -55,7 +55,7 @@ Created by IntelliJ IDEA.
 <%
 } else {
 %>
-    <%= " " + UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></p>
+    <%= " " + UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></p>
 <%
     }
 %>

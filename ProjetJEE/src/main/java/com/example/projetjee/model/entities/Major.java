@@ -11,6 +11,7 @@ public class Major {
     @Column(name = "majorId")
     private int majorId;
 
+    @Basic
     @Column(name = "majorName")
     private String majorName;
 

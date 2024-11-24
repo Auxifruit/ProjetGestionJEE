@@ -10,6 +10,7 @@ public class Subjects {
     @Column(name = "subjectId")
     private int subjectId;
 
+    @Basic
     @Column(name = "subjectName")
     private String subjectName;
 

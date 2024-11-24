@@ -14,27 +14,28 @@
 <br/>
 <a href="${pageContext.request.contextPath}/hello-servlet">Hello Servlet</a></br>
 <%
-  if(userId != null && "administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId != null && "administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
 %>
-  <a href="${pageContext.request.contextPath}/goToAdminPage-servlet">Page admin</a></br>
+<a href="${pageContext.request.contextPath}/goToAdminPage-servlet">Page admin</a></br>
 <%
   }
 %>
 <%
   if(userId == null) {
 %>
-  <a href="${pageContext.request.contextPath}/login">Connexion</a></br>
-  <a href="${pageContext.request.contextPath}/register">Inscription</a></br>
+<a href="${pageContext.request.contextPath}/login">Connexion</a></br>
+<a href="${pageContext.request.contextPath}/register">Inscription</a></br>
 <%
-  } else {
-    if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+} else {
+  if(!"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
 %>
-  <a href="${pageContext.request.contextPath}/userSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
-  <%
-    }
-  %>
-  <a href="${pageContext.request.contextPath}/personalInformation-servlet">Informations personnelles</a></br>
-  <a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
+<a href="${pageContext.request.contextPath}/userSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
+<%
+  }
+%>
+<a href="${pageContext.request.contextPath}/personalInformation-servlet">Informations personnelles</a></br>
+<a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
+<a href="${pageContext.request.contextPath}/entry-note-servlet?userId=<%= userId.intValue() %>">Saisie de note</a></br>
 <%
   }
 %>

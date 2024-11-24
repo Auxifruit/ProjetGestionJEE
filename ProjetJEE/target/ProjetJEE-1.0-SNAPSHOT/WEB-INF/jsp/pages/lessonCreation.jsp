@@ -13,6 +13,7 @@
 <%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Users" %>
 <br>
 <head>
     <title>Création séance</title>
@@ -20,7 +21,7 @@
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
     response.sendRedirect("index.jsp");
     return;
   }
@@ -56,7 +57,7 @@
   %>
   <tr>
     <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-    <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+    <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
     <td><%= lesson.getLessonStartDate() %></td>
     <td><%= lesson.getLessonEndDate() %></td>
   </tr>
@@ -100,8 +101,10 @@
 <select name="teacher">
   <%
     for (Teacher teacher : teacherList) {
-      String teacherLastName = UserDAO.getLastNameById(teacher.getTeacherId());
-      String teacherName = UserDAO.getNameById(teacher.getTeacherId());
+      Users user = UserDAO.getUserById(teacher.getTeacherId());
+
+      String teacherLastName = user.getUserLastName();
+      String teacherName = user.getUserName();
 
       if(teacherLastName != null || teacherName != null) {
   %>

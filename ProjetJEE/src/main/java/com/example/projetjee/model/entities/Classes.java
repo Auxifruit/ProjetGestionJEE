@@ -9,10 +9,10 @@ public class Classes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "classesId")
+    @Column(name = "classId")
     private int classId;
 
-    @Column(name = "classesName", nullable = false)
+    @Column(name = "className", nullable = false)
     private String className;
 
     // Getters et Setters

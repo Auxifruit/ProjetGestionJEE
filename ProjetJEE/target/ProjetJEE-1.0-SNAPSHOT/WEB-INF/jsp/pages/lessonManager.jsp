@@ -18,7 +18,7 @@
 <h1>Liste des séance</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -45,7 +45,7 @@
         %>
         <tr>
             <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-            <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+            <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
             <td><%= lesson.getLessonStartDate() %></td>
             <td><%= lesson.getLessonEndDate() %></td>
             <td><input type="radio" name="lessonId" value="<%= lesson.getLessonId()%>" required></td>

@@ -14,13 +14,20 @@ DROP TABLE course;
 DROP TABLE teacher;
 DROP TABLE subjects;
 DROP TABLE users;
-DROP TABLE possibleRole;
-*/
 
+
+DROP TABLE possibleRole;
 CREATE TABLE PossibleRole (
 	roleId INT AUTO_INCREMENT PRIMARY KEY,
     roleName VARCHAR(50) UNIQUE
 );
+
+INSERT INTO PossibleRole VALUES (1, "student");
+INSERT INTO PossibleRole VALUES (2, "teacher");
+INSERT INTO PossibleRole VALUES (3, "administrator");
+*/
+
+
 
 CREATE TABLE Major (
 	majorId INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,9 +41,7 @@ CREATE TABLE Users (
     userName VARCHAR(50),
     userEmail VARCHAR(50) UNIQUE,
     userBirthdate VARCHAR(50),
-    roleId int,
-    
-    FOREIGN KEY (roleId) REFERENCES PossibleRole(roleId) ON DELETE CASCADE
+    userRole ENUM("student","teacher","administrator")
 );
 
 CREATE TABLE Administrator (
@@ -123,26 +128,7 @@ CREATE TABLE LessonClass (
     FOREIGN KEY (classId) REFERENCES Classes(classId) ON DELETE SET NULL
 );
 
-SELECT * FROM course;
-SELECT * FROM classes;
-SELECT * FROM lesson;
-SELECT * FROM lessonClass;
-
-SELECT * FROM subjects;
-SELECT * FROM grade;
-
-SELECT * FROM administrator;
-SELECT * FROM teacher;
-SELECT * FROM users;
-SELECT * FROM student;
-SELECT * FROM major;
-SELECT * FROM possiblerole;
-
 # Jeu de données pour test
-INSERT INTO PossibleRole VALUES (1, "student");
-INSERT INTO PossibleRole VALUES (2, "teacher");
-INSERT INTO PossibleRole VALUES (3, "administrator");
-
 INSERT INTO Classes VALUES (1, "GSI1");
 INSERT INTO Classes VALUES (2, "GSI2");
 INSERT INTO Classes VALUES (3, "GSI3");
@@ -155,13 +141,13 @@ INSERT INTO Major VALUES (4, "CACA");
 INSERT INTO subjects VALUES (1, "Mathématiques");
 INSERT INTO subjects VALUES (2, "Informatique");
 
-INSERT INTO users VALUES (1, "password", "Evans", "Mark", "mark@gmail.com", "2000-01-02", 1);
-INSERT INTO users VALUES (2, "password", "Blaze", "Axel", "axel@gmail.com", "2002-05-06", 1);
-INSERT INTO users VALUES (3, "password", "Sharp", "Jude", "jude@gmail.com", "2002-04-03", 1);
-INSERT INTO users VALUES (4, "password", "Eau", "Ondine", "ondine@gmail.com", "1982-07-08", 2);
-INSERT INTO users VALUES (5, "password", "Roche", "Pierre", "pierre@gmail.com", "1978-09-10", 2);
-INSERT INTO users VALUES (6, "password", "Capone", "Bege", "bege@gmail.com", "1786-12-01", 3);
-INSERT INTO users VALUES (7, "password", "Newgate", "Edward", "edward@gmail.com", "1781-02-11", 3);
+INSERT INTO users VALUES (1, "password", "Evans", "Mark", "mark@gmail.com", "2000-01-02", "student");
+INSERT INTO users VALUES (2, "password", "Blaze", "Axel", "axel@gmail.com", "2002-05-06", "student");
+INSERT INTO users VALUES (3, "password", "Sharp", "Jude", "jude@gmail.com", "2002-04-03", "student");
+INSERT INTO users VALUES (4, "password", "Eau", "Ondine", "ondine@gmail.com", "1982-07-08", "teacher");
+INSERT INTO users VALUES (5, "password", "Roche", "Pierre", "pierre@gmail.com", "1978-09-10", "teacher");
+INSERT INTO users VALUES (6, "password", "Capone", "Bege", "bege@gmail.com", "1786-12-01", "administrator");
+INSERT INTO users VALUES (7, "password", "Newgate", "Edward", "edward@gmail.com", "1781-02-11", "administrator");
 
 INSERT INTO users VALUES (8, "a", "Nom", "Prénom", "a@gmail.com", "1111-11-11", 3);
 
@@ -192,6 +178,20 @@ INSERT INTO lesson VALUES (2, "2024-12-22T14:45:00", "2024-12-22T16:15:00", 1, 4
 
 INSERT INTO lessonClass VALUES (1, 1, 1);
 INSERT INTO lessonClass VALUES (2, 2, 2);
+
+SELECT * FROM course;
+SELECT * FROM classes;
+SELECT * FROM lesson;
+SELECT * FROM lessonClass;
+
+SELECT * FROM subjects;
+SELECT * FROM grade;
+
+SELECT * FROM administrator;
+SELECT * FROM teacher;
+SELECT * FROM users;
+SELECT * FROM student;
+SELECT * FROM major;
 
 # Exemple de query
 

@@ -84,11 +84,12 @@ public class CourseModificationServlet extends HttpServlet {
         course.setCourseName(newCourseName);
         course.setSubjectId(newCourseSubjectId);
 
-        if(CourseDAO.modifyCourseFromTable(course) == true) {
+        String error = CourseDAO.modifyCourseFromTable(course);
+        if(error == null) {
             request.getRequestDispatcher("courseManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de la modification du cours.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

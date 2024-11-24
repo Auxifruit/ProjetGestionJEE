@@ -50,12 +50,12 @@ public class EditInformationsServlet extends HttpServlet {
         user.setUserBirthdate(birthDate);
 
         // Mise à jour des informations dans la base de données
-        boolean updateSuccessful = UserDAO.modifyUserFromTable(user);
+        String error = UserDAO.modifyUserFromTable(user);
 
-        if (updateSuccessful) {
+        if (error == null) {
             request.setAttribute("message", "Les informations ont été mises à jour avec succès.");
         } else {
-            request.setAttribute("message", "Échec de la mise à jour des informations.");
+            request.setAttribute("message", error);
         }
 
         // Rediriger vers la page JSP

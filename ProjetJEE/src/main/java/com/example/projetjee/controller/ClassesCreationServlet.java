@@ -48,11 +48,12 @@ public class ClassesCreationServlet extends HttpServlet {
         Classes classe = new Classes();
         classe.setClassName(classesName);
 
-        if(ClasseDAO.addClasseInTable(classe) == true) {
+        String error = ClasseDAO.addClasseInTable(classe);
+        if(error == null) {
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de la classe.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

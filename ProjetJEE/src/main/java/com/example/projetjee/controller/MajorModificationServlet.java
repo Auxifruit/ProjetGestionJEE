@@ -67,11 +67,12 @@ public class MajorModificationServlet extends HttpServlet {
 
         major.setMajorName(majorNewName);
 
-        if(MajorDAO.modifyMajorFromTable(major) == true) {
+        String error = MajorDAO.modifyMajorFromTable(major);
+        if(error == null) {
             request.getRequestDispatcher("majorManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de la modification de la filière.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

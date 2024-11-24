@@ -36,22 +36,15 @@ public class SubjectCreationServlet extends HttpServlet {
             return;
         }
 
-        /*
-        // A MODIFIER PLUS TARD
-        if(SubjectDAO.isSubjectInTable(subjectName) == true) {
-            request.setAttribute("erreur", "Erreur : La matière existe déjà.");
-            doGet(request, response);
-            return;
-        }*/
-
         Subjects subject = new Subjects();
         subject.setSubjectName(subjectName);
 
-        if(SubjectDAO.addSubjectInTable(subject) == true) {
+        String error = SubjectDAO.addSubjectInTable(subject);
+        if(error == null) {
             request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de la matière.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

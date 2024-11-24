@@ -48,11 +48,12 @@ public class MajorCreationServlet extends HttpServlet {
         Major major = new Major();
         major.setMajorName(majorName);
 
-        if(MajorDAO.addMajorInTable(major) == true) {
+        String error = MajorDAO.addMajorInTable(major);
+        if(error == null) {
             request.getRequestDispatcher("majorManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de la filière.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

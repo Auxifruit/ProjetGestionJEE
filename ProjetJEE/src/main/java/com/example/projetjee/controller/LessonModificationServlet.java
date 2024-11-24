@@ -121,11 +121,12 @@ public class LessonModificationServlet extends HttpServlet {
         lesson.setCourseId(newCourseId);
         lesson.setTeacherId(newTeacherId);
 
-        if(LessonDAO.modifyLessonFromTable(lesson) == true) {
+        String error = LessonDAO.modifyLessonFromTable(lesson);
+        if(error == null) {
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de la modification de la séance.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

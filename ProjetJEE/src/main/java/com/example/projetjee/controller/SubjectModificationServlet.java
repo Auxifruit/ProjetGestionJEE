@@ -68,11 +68,12 @@ public class SubjectModificationServlet extends HttpServlet {
 
         subject.setSubjectName(subjectNewName);
 
-        if(SubjectDAO.modifySubjectFromTable(subject) == true) {
+        String error = SubjectDAO.modifySubjectFromTable(subject);
+        if(error == null) {
             request.getRequestDispatcher("subjectManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de la suppression de la matière.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

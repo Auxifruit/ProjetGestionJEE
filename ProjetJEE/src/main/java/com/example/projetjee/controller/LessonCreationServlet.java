@@ -82,11 +82,12 @@ public class LessonCreationServlet extends HttpServlet {
         lesson.setCourseId(courseId);
         lesson.setTeacherId(teacherId);
 
-        if(LessonDAO.addLessonInTable(lesson) == true) {
+        String error = LessonDAO.addLessonInTable(lesson);
+        if(error == null) {
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de la séance.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
     }

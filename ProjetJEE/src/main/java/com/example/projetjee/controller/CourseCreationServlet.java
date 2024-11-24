@@ -49,24 +49,16 @@ public class CourseCreationServlet extends HttpServlet {
 
         int subjectId = Integer.parseInt(subjectIdString);
 
-        /*
-        // A MODIFIER
-        if(CourseDAO.isCourseInTable(courseName, subjectId) == true) {
-            request.setAttribute("erreur", "Erreur : Le cours existe déjà.");
-            doGet(request, response);
-            return;
-        }
-        */
-
         Course course = new Course();
         course.setCourseName(courseName);
         course.setSubjectId(subjectId);
 
-        if(CourseDAO.addCourseInTable(course) == true) {
+        String error = CourseDAO.addCourseInTable(course);
+        if(error == null) {
             request.getRequestDispatcher("courseManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout du cours.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

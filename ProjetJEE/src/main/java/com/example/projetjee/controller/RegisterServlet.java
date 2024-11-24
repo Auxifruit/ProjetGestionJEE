@@ -67,8 +67,9 @@ public class RegisterServlet extends HttpServlet {
         user.setUserBirthdate(birthdate);
         user.setRoleId(1);
 
-        if(UserDAO.addUserInTable(user) == false) {
-            request.setAttribute("error", "Erreur : Erreur lors de l'inscription.");
+        String error = UserDAO.addUserInTable(user);
+        if(error != null) {
+            request.setAttribute("error", error);
             doGet(request, response);
             return;
         }

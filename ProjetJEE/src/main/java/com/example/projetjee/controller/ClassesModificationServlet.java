@@ -67,11 +67,12 @@ public class ClassesModificationServlet extends HttpServlet {
 
         classe.setClassName(classesNewName);
 
-        if(ClasseDAO.modifyClassFromTable(classe) == true) {
+        String error = ClasseDAO.modifyClassFromTable(classe);
+        if(error == null) {
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
         }
         else {
-            request.setAttribute("erreur", "Erreur : Erreur lors de la modification de la classe.");
+            request.setAttribute("erreur", error);
             doGet(request, response);
         }
 

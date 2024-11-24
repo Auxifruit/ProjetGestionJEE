@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%@ page import="java.util.Date" %>
 
 <%
@@ -42,7 +41,7 @@
       nom: "<%= user.getUserLastName() %>",
       prenom: "<%= user.getUserName() %>",
       dateNaissance: "<%= user.getUserBirthdate() %>",
-      motDePasse: ""
+      motDePasse: "<%= user.getUserPassword() %>"
     };
 
     function toggleEditMode(isEditable) {
@@ -87,7 +86,7 @@
 
   <label>Mot de passe :</label>
   <div>
-    <input type="password" id="motDePasse" name="motDePasse" value="" readonly>
+    <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getUserPassword() %>" readonly>
   </div>
 
   <!-- Boutons -->

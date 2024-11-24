@@ -2,8 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
 <%--
   Created by IntelliJ IDEA.
   User: CYTech Student
@@ -20,7 +20,7 @@
 <h1>Modification d'un cours</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }

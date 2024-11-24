@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Student" %>
 <%@ page import="com.example.projetjee.model.dao.*" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
 <%--
 Created by IntelliJ IDEA.
   User: CYTech Student
@@ -18,7 +19,7 @@ Created by IntelliJ IDEA.
 <h1>Assignation des séances à des Classs</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }

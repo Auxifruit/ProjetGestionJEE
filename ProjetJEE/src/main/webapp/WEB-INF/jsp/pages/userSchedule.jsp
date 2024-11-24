@@ -6,7 +6,8 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="com.example.projetjee.model.entities.Classes" %>
 <%@ page import="com.example.projetjee.model.dao.*" %>
-<%@ page import="java.util.TreeMap" %><%--
+<%@ page import="java.util.TreeMap" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 19/11/2024
@@ -27,8 +28,8 @@
         return;
     }
 
-    String role = RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId());
-    boolean isTeacher = "teacher".equals(role);
+    Role role = UserDAO.getUserById(userId).getUserRole();
+    boolean isTeacher = Role.teacher.equals(role);
 
     Map<LocalDate, List<Lesson>> lessonList = (Map<LocalDate, List<Lesson>>) request.getAttribute("lessonList");
 

@@ -7,13 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Teacher" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Course" %>
-<%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Users" %>
+<%@ page import="com.example.projetjee.model.entities.*" %>
 <br>
 <head>
     <title>Création séance</title>
@@ -21,7 +17,7 @@
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getUserById(userId).getRoleId()))) {
+  if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
     response.sendRedirect("index.jsp");
     return;
   }

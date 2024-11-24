@@ -90,7 +90,7 @@ CREATE TABLE Course(
 );
 
 CREATE TABLE Grade (
-    gradeId INT PRIMARY KEY,
+    gradeId INT AUTO_INCREMENT PRIMARY KEY,
     gradeName VARCHAR(50),
     gradeValue DOUBLE,
     gradeCoefficient INT,

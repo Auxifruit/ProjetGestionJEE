@@ -36,9 +36,9 @@
 <form action="changeRole-servlet" method="get" >
     <select name="roleFilter">
         <option value="">Tous</option>
-        <option value="1">Étudiants</option>
-        <option value="2">Enseignants</option>
-        <option value="3">Administrateurs</option>
+        <option value=<%= Role.student %>>Étudiants</option>
+        <option value="<%= Role.teacher %>">Enseignants</option>
+        <option value="<%= Role.administrator %>">Administrateurs</option>
     </select>
     <button type="submit">Valider</button>
 </form>
@@ -76,9 +76,9 @@
 </br>
 <span><b>Nouveau rôle : </b></span>
     <select name="newRoleID" required>
-        <option value="1">Étudiant</option>
-        <option value="2">Enseignant</option>
-        <option value="3">Administrateur</option>
+        <option value=<%= Role.student %>>Étudiants</option>
+        <option value="<%= Role.teacher %>">Enseignants</option>
+        <option value="<%= Role.administrator %>">Administrateurs</option>
     </select>
     <button type="submit">Valider</button>
     </br></br>

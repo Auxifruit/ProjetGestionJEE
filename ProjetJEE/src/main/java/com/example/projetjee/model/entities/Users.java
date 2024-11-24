@@ -19,7 +19,7 @@ public class Users {
     @Column(name = "userName")
     private String userName;
 
-    @Column(name = "userEmail")
+    @Column(name = "userEmail", unique = true)
     private String userEmail;
 
     @Column(name = "userBirthdate")

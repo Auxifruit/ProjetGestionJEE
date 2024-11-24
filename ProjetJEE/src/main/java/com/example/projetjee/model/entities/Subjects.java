@@ -10,7 +10,7 @@ public class Subjects {
     @Column(name = "subjectId")
     private int subjectId;
 
-    @Column(name = "subjectName")
+    @Column(name = "subjectName", unique = true)
     private String subjectName;
 
     public int getSubjectId() {

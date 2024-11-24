@@ -11,7 +11,7 @@ public class Possiblerole {
     @Column(name = "roleId")
     private int roleId;
 
-    @Column(name = "roleName")
+    @Column(name = "roleName", unique = true)
     private String roleName;
 
     public int getRoleId() {

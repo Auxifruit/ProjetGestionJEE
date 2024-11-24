@@ -11,7 +11,7 @@ public class Major {
     @Column(name = "majorId")
     private int majorId;
 
-    @Column(name = "majorName")
+    @Column(name = "majorName", unique = true)
     private String majorName;
 
     public int getMajorId() {

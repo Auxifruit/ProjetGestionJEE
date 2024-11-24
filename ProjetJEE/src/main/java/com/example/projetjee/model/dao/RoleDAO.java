@@ -5,10 +5,20 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.management.relation.Role;
+import java.util.List;
+
 public class RoleDAO {
     private static final String ROLE_TABLE = "possibleRole";
     private static final String ROLE_ID = "roleId";
     private static final String ROLE_NAME = "roleName";
+
+    public static List<Role> getAllMajor() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Role> roles = session.createQuery("FROM Possiblerole ", Role.class).list();
+        session.close();
+        return roles;
+    }
 
     public static String getRoleNameById(int roleId) {
         String roleName = null;

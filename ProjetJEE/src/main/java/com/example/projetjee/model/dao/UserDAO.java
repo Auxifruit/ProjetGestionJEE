@@ -1,10 +1,7 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Student;
-import com.example.projetjee.model.entities.Teacher;
-import com.example.projetjee.model.entities.Users;
+import com.example.projetjee.model.entities.*;
 import com.example.projetjee.util.HibernateUtil;
-import com.example.projetjee.model.entities.Administrator;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -23,7 +20,7 @@ public class UserDAO {
     private static final String USER_NAME = "userName";
     private static final String USER_EMAIL = "userEmail";
     private static final String USER_BIRTHDATE = "userBirthdate";
-    private static final String ROLE_ID = "roleId";
+    private static final String USER_ROLE = "userRole";
 
     public static List<Users> getAllUsers(String roleFilter) {
         List<Users> userList = null;
@@ -217,7 +214,7 @@ public class UserDAO {
         return classNames;
     }
 
-    public static boolean modifyUserRole(Users user, int oldRoleID, int newRoleID) {
+    public static boolean modifyUserRole(Users user, Role oldUserRole, Role newUserRole) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         boolean success = false;
@@ -227,43 +224,41 @@ public class UserDAO {
             int userID = user.getUserId();
 
             // Modifier le rôle de l'utilisateur
-            user.setRoleId(newRoleID);
+            user.setUserRole(newUserRole);
             UserDAO.modifyUserFromTable(user);
 
-            boolean flag = false;
-
-            switch (newRoleID) {
-                case 1:
+            switch (newUserRole) {
+                case student:
                     Student student = new Student();
                     student.setStudentId(userID);
                     student.setClassId(null);
                     student.setMajorId(null);
 
-                    flag = StudentDAO.addStudentInTable(student);
+                    StudentDAO.addStudentInTable(student);
                     break;
-                case 2:
+                case teacher:
                     Teacher teacher = new Teacher();
                     teacher.setTeacherId(userID);
 
-                    flag = TeacherDAO.addTeacherInTable(teacher);
+                    TeacherDAO.addTeacherInTable(teacher);
                     break;
-                case 3:
+                case administrator:
                     Administrator admin = new Administrator();
                     admin.setAdministratorId(userID);
 
-                    flag = AdminDAO.addAdminInTable(admin);
+                    AdminDAO.addAdminInTable(admin);
                     break;
             }
 
             // Supprimer l'utilisateur de l'ancien rôle
-            switch (oldRoleID) {
-                case 1:
+            switch (oldUserRole) {
+                case student:
                     StudentDAO.deleteStudentFromTable(userID);
                     break;
-                case 2:
+                case teacher:
                     TeacherDAO.deleteTeacherFromTable(userID);
                     break;
-                case 3:
+                case administrator:
                     AdminDAO.deleteAdminFromTable(userID);
                     break;
             }

@@ -19,7 +19,6 @@ public class StudentClassesUnassignationServlet extends HttpServlet {
         String studentIdString = request.getParameter("studentId");
 
         int classeId = Integer.parseInt(classeIdString);
-        System.out.println(classeId);
         request.setAttribute("classesId", classeId);
 
         if(studentIdString == null || studentIdString.isEmpty()) {

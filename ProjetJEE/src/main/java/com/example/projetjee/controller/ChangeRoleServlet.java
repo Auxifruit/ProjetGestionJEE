@@ -1,6 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.UserDAO;
+import com.example.projetjee.model.entities.Role;
 import com.example.projetjee.model.entities.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +31,7 @@ public class ChangeRoleServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int newRoleID = Integer.parseInt(request.getParameter("newRoleID"));
+        Role newUserRole = Role.valueOf(request.getParameter("newRoleID"));
         String userParam = request.getParameter("user");
 
         if (userParam == null || userParam.isEmpty()) {
@@ -41,12 +42,12 @@ public class ChangeRoleServlet extends HttpServlet {
         int userId = Integer.parseInt(userParam);
         Users user = UserDAO.getUserById(userId);
 
-        if (newRoleID == user.getRoleId()) {
+        if (newUserRole.equals(user.getUserRole())) {
             request.setAttribute("erreur", "Erreur : L'Users a déjà ce rôle.");
             doGet(request, response);
         }
 
-        if(UserDAO.modifyUserRole(user, user.getRoleId(), newRoleID) == true) {
+        if(UserDAO.modifyUserRole(user, user.getUserRole(), newUserRole) == true) {
             doGet(request, response);
         }
         else {

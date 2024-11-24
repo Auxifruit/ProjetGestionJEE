@@ -1,7 +1,6 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.util.HashPswdUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,18 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/cydatabase";
-    private static final String DB_USERNAME = "root"; // Change en fonction de ton utilisateur MySQL
-    private static final String DB_PASSWORD = ""; // Ton mot de passe MySQL
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,7 +22,6 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String hashedPassword = HashPswdUtil.hashPassword(password);
 
         if(email == null || email.isEmpty()) {
             request.setAttribute("error", "Erreur : Veuillez saisir l'email.");
@@ -46,7 +35,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        Integer userId = UserDAO.userConnection(email, hashedPassword);
+        Integer userId = UserDAO.userConnection(email, password);
 
         if(userId == null) {
             request.setAttribute("error", "Erreur : L'email ou le mot de passe est incorrecte");

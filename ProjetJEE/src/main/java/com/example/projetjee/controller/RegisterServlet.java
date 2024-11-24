@@ -4,9 +4,9 @@ import com.example.projetjee.model.dao.MajorDAO;
 import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.Major;
+import com.example.projetjee.model.entities.Role;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Users;
-import com.example.projetjee.util.HashPswdUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,8 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @WebServlet("/register")
@@ -46,8 +44,6 @@ public class RegisterServlet extends HttpServlet {
         String birthdate = request.getParameter("birthdate");
         String majorIdString = request.getParameter("major");
 
-        String hashedPassword = HashPswdUtil.hashPassword(password);
-
         if((firstName == null || firstName.isEmpty()) || (lastName == null || lastName.isEmpty()) || (email == null || email.isEmpty())
                 || (password == null || password.isEmpty()) || (birthdate == null || birthdate.isEmpty()) || (majorIdString == null || majorIdString.isEmpty())) {
             request.setAttribute("error", "Erreur : Veuillez remplir tous les champs.");
@@ -55,22 +51,13 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        /*
-        // A MODIFIER PLUS TARD
-        if(UserDAO.isEmailInTable(email) == true) {
-            request.setAttribute("error", "Erreur : Cette adresse e-mail est déjà utilisée.");
-            doGet(request, response);
-            return;
-        }
-        */
-
         Users user = new Users();
-        user.setUserPassword(hashedPassword);
+        user.setUserPassword(password);
         user.setUserLastName(lastName);
         user.setUserName(firstName);
         user.setUserEmail(email);
         user.setUserBirthdate(birthdate);
-        user.setRoleId(1);
+        user.setUserRole(Role.student);
 
         String error = UserDAO.addUserInTable(user);
         if(error != null) {

@@ -103,8 +103,9 @@ public class LessonModificationServlet extends HttpServlet {
             teacherModified = true;
         }
 
-        if(dateModified == true && DateUtil.areDatesValid(newStartDate, newEndDate) == false) {
-            request.setAttribute("erreur", "Erreur : Veuillez saisir 2 dates valides.");
+        String erreur = DateUtil.areDatesValid(newStartDate, newEndDate);
+        if(dateModified == true && erreur != null) {
+            request.setAttribute("erreur", erreur);
             doGet(request, response);
             return;
         }

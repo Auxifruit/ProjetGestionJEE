@@ -63,11 +63,9 @@ public class LessonCreationServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("Start date : " + startDate);
-        System.out.println("End date : " + endDate);
-
-        if(DateUtil.areDatesValid(startDate, endDate) == false) {
-            request.setAttribute("erreur", "Erreur : Veuillez saisir 2 dates valides.");
+        String erreur = DateUtil.areDatesValid(startDate, endDate);
+        if(erreur != null) {
+            request.setAttribute("erreur", erreur);
             doGet(request, response);
             return;
         }

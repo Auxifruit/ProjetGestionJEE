@@ -10,35 +10,38 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class DateUtil {
-    public static boolean areDatesValid(String startDateString, String endDateString) {
+    public static String areDatesValid(String startDateString, String endDateString) {
         try {
             LocalDateTime startDate = LocalDateTime.parse(startDateString);
             LocalDateTime endDate = LocalDateTime.parse(endDateString);
 
             if (!startDate.toLocalDate().equals(endDate.toLocalDate())) {
-                return false;
+                return "Erreur : Les deux dates doivent être le même jour.";
             }
 
             LocalDateTime validStartDate = startDate.withHour(8).withMinute(30).withSecond(0).withNano(0);
             if (startDate.isBefore(validStartDate)) {
-                return false;
+                return "Erreur : Les séances commencent à partir de 8h30.";
             }
 
             LocalDateTime validEndDate = endDate.withHour(19).withMinute(45).withSecond(0).withNano(0);
             if (endDate.isAfter(validEndDate)) {
-                return false;
+                return "Erreur : Les séances se terminent à 19h45.";
             }
 
             long minutesBetween = ChronoUnit.MINUTES.between(startDate, endDate);
             if (minutesBetween > 180) {
-                return false;
+                return "Erreur : Les séances durent un maximum de 3 heures.";
             }
 
-            return startDate.isBefore(endDate);
+            if(endDate.isBefore(startDate)) {
+                return "Erreur : La date de début doit être avant la date de fin.";
+            }
         } catch (DateTimeParseException e) {
-            System.out.println("Erreur de format de date : " + e.getMessage());
-            return false;
+            return "Erreur de format de date.";
         }
+
+        return null;
     }
 
     public static Timestamp dateStringToTimestamp(String dateString) {

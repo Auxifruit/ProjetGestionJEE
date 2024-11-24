@@ -34,7 +34,7 @@
 <%
 } else {
 %>
-<form method="post">
+<form method="post" id="userForm">
 <table border="1px">
     <tr>
         <th>Nom de l'utilisateur</th>
@@ -73,8 +73,8 @@
     %>
 </table>
 </br>
-<button type="submit" formaction="validateUser-servlet">Valider</button>
-<button type="submit" formaction="refuseUser-servlet">Refuser</button>
+<button type="submit" onclick="confirmSubmission(document.getElementById('userForm'), 'validate')">Valider</button>
+<button type="submit" onclick="confirmSubmission(document.getElementById('userForm'), 'refuse')">Refuser</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
     if(messageErreur != null && !messageErreur.isEmpty()) {
@@ -85,4 +85,13 @@
     }
 %>
 </body>
+<script>
+    function confirmSubmission(form, action) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir " + (action === 'validate' ? "valider" : "refuser") + " cet utilisateur ?");
+        if (confirmation) {
+            form.action = action === 'validate' ? 'validateUser-servlet' : 'refuseUser-servlet';
+            form.submit();
+        }
+    }
+</script>
 </html>

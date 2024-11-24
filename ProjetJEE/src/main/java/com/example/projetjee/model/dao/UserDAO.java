@@ -22,7 +22,7 @@ public class UserDAO {
     private static final String USER_BIRTHDATE = "userBirthdate";
     private static final String USER_ROLE = "userRole";
 
-    public static List<Users> getAllUsers(String roleFilter) {
+    public static List<Users> getAllUsers(Role roleFilter) {
         List<Users> userList = null;
 
         // Ouverture d'une session Hibernate
@@ -32,16 +32,16 @@ public class UserDAO {
             String hql = "FROM Users";
 
             // Si un filtre de rôle est fourni, ajouter une clause WHERE
-            if (roleFilter != null && !roleFilter.isEmpty()) {
-                hql += " WHERE roleId = :roleId";
+            if (roleFilter != null) {
+                hql += " WHERE userRole = :userRole";
             }
 
             // Création de la requête Hibernate
             Query<Users> query = session.createQuery(hql, Users.class);
 
             // Si un filtre est appliqué, on ajoute le paramètre à la requête
-            if (roleFilter != null && !roleFilter.isEmpty()) {
-                query.setParameter("roleId", Integer.parseInt(roleFilter));
+            if (roleFilter != null) {
+                query.setParameter("userRole", roleFilter);
             }
 
             // Exécution de la requête et récupération des résultats

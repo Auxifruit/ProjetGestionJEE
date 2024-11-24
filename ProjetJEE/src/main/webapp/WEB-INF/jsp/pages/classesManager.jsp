@@ -48,6 +48,7 @@
     </br>
     <button type="submit" formaction="classesModification-servlet">Modifier</button>
     <button type="submit" formaction="classesDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="studentClassesManager-servlet">Assigner un ou plusieurs étudiants à la classe</button>
 </form>
 <%
     }

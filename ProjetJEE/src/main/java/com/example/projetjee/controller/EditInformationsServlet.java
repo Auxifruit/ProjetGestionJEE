@@ -10,9 +10,38 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.example.projetjee.model.dao.UserDAO;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @WebServlet("/editInformations")
 public class EditInformationsServlet extends HttpServlet {
+
+    public static String hashPassword(String password) {
+        try {
+            // Créer une instance de MessageDigest pour SHA-256
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            // Convertir le mot de passe en tableau de bytes
+            byte[] encodedHash = digest.digest(password.getBytes());
+
+            // Convertir le tableau de bytes en chaîne hexadécimale
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : encodedHash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            // Renvoyer une version tronquée à 50 caractères
+            return hexString.substring(0, 49);
+
+        } catch (NoSuchAlgorithmException e) {
+            // Gérer l'erreur si l'algorithme n'est pas disponible
+            throw new RuntimeException("Erreur : Algorithme SHA-256 non disponible", e);
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -22,6 +51,7 @@ public class EditInformationsServlet extends HttpServlet {
         String name = request.getParameter("prenom");
         String birthDate = request.getParameter("dateNaissance");
         String password = request.getParameter("motDePasse");
+        String hashedPassword = hashPassword(password);
 
         // ID de l'utilisateur connecté
         String userIdStr = request.getParameter("userId");
@@ -43,7 +73,7 @@ public class EditInformationsServlet extends HttpServlet {
         }
 
         Users user = UserDAO.getUserById(userId);
-        user.setUserPassword(password);
+        user.setUserPassword(hashedPassword);
         user.setUserLastName(lastName);
         user.setUserName(name);
         user.setUserEmail(email);

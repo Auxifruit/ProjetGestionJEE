@@ -25,26 +25,20 @@ public class UserDAO {
     public static List<Users> getAllUsers(Role roleFilter) {
         List<Users> userList = null;
 
-        // Ouverture d'une session Hibernate
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-            // Création de la requête de base
             String hql = "FROM Users";
 
-            // Si un filtre de rôle est fourni, ajouter une clause WHERE
             if (roleFilter != null) {
                 hql += " WHERE userRole = :userRole";
             }
 
-            // Création de la requête Hibernate
             Query<Users> query = session.createQuery(hql, Users.class);
 
-            // Si un filtre est appliqué, on ajoute le paramètre à la requête
             if (roleFilter != null) {
                 query.setParameter("userRole", roleFilter);
             }
 
-            // Exécution de la requête et récupération des résultats
             userList = query.list();
 
         } catch (Exception e) {
@@ -279,12 +273,11 @@ public class UserDAO {
 
     public static boolean isEmailInTable(String email) {
         if (email == null || email.isEmpty()) {
-            return false; // Si l'email est null ou vide, on retourne false
+            return false;
         }
 
-        boolean isIn = false;  // Par défaut, on suppose que l'email n'existe pas
+        boolean isIn = false;
 
-        // HQL query pour vérifier si l'email existe dans la table Users
         String hql = "SELECT COUNT(u) FROM Users u WHERE u.userEmail = :email";
 
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -293,27 +286,22 @@ public class UserDAO {
         try {
             transaction = session.beginTransaction();
 
-            // Créer la requête HQL pour compter les utilisateurs avec l'email donné
             Query<Long> query = session.createQuery(hql, Long.class);
-            query.setParameter("email", email);  // Paramétrage de l'email dans la requête
+            query.setParameter("email", email);
 
-            // Récupérer le nombre d'utilisateurs avec cet email
-            long count = query.uniqueResult();  // Cela renvoie un seul résultat (le nombre d'occurrences)
+            long count = query.uniqueResult();
 
-            // Si le compte est supérieur à 0, l'email existe dans la table
             isIn = count > 0;
 
-            // Commit de la transaction
             transaction.commit();
 
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();  // Rollback de la transaction en cas d'erreur
+                transaction.rollback();
             }
-            System.out.println("Error in isEmailInTable:");
             e.printStackTrace();
         } finally {
-            session.close();  // Toujours fermer la session pour libérer les ressources
+            session.close();
         }
 
         return isIn;

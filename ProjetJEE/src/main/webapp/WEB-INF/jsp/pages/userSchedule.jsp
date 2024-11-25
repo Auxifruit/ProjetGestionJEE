@@ -86,24 +86,42 @@
                 <tr>
                     <td>
                         <%
-                            if(participantClass.size() > 1 ) {
+                            Integer courseId = lesson.getCourseId();
+                            if(courseId != null) {
+                                if(participantClass.size() > 1) {
                         %>
-                        CM
+                                CM
                         <%
-                        } else {
+                                } else {
                         %>
-                        TD
+                                TD
+                        <%
+                                }
+                        %>
+                            <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+                        <%
+                            } else {
+                        %>
+                            Pas de cours pour cette
                         <%
                             }
                         %>
-                        <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
                     </td>
+                    <td>
                     <% if(!isTeacher) {
+                            Integer teacherId = lesson.getTeacherId();
+                            if(teacherId != null) {
                     %>
-                        <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
+                        <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
                     <%
+                            } else {
+                    %>
+                        Pas d'enseignant pour cette séance
+                    <%
+                            }
                         }
                     %>
+                    </td>
                     <td><%= startDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
                     <td><%= endDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
                     <td>

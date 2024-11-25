@@ -13,8 +13,12 @@
 <head>
     <title>Gestion des matières</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
 <h1>Liste des matières</h1>
+<label for="searchInput">Rechercher :</label>
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+</br></br>
 <%
     Integer userId = (Integer) session.getAttribute("user");
     if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {

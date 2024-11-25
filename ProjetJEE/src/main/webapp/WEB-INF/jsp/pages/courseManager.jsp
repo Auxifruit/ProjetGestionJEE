@@ -14,8 +14,12 @@
 <head>
     <title>Gestion des cours</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
 <h1>Liste des cours</h1>
+<label for="searchInput">Rechercher :</label>
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+</br></br>
 <%
     Integer userId = (Integer) session.getAttribute("user");
     if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -38,20 +42,18 @@
         <th>Selection</th>
         <%
             for (Course course : courseList) {
+                Integer subjectId = course.getSubjectId();
         %>
         <tr>
             <td><%= course.getCourseName() %></td>
             <td>
-                <%
-                    String subjectName = SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName();
-                    if(subjectName == null || subjectName.isEmpty()) {
+                <% if(subjectId == null) {
                 %>
-                        <p>Pas de matière</p>
+                Pas de matière associé
                 <%
-                    }
-                    else {
+                } else {
                 %>
-                        <%= subjectName %>
+                <%= SubjectDAO.getSubjectById(subjectId).getSubjectName() %>
                 <%
                     }
                 %>

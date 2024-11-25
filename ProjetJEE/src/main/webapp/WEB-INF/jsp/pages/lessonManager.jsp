@@ -15,8 +15,12 @@
 <head>
     <title>Gestion des séance</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
 <h1>Liste des séance</h1>
+<label for="searchInput">Rechercher :</label>
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+</br></br>
 <%
     Integer userId = (Integer) session.getAttribute("user");
     if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -43,10 +47,34 @@
         </tr>
         <%
             for (Lesson lesson : lessonList) {
+                Integer courseId = lesson.getCourseId();
+                Integer teacherId = lesson.getTeacherId();
         %>
         <tr>
-            <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-            <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
+            <td>
+            <% if(courseId == null) {
+            %>
+                Pas de cours associé
+            <%
+                } else {
+            %>
+                <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+            <%
+                }
+            %>
+            </td>
+            <td>
+                <% if(teacherId == null) {
+                %>
+                Pas d'enseignant associé
+                <%
+                } else {
+                %>
+                <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
+                <%
+                    }
+                %>
+            </td>
             <td><%= lesson.getLessonStartDate() %></td>
             <td><%= lesson.getLessonEndDate() %></td>
             <td><input type="radio" name="lessonId" value="<%= lesson.getLessonId()%>" required></td>

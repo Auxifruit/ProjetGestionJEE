@@ -14,6 +14,7 @@
 <head>
     <title>Création de note</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <h1>Création d'une nouvelle note</h1>
 <%
@@ -35,7 +36,8 @@
 } else {
 %>
 <h3>Notes existante : </h3>
-<table border="1">
+<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
+<table border="1" id="existingTable" style="display: table">
     <th>Nom de la note</th>
     <th>Nom du cours</th>
     <th>Valeur de la note</th>

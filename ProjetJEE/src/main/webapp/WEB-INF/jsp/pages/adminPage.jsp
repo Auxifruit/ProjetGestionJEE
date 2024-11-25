@@ -26,6 +26,7 @@
 <a href="${pageContext.request.contextPath}/subjectManager-servlet">Gérer les matières</a></br>
 <a href="${pageContext.request.contextPath}/courseManager-servlet">Gérer les cours</a></br>
 <a href="${pageContext.request.contextPath}/majorManager-servlet">Gérer les filières</a></br>
+<a href="${pageContext.request.contextPath}/gradeManager-servlet">Gérer les notes</a></br>
 <a href="${pageContext.request.contextPath}/classesManager-servlet">Gérer les classes</a></br>
 </body>
 </html>

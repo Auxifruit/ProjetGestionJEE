@@ -15,6 +15,7 @@
 <head>
     <title>Création de cours</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <h1>Création d'un nouveau cours</h1>
 <%
@@ -34,7 +35,8 @@
 } else {
 %>
 <h3>Cours existant : </h3>
-<table border="1">
+<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
+<table border="1" id="existingTable" style="display: table">
     <th>Nom du cours</th>
     <th>Nom de la matière</th>
     <%

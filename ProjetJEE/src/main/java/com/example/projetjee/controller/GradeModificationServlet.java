@@ -80,6 +80,13 @@ public class GradeModificationServlet extends HttpServlet {
 
         if(gradeNewValueString != null && !gradeNewValueString.isEmpty()) {
             double value = Double.parseDouble(gradeNewValueString);
+
+            if(value < 0 || value > 200) {
+                request.setAttribute("erreur", "Erreur : Veuillez saisir une note entre 0 et 20.");
+                doGet(request, response);
+                return;
+            }
+
             grade.setGradeValue(value);
         }
 
@@ -90,6 +97,12 @@ public class GradeModificationServlet extends HttpServlet {
 
         if(gradeNewCoefficientString != null && !gradeNewCoefficientString.isEmpty()) {
             int coefficient = Integer.parseInt(gradeNewCoefficientString);
+
+            if(coefficient < 0) {
+                request.setAttribute("erreur", "Erreur : Veuillez saisir un coefficient supérieur à 0.");
+                doGet(request, response);
+                return;
+            }
 
             grade.setGradeCoefficient(coefficient);
         }

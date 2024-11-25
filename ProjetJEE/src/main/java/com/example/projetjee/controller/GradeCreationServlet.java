@@ -54,6 +54,18 @@ public class GradeCreationServlet extends HttpServlet {
         int courseId = Integer.parseInt(newGradeCourseIdString);
         int teacherId = Integer.parseInt(newGradeTeacherIdString);
 
+        if(value < 0 || value > 200) {
+            request.setAttribute("erreur", "Erreur : Veuillez saisir une note entre 0 et 20.");
+            doGet(request, response);
+            return;
+        }
+
+        if(coefficient < 0) {
+            request.setAttribute("erreur", "Erreur : Veuillez saisir un coefficient supérieur à 0.");
+            doGet(request, response);
+            return;
+        }
+
         Grade grade = new Grade();
         grade.setGradeName(newGradeName);
         grade.setGradeValue(value);

@@ -79,15 +79,29 @@ public class UserDAO {
         return null;
     }
 
-    public static void deleteUserFromTable(int userId) {
+    public static boolean deleteUserFromTable(int userId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        Users user = session.get(Users.class, userId);
-        if (user != null) {
-            session.remove(user);
+        Transaction tx = null;
+        boolean success = false;
+
+        try {
+            tx = session.beginTransaction();
+            Users user = session.get(Users.class, userId);
+            if (user != null) {
+                session.remove(user);
+                success = true;
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        tx.commit();
-        session.close();
+
+        return success;
     }
 
     public static String modifyUserFromTable(Users user) {
@@ -115,7 +129,7 @@ public class UserDAO {
 
     public static Users getUserByEmail(String mail) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Users user = session.createQuery("from Users where " + USER_EMAIL + " = :mail", Users.class).setParameter("mail", mail).getSingleResultOrNull();
+        Users user = session.createQuery("from Users where userEmail = :mail", Users.class).setParameter("mail", mail).getSingleResultOrNull();
         session.close();
         return user;
     }

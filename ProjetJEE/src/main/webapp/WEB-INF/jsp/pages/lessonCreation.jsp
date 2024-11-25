@@ -14,6 +14,7 @@
 <head>
     <title>Création séance</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
@@ -40,8 +41,8 @@
 %>
 <h1>Création d'une séance</h1>
 <label>Séance existante :</label>
-</br>
-<table border="1">
+<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
+<table border="1" id="existingTable" style="display: table">
   <tr>
     <th>Nom du cours</th>
     <th>Nom et prénom du professeur</th>

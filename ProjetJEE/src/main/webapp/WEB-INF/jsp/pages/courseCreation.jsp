@@ -39,10 +39,22 @@
     <th>Nom de la matière</th>
     <%
         for (Course course : coursList) {
+            Integer subjectId = course.getSubjectId();
     %>
     <tr>
         <td><%= course.getCourseName() %></td>
-        <td><%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></td>
+        <td>
+            <% if(subjectId == null) {
+            %>
+            Pas de matière associé
+            <%
+            } else {
+            %>
+            <%= SubjectDAO.getSubjectById(subjectId).getSubjectName() %>
+            <%
+                }
+            %>
+        </td>
     </tr>
     <%
         }

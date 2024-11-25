@@ -50,10 +50,34 @@
   </tr>
   <%
     for (Lesson lesson : lessonList) {
+      Integer courseId = lesson.getCourseId();
+      Integer teacherId = lesson.getTeacherId();
   %>
   <tr>
-    <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-    <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
+    <td>
+      <% if(courseId == null) {
+      %>
+      Pas de cours associé
+      <%
+      } else {
+      %>
+      <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+      <%
+        }
+      %>
+    </td>
+    <td>
+      <% if(teacherId == null) {
+      %>
+      Pas d'enseignant associé
+      <%
+      } else {
+      %>
+      <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
+      <%
+        }
+      %>
+    </td>
     <td><%= lesson.getLessonStartDate() %></td>
     <td><%= lesson.getLessonEndDate() %></td>
   </tr>

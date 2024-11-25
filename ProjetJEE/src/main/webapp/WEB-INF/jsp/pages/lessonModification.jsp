@@ -9,7 +9,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%@ page import="com.example.projetjee.model.entities.*" %>
 <br>
 <head>

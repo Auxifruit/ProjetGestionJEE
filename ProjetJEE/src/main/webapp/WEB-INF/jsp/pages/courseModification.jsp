@@ -33,10 +33,22 @@
 <p>Le cours n'existe pas</p>
 <%
 } else {
+        Integer subjectId = course.getSubjectId();
 %>
 <h3>Anciennes informations</h3>
 <p>Ancien nom : <%= course.getCourseName() %></p>
-<p>Ancienne matière : <%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></p>
+<p>Ancienne matière :
+    <% if(subjectId == null) {
+    %>
+    Pas de maitère associée
+    <%
+    } else {
+    %>
+    <%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %>
+    <%
+        }
+    %>
+</p>
 
 <form action="courseModification-servlet" method="post">
 

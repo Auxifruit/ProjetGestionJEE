@@ -32,7 +32,7 @@
 } else {
 %>
 <h3>Classe existante : </h3>
-<button onclick="toggleTable()">Afficher/Masquer le tableau</button>
+<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
 <table border="1" id="existingTable" style="display: table">
     <th>Nom de la classe</th>
     <%

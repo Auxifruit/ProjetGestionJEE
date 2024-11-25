@@ -1,10 +1,14 @@
 package com.example.projetjee.model.dao;
 
+import com.example.projetjee.model.entities.Classes;
+import com.example.projetjee.model.entities.Course;
 import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherDAO {

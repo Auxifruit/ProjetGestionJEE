@@ -6,8 +6,7 @@
 </head>
 <body>
 <h1>Inscription réussie !</h1>
-<p>Bienvenue dans notre système, vous êtes maintenant inscrit.</p>
-<a href="${pageContext.request.contextPath}/login">Se connecter</a>
+<p>Nos administrateur doivent valider votre inscription avant de pouvoir vous connecter.</p>
 <a href="index.jsp"> <button>Retour index</button></a>
 </body>
 </html>

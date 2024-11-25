@@ -1,7 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Classes" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
-<%@ page import="com.example.projetjee.model.dao.UserDAO" %><%--
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 15/11/2024
@@ -13,11 +13,15 @@
 <head>
     <title>Gestion des classes</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
 <h1>Liste des classes</h1>
+<label for="searchInput">Rechercher :</label>
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+</br></br>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -47,7 +51,8 @@
     </table>
     </br>
     <button type="submit" formaction="classesModification-servlet">Modifier</button>
-    <button type="submit" formaction="classesDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="classesDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
+    <button type="submit" formaction="studentClassesManager-servlet">Assigner un ou plusieurs étudiants à la classe</button>
 </form>
 <%
     }
@@ -63,4 +68,13 @@
     }
 %>
 </body>
+<script>
+    function confirmDelete(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer la classe ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

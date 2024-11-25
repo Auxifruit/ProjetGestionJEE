@@ -10,7 +10,7 @@
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
 <br>
 <head>
     <title>Suppression séance</title>
@@ -18,7 +18,7 @@
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
     response.sendRedirect("index.jsp");
     return;
   }
@@ -47,7 +47,7 @@
   %>
   <tr>
     <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-    <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+    <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
     <td><%= lesson.getLessonStartDate() %></td>
     <td><%= lesson.getLessonEndDate() %></td>
     <td><input type="radio" name="lessonId" value="<%= lesson.getLessonId() %>"></td>

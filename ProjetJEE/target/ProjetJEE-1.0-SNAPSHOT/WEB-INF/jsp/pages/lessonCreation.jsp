@@ -7,12 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Teacher" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Course" %>
-<%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.*" %>
 <br>
 <head>
     <title>Création séance</title>
@@ -20,7 +17,7 @@
 <body>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
     response.sendRedirect("index.jsp");
     return;
   }
@@ -56,7 +53,7 @@
   %>
   <tr>
     <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-    <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+    <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
     <td><%= lesson.getLessonStartDate() %></td>
     <td><%= lesson.getLessonEndDate() %></td>
   </tr>
@@ -100,8 +97,10 @@
 <select name="teacher">
   <%
     for (Teacher teacher : teacherList) {
-      String teacherLastName = UserDAO.getLastNameById(teacher.getTeacherId());
-      String teacherName = UserDAO.getNameById(teacher.getTeacherId());
+      Users user = UserDAO.getUserById(teacher.getTeacherId());
+
+      String teacherLastName = user.getUserLastName();
+      String teacherName = user.getUserName();
 
       if(teacherLastName != null || teacherName != null) {
   %>
@@ -112,7 +111,7 @@
   %>
 </select>
 </br></br>
-<button type="submit">Valider</button>
+<button type="submit" onclick="confirmCreate(event)">Valider</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
   if(messageErreur != null && !messageErreur.isEmpty()) {
@@ -124,4 +123,13 @@
   }
 %>
 </body>
+<script>
+  function confirmCreate(event) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir créer la séance ?");
+
+    if (!confirmation) {
+      event.preventDefault();
+    }
+  }
+</script>
 </html>

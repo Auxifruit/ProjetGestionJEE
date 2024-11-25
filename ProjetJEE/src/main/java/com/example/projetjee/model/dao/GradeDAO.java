@@ -3,6 +3,7 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Grade;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 

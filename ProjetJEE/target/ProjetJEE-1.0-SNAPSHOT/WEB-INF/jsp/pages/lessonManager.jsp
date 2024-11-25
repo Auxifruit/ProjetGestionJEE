@@ -2,7 +2,8 @@
 <%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %><%--
+<%@ page import="com.example.projetjee.model.entities.Role" %>
+<%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 15/11/2024
@@ -14,11 +15,15 @@
 <head>
     <title>Gestion des séance</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
 <h1>Liste des séance</h1>
+<label for="searchInput">Rechercher :</label>
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+</br></br>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -42,10 +47,34 @@
         </tr>
         <%
             for (Lesson lesson : lessonList) {
+                Integer courseId = lesson.getCourseId();
+                Integer teacherId = lesson.getTeacherId();
         %>
         <tr>
-            <td><%= CourseDAO.getCourseName(lesson.getCourseId()) %></td>
-            <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+            <td>
+            <% if(courseId == null) {
+            %>
+                Pas de cours associé
+            <%
+                } else {
+            %>
+                <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+            <%
+                }
+            %>
+            </td>
+            <td>
+                <% if(teacherId == null) {
+                %>
+                Pas d'enseignant associé
+                <%
+                } else {
+                %>
+                <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
+                <%
+                    }
+                %>
+            </td>
             <td><%= lesson.getLessonStartDate() %></td>
             <td><%= lesson.getLessonEndDate() %></td>
             <td><input type="radio" name="lessonId" value="<%= lesson.getLessonId()%>" required></td>
@@ -56,7 +85,7 @@
     </table>
     </br>
     <button type="submit" formaction="lessonModification-servlet">Modifier</button>
-    <button type="submit" formaction="lessonDeletion-servlet">Supprimer</button>
+    <button type="submit" formaction="lessonDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
     <button type="submit" formaction="lessonClassesManager-servlet">Assigner une ou plusieurs classes à la séance</button>
 </form>
 <form action="lessonCreation-servlet" method="get">
@@ -74,4 +103,13 @@
     }
 %>
 </body>
+<script>
+    function confirmDelete(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer la séance ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

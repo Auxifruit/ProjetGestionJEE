@@ -3,7 +3,7 @@
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.entities.Role" %><%--
-  Created by IntelliJ IDEA.
+  Created by IntelliJ IDEA.-
   User: CYTech Student
   Date: 15/11/2024
   Time: 19:27

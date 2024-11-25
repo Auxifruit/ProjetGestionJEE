@@ -4,7 +4,7 @@
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.LessonClassesDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
 <%--
 Created by IntelliJ IDEA.
   User: CYTech Student
@@ -21,7 +21,7 @@ Created by IntelliJ IDEA.
 <h1>Assignation des séances à des Classs</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -55,7 +55,7 @@ Created by IntelliJ IDEA.
 <%
 } else {
 %>
-    <%= " " + UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></p>
+    <%= " " + UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></p>
 <%
     }
 %>
@@ -91,7 +91,7 @@ Created by IntelliJ IDEA.
 </table>
     <input type="text" name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
     </br>
-    <button type="submit">Assigner</button>
+    <button type="submit" onclick="confirmAction(event, 'assign')">Assigner</button>
 </form>
 <%
     }
@@ -103,7 +103,7 @@ Created by IntelliJ IDEA.
 <%
     } else {
 %>
-<h3>Class(s) participantes(s) : </h3>
+<h3>Classe(s) participantes(s) : </h3>
 <form action="lessonClassesUnassignation-servlet" method="post">
     <table border="1">
         <tr>
@@ -123,7 +123,7 @@ Created by IntelliJ IDEA.
     </table>
     <input type="text" name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
     </br>
-    <button type="submit">Désassigner</button>
+    <button type="submit" onclick="confirmAction(event, 'unassign')">Désassigner</button>
 </form>
 <%
     }
@@ -137,4 +137,23 @@ Created by IntelliJ IDEA.
 }
 %>
 </body>
+<script>
+    function confirmAction(event, action) {
+        let confirmationMessage = '';
+
+        if (action === 'assign') {
+            confirmationMessage = "Êtes-vous sûr de vouloir assigner cette classe de cette séance ?";
+        } else if (action === 'unassign') {
+            confirmationMessage = "Êtes-vous sûr de vouloir désassigner cette classe de cette séance ?";
+        } else {
+            confirmationMessage = "Êtes-vous sûr de vouloir effectuer cette action ?";
+        }
+
+        const confirmation = confirm(confirmationMessage);
+
+        if (!confirmation) {
+            event.preventDefault(); // Annule l'envoi du formulaire si l'utilisateur annule
+        }
+    }
+</script>
 </html>

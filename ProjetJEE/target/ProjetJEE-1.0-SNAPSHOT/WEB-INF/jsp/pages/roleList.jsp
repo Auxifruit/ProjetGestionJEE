@@ -8,8 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Users" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
 <html>
 <head>
     <title>Liste Userss</title>
@@ -19,7 +19,7 @@
 
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -36,9 +36,9 @@
 <form action="changeRole-servlet" method="get" >
     <select name="roleFilter">
         <option value="">Tous</option>
-        <option value="1">Étudiants</option>
-        <option value="2">Enseignants</option>
-        <option value="3">Administrateurs</option>
+        <option value=<%= Role.student %>>Étudiants</option>
+        <option value="<%= Role.teacher %>">Enseignants</option>
+        <option value="<%= Role.administrator %>">Administrateurs</option>
     </select>
     <button type="submit">Valider</button>
 </form>
@@ -65,7 +65,7 @@
         </td>
         <td><%= user.getUserEmail() %>
         </td>
-        <td><%= RoleDAO.getRoleNameById(user.getRoleId()) %>
+        <td><%= user.getUserRole().toString() %>
         </td>
         <td><input type="radio" name="user" value="<%= user.getUserId() %>" required></td>
     </tr>
@@ -76,9 +76,9 @@
 </br>
 <span><b>Nouveau rôle : </b></span>
     <select name="newRoleID" required>
-        <option value="1">Étudiant</option>
-        <option value="2">Enseignant</option>
-        <option value="3">Administrateur</option>
+        <option value=<%= Role.student %>>Étudiants</option>
+        <option value="<%= Role.teacher %>">Enseignants</option>
+        <option value="<%= Role.administrator %>">Administrateurs</option>
     </select>
     <button type="submit">Valider</button>
     </br></br>

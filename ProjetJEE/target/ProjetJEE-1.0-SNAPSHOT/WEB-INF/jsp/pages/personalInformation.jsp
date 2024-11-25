@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
 <%@ page import="java.util.Date" %>
 
 <%

@@ -1,8 +1,6 @@
 package com.example.projetjee.model.dao;
 
-import com.example.projetjee.model.entities.Course;
-import com.example.projetjee.model.entities.Major;
-import com.example.projetjee.model.entities.Student;
+import com.example.projetjee.model.entities.*;
 import com.example.projetjee.util.HibernateUtil;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
@@ -161,7 +159,7 @@ public class StudentDAO {
             JOIN Course co ON l.courseId = co.courseId 
             WHERE co.courseId = :courseId 
               AND c.classId = :classId 
-              AND u.roleId = 1 
+              AND u.userRole = :role 
               AND l.teacherId = :teacherID
         """;
 
@@ -169,6 +167,7 @@ public class StudentDAO {
             Query<Object[]> query = session.createQuery(hql);
             query.setParameter("courseId", courseId);
             query.setParameter("classId", classId);
+            query.setParameter("userRole", Role.student);
             query.setParameter("teacherID", teacherID);
 
             // get the result

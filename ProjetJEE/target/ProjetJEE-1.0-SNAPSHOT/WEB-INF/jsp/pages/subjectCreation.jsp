@@ -1,7 +1,7 @@
 <%@ page import="com.example.projetjee.model.entities.Subjects" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
-<%@ page import="com.example.projetjee.model.dao.UserDAO" %><%--
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 12/11/2024
@@ -17,7 +17,7 @@
 <h1>Création d'une nouvelle matière</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -52,7 +52,7 @@
     <label>Nom de la nouvelle matière : </label>
     <input type="text" name="newSubject" required/>
     </br></br>
-    <button type="submit">Créer</button>
+    <button type="submit" onclick="confirmCreate(event)">Créer</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
     if (messageErreur != null && !messageErreur.isEmpty()) {
@@ -63,4 +63,13 @@
     }
 %>
 </body>
+<script>
+    function confirmCreate(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir créer la matière ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

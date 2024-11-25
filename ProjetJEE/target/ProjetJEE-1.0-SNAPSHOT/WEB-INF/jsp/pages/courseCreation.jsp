@@ -2,8 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.projetjee.model.entities.Course" %>
 <%@ page import="com.example.projetjee.model.dao.SubjectDAO" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
-<%@ page import="com.example.projetjee.model.dao.UserDAO" %><%--
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 12/11/2024
@@ -19,7 +19,7 @@
 <h1>Création d'un nouveau cours</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -42,7 +42,7 @@
     %>
     <tr>
         <td><%= course.getCourseName() %></td>
-        <td><%= SubjectDAO.getSubjectNameById(course.getSubjectId()) %></td>
+        <td><%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></td>
     </tr>
     <%
         }
@@ -75,7 +75,7 @@
     <label>Choix du nom du cours : </label>
     <input type="text" name="courseName" required/>
     </br></br>
-    <button type="submit">Créer</button>
+    <button type="submit" onclick="confirmCreate(event)">Créer</button>
 </form>
 <%
     }
@@ -89,4 +89,13 @@
     }
 %>
 </body>
+<script>
+    function confirmCreate(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir créer le cours ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

@@ -1,7 +1,6 @@
 <%@ page import="com.example.projetjee.model.entities.Subjects" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
-<%@ page import="com.example.projetjee.model.dao.UserDAO" %><%--
+<%@ page import="com.example.projetjee.model.dao.UserDAO" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 12/11/2024
@@ -17,7 +16,7 @@
 <h1>Modification d'une matière</h1>
 <%
     Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -38,7 +37,7 @@
     <input name="subjectId" value="<%= subject.getSubjectId() %>" style="visibility: hidden">
 
     </br></br>
-    <button type="submit">Modifier</button>
+    <button type="submit" onclick="confirmModify(event)">Modifier</button>
 </form>
 <%
     }
@@ -51,4 +50,13 @@
     }
 %>
 </body>
+<script>
+    function confirmModify(event) {
+        const confirmation = confirm("Êtes-vous sûr de vouloir modifier la matière ?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

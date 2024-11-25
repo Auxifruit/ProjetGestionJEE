@@ -6,7 +6,8 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="com.example.projetjee.model.entities.Classes" %>
 <%@ page import="com.example.projetjee.model.dao.*" %>
-<%@ page import="java.util.TreeMap" %><%--
+<%@ page import="java.util.TreeMap" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 19/11/2024
@@ -27,8 +28,8 @@
         return;
     }
 
-    String role = RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId));
-    boolean isTeacher = "teacher".equals(role);
+    Role role = UserDAO.getUserById(userId).getUserRole();
+    boolean isTeacher = Role.teacher.equals(role);
 
     Map<LocalDate, List<Lesson>> lessonList = (Map<LocalDate, List<Lesson>>) request.getAttribute("lessonList");
 
@@ -85,24 +86,42 @@
                 <tr>
                     <td>
                         <%
-                            if(participantClass.size() > 1 ) {
+                            Integer courseId = lesson.getCourseId();
+                            if(courseId != null) {
+                                if(participantClass.size() > 1) {
                         %>
-                        CM
+                                CM
                         <%
-                        } else {
+                                } else {
                         %>
-                        TD
+                                TD
+                        <%
+                                }
+                        %>
+                            <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+                        <%
+                            } else {
+                        %>
+                            Pas de cours pour cette
                         <%
                             }
                         %>
-                        <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
                     </td>
+                    <td>
                     <% if(!isTeacher) {
+                            Integer teacherId = lesson.getTeacherId();
+                            if(teacherId != null) {
                     %>
-                        <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+                        <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
                     <%
+                            } else {
+                    %>
+                        Pas d'enseignant pour cette séance
+                    <%
+                            }
                         }
                     %>
+                    </td>
                     <td><%= startDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
                     <td><%= endDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
                     <td>
@@ -184,7 +203,7 @@
                 </td>
                 <% if(!isTeacher) {
                 %>
-                <td><%= UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></td>
+                <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
                 <%
                     }
                 %>

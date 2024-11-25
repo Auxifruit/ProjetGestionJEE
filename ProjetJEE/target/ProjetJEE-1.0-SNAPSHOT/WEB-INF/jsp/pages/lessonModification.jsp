@@ -7,12 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.projetjee.model.entities.Teacher" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Course" %>
-<%@ page import="com.example.projetjee.model.entities.Lesson" %>
 <%@ page import="com.example.projetjee.model.dao.CourseDAO" %>
 <%@ page import="com.example.projetjee.model.dao.RoleDAO" %>
+<%@ page import="com.example.projetjee.model.entities.*" %>
 <br>
 <head>
     <title>Modification séance</title>
@@ -21,7 +19,7 @@
 <h1>Modification d'une séance</h1>
 <%
   Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !"administrator".equals(RoleDAO.getRoleNameById(UserDAO.getRoleIdByUserID(userId)))) {
+  if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
     response.sendRedirect("index.jsp");
     return;
   }
@@ -35,7 +33,7 @@
 } else {
 %>
 <h3>Anciennes informations :</h3>
-<p>Ancien Course :
+<p>Ancien cours :
 <%
   if(lesson.getCourseId() == null || lesson.getCourseId() <= 0) {
 %>
@@ -47,7 +45,7 @@ Il n'y a pas de Course associé à la séance</p>
 <%
   }
 %>
-<p>Ancien Teacher :
+<p>Ancien enseignant :
 <%
   if(lesson.getTeacherId() == null || lesson.getTeacherId() <= 0) {
 %>
@@ -55,31 +53,32 @@ Il n'y a pas d'Teacher associé à la séance</p>
 <%
 } else {
 %>
-<%= " " + UserDAO.getLastNameById(lesson.getTeacherId()) + " " + UserDAO.getNameById(lesson.getTeacherId()) %></p>
+<%= " " + UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></p>
 <%
   }
 %>
 <p>Ancienne date de début : <%= lesson.getLessonStartDate() %></p>
 <p>Ancienne date de fin : <%= lesson.getLessonEndDate() %></p>
 </br>
+<h3>Nouvelles informations :</h3>
 <form action="lessonModification-servlet" method="post">
-<label>Choix du nouveau Course : </label>
+<label>Choix du nouveau cours : </label>
   <%
-    List<Course> CourseesList = (List<Course>) request.getAttribute("Coursees");
+    List<Course> coursesList = (List<Course>) request.getAttribute("courses");
 
-    if (CourseesList == null || CourseesList.isEmpty()) {
+    if (coursesList == null || coursesList.isEmpty()) {
   %>
-  <h3>Pas de séacence à selectionner</h3>
+  <p>Pas de cours à selectionner</p>
   <%
     }
     else {
   %>
-  <select name="newCourseeId">
-    <option value="">Ne pas modifier le Course</option>
+  <select name="newCourseId">
+    <option value="">Ne pas modifier le cours</option>
   <%
-      for (Course Coursee : CourseesList) {
+      for (Course course : coursesList) {
   %>
-    <option value=<%= Coursee.getCourseId() %>><%= Coursee.getCourseName()%></option>
+    <option value=<%= course.getCourseId() %>><%= course.getCourseName()%></option>
   <%
       }
   %>
@@ -100,17 +99,19 @@ Il n'y a pas d'Teacher associé à la séance</p>
 
   if (teacherList == null || teacherList.isEmpty()) {
 %>
-<h3>Pas de professeur à selectionner</h3>
+<h3>Pas d'enseignant à selectionner</h3>
 <%
 } else {
 %>
-<label>Choix du Teacher : </label>
+<label>Choix de l'enseignant : </label>
 <select name="newTeacherId">
-  <option value="">Ne pas modifier l'Teacher</option>
+  <option value="">Ne pas modifier l'enseignant</option>
   <%
     for (Teacher teacher : teacherList) {
-      String teacherLastName = UserDAO.getLastNameById(teacher.getTeacherId());
-      String teacherName = UserDAO.getNameById(teacher.getTeacherId());
+      Users user = UserDAO.getUserById(teacher.getTeacherId());
+
+      String teacherLastName = user.getUserLastName();
+      String teacherName = user.getUserName();
 
       if(teacherLastName != null || teacherName != null) {
   %>
@@ -122,7 +123,7 @@ Il n'y a pas d'Teacher associé à la séance</p>
 </select>
 <input name="lessonId" value="<%= lesson.getLessonId() %>" style="visibility: hidden">
 </br></br>
-<button type="submit">Valider</button>
+<button type="submit" onclick="confirmModify(event)">Valider</button>
 </form>
 <% String messageErreur = (String) request.getAttribute("erreur");
   if(messageErreur != null && !messageErreur.isEmpty()) {
@@ -134,4 +135,13 @@ Il n'y a pas d'Teacher associé à la séance</p>
   }
 %>
 </body>
+<script>
+  function confirmModify(event) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir modifier la séance ?");
+
+    if (!confirmation) {
+      event.preventDefault();
+    }
+  }
+</script>
 </html>

@@ -13,6 +13,7 @@
 <head>
     <title>Création de matière</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <h1>Création d'une nouvelle matière</h1>
 <%
@@ -31,7 +32,8 @@
 } else {
 %>
 <h3>Matière existante : </h3>
-<table border="1">
+<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
+<table border="1" id="existingTable" style="display: table">
     <th>Nom de la matière</th>
     <%
         for (Subjects subject : subjectList) {

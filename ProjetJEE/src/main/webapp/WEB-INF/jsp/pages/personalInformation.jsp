@@ -23,6 +23,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Informations personnelles</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
   <style>
     label { font-weight: bold; }
     input[type="text"], input[type="password"], input[type="date"] {
@@ -66,9 +67,10 @@
   </script>
 </head>
 <body>
-<h1>Modifier mes informations</h1>
+
 
 <form action="editInformations" method="post">
+  <h1>Modifier mes informations</h1>
   <!-- Champ caché pour l'ID utilisateur -->
   <input type="hidden" id="userId" name="userId" value="<%= user.getUserId() %>">
 

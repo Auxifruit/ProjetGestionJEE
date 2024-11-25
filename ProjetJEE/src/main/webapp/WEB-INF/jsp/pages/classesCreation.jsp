@@ -13,6 +13,7 @@
 <head>
     <title>Création de filière</title>
 </head>
+<script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <h1>Création d'une nouvelle filière</h1>
 <%
@@ -31,7 +32,8 @@
 } else {
 %>
 <h3>Classe existante : </h3>
-<table border="1">
+<button onclick="toggleTable()">Afficher/Masquer le tableau</button>
+<table border="1" id="existingTable" style="display: table">
     <th>Nom de la classe</th>
     <%
         for (Classes classe : classesList) {

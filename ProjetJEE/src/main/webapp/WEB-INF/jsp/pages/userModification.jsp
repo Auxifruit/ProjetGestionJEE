@@ -136,20 +136,20 @@
             <option value="<%= Role.administrator %>">Administrateurs</option>
         </select>
 
-        <input name="userId" value="<%= user.getUserId() %>" style="visibility: hidden">
+        <input name="userId" value="<%= user.getUserId() %>" style="display: none">
+        <%
+            }
+        %>
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %></p></br>
+        <%
+            }
+        %>
 
         <button type="submit" onclick="confirmModify(event)">Modifier</button>
     </form>
-    <%
-        }
-    %>
-    <% String messageErreur = (String) request.getAttribute("erreur");
-        if (messageErreur != null && !messageErreur.isEmpty()) {
-    %>
-    <p style='color: red'><%= messageErreur %></p></br>
-    <%
-        }
-    %>
 </div>
 </body>
 <script>

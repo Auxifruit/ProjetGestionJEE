@@ -128,4 +128,40 @@ select option:checked {
     color: white; /* Texte blanc pour l'option sélectionnée */
 }
 
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 2px solid #77A4C6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #77A4C6;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #abdbff;
+    font-weight: bold;
+}
+
+tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) td {
+    background-color: #ffffff;
+}
+
+div#OldInfos {
+    background: rgba(255, 255, 255, 1);
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
 

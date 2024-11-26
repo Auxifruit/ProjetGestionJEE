@@ -13,140 +13,142 @@
 <br>
 <head>
     <title>Création séance</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
-<%
-  Integer userId = (Integer) session.getAttribute("user");
-  if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-    response.sendRedirect("index.jsp");
-    return;
-  }
-
-  List<Course> coursesList = (List<Course>) request.getAttribute("courses");
-
-  if (coursesList == null || coursesList.isEmpty()) {
-%>
-<h2>Pas de cours pour faire une séance</h2>
-<%
-} else {
-%>
-<%
-  List<Lesson> lessonList = (List<Lesson>) request.getAttribute("lessons");
-  if (lessonList == null || lessonList.isEmpty()) {
-%>
-<h2>Pas de séance pour l'instant</h2>
-<%
-} else {
-%>
-<h1>Création d'une séance</h1>
-<label>Séance existante :</label>
-<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
-<table border="1" id="existingTable" style="display: table">
-  <tr>
-    <th>Nom du cours</th>
-    <th>Nom et prénom du professeur</th>
-    <th>Date de début</th>
-    <th>Date de fin</th>
-  </tr>
+<div>
+  <h1>Création d'une séance</h1>
   <%
-    for (Lesson lesson : lessonList) {
-      Integer courseId = lesson.getCourseId();
-      Integer teacherId = lesson.getTeacherId();
+    Integer userId = (Integer) session.getAttribute("user");
+    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+      response.sendRedirect("index.jsp");
+      return;
+    }
+
+    List<Course> coursesList = (List<Course>) request.getAttribute("courses");
+
+    if (coursesList == null || coursesList.isEmpty()) {
   %>
-  <tr>
-    <td>
-      <% if(courseId == null) {
-      %>
-      Pas de cours associé
+  <h2>Pas de cours pour faire une séance</h2>
+  <%
+  } else {
+  %>
+  <%
+    List<Lesson> lessonList = (List<Lesson>) request.getAttribute("lessons");
+    if (lessonList == null || lessonList.isEmpty()) {
+  %>
+  <h2>Pas de séance pour l'instant</h2>
+  <%
+  } else {
+  %>
+  <div id="OldInfos">
+    <label>Séance existante :</label>
+    <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
+    <table border="1" id="existingTable" style="display: table">
+      <tr>
+        <th>Nom du cours</th>
+        <th>Nom et prénom du professeur</th>
+        <th>Date de début</th>
+        <th>Date de fin</th>
+      </tr>
       <%
-      } else {
+        for (Lesson lesson : lessonList) {
+          Integer courseId = lesson.getCourseId();
+          Integer teacherId = lesson.getTeacherId();
       %>
-      <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+      <tr>
+        <td>
+          <% if(courseId == null) {
+          %>
+          Pas de cours associé
+          <%
+          } else {
+          %>
+          <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+          <%
+            }
+          %>
+        </td>
+        <td>
+          <% if(teacherId == null) {
+          %>
+          Pas d'enseignant associé
+          <%
+          } else {
+          %>
+          <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
+          <%
+            }
+          %>
+        </td>
+        <td><%= lesson.getLessonStartDate() %></td>
+        <td><%= lesson.getLessonEndDate() %></td>
+      </tr>
       <%
         }
       %>
-    </td>
-    <td>
-      <% if(teacherId == null) {
-      %>
-      Pas d'enseignant associé
-      <%
-      } else {
-      %>
-      <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
-      <%
+    </table>
+  <%
+    }
+  %>
+  </div>
+  <form action="lessonCreation-servlet" method="post">
+  <label>Choix du cours : </label>
+  <select name="course">
+    <%
+      for (Course course : coursesList) {
+    %>
+    <option value=<%= course.getCourseId() %>><%= course.getCourseName()%></option>
+    <%
+      }
+    %>
+  </select>
+  </br></br>
+  <label>Date de début : </label>
+  <input name="startDate" type="datetime-local" required/>
+  </br>
+  <label>Date de fin : </label>
+  <input name="endDate" type="datetime-local" required/>
+  </br></br>
+  <%
+    List<Teacher> teacherList = (List<Teacher>) request.getAttribute("teachers");
+
+    if (teacherList == null || teacherList.isEmpty()) {
+  %>
+  <h3>Pas de professeur pour faire le cours</h3>
+  <%
+  } else {
+  %>
+  <label>Choix du professeur : </label>
+  <select name="teacher">
+    <%
+      for (Teacher teacher : teacherList) {
+        Users user = UserDAO.getUserById(teacher.getTeacherId());
+
+        String teacherLastName = user.getUserLastName();
+        String teacherName = user.getUserName();
+
+        if(teacherLastName != null || teacherName != null) {
+    %>
+    <option value=<%= teacher.getTeacherId() %>><%= teacherLastName + " " + teacherName %></option>
+    <%
         }
-      %>
-    </td>
-    <td><%= lesson.getLessonStartDate() %></td>
-    <td><%= lesson.getLessonEndDate() %></td>
-  </tr>
-  <%
-    }
-  %>
-</table>
-</br>
-<%
-  }
-%>
-<form action="lessonCreation-servlet" method="post">
-<label>Choix du cours : </label>
-<select name="course">
-  <%
-    for (Course course : coursesList) {
-  %>
-  <option value=<%= course.getCourseId() %>><%= course.getCourseName()%></option>
-  <%
-    }
-  %>
-</select>
-</br></br>
-<label>Choix de la date de début et de fin : </label></br>
-<label>Date de début : </label>
-<input name="startDate" type="datetime-local" required/>
-</br>
-<label>Date de fin : </label>
-<input name="endDate" type="datetime-local" required/>
-</br></br>
-<%
-  List<Teacher> teacherList = (List<Teacher>) request.getAttribute("teachers");
-
-  if (teacherList == null || teacherList.isEmpty()) {
-%>
-<h3>Pas de professeur pour faire le cours</h3>
-<%
-} else {
-%>
-<label>Choix du professeur : </label>
-<select name="teacher">
-  <%
-    for (Teacher teacher : teacherList) {
-      Users user = UserDAO.getUserById(teacher.getTeacherId());
-
-      String teacherLastName = user.getUserLastName();
-      String teacherName = user.getUserName();
-
-      if(teacherLastName != null || teacherName != null) {
-  %>
-  <option value=<%= teacher.getTeacherId() %>><%= teacherLastName + " " + teacherName %></option>
-  <%
       }
-    }
-  %>
-</select>
-</br></br>
-<button type="submit" onclick="confirmCreate(event)">Valider</button>
-</form>
-<% String messageErreur = (String) request.getAttribute("erreur");
-  if(messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %></p></br>
-<%
+    %>
+  </select>
+    <% String messageErreur = (String) request.getAttribute("erreur");
+      if(messageErreur != null && !messageErreur.isEmpty()) {
+    %>
+    <p style='color: red'><%= messageErreur %></p>
+    <%
+          }
+        }
       }
-    }
-  }
-%>
+    %>
+  <button type="submit" onclick="confirmCreate(event)">Valider</button>
+  </form>
+</div>
 </body>
 <script>
   function confirmCreate(event) {

@@ -12,58 +12,62 @@
 <html>
 <head>
     <title>Création de matière</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
-<h1>Création d'une nouvelle matière</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
-
-    List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
-
-    if (subjectList == null || subjectList.isEmpty()) {
-%>
-<p>Il n'y a pas encore de matière</p>
-<%
-} else {
-%>
-<h3>Matière existante : </h3>
-<button onclick="toggleTable()">Afficher/Masquer le tableau</button></br>
-<table border="1" id="existingTable" style="display: table">
-    <th>Nom de la matière</th>
+<div>
+    <h1>Création d'une nouvelle matière</h1>
     <%
-        for (Subjects subject : subjectList) {
-    %>
-    <tr>
-        <td><%= subject.getSubjectName() %>
-        </td>
-    </tr>
-    <%
+        Integer userId = (Integer) session.getAttribute("user");
+        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+            response.sendRedirect("index.jsp");
+            return;
         }
+
+        List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
+
+        if (subjectList == null || subjectList.isEmpty()) {
     %>
-</table>
-<%
-    }
-%>
-<h3>Nouvelle matière :</h3>
-<form action="subjectCreation-servlet" method="post">
-    <label>Nom de la nouvelle matière : </label>
-    <input type="text" name="newSubject" required/>
-    </br></br>
-    <button type="submit" onclick="confirmCreate(event)">Créer</button>
-</form>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if (messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %>
-</p></br>
-<%
-    }
-%>
+    <p>Il n'y a pas encore de matière</p>
+    <%
+    } else {
+    %>
+    <div id="OldInfos">
+        <h3>Matière existante : </h3>
+        <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
+        <table border="1" id="existingTable" style="display: table">
+            <th>Nom de la matière</th>
+            <%
+                for (Subjects subject : subjectList) {
+            %>
+            <tr>
+                <td><%= subject.getSubjectName() %>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+        <%
+            }
+        %>
+    </div>
+    <form action="subjectCreation-servlet" method="post">
+        <h3>Nouvelle matière :</h3>
+        <label>Nom de la nouvelle matière : </label>
+        <input type="text" name="newSubject" required/>
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %>
+        </p></br>
+        <%
+            }
+        %>
+        <button type="submit" onclick="confirmCreate(event)">Créer</button>
+    </form>
+</div>
 </body>
 <script>
     function confirmCreate(event) {

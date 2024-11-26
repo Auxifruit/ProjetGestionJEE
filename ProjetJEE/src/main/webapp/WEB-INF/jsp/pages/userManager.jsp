@@ -131,7 +131,7 @@
         <% String messageErreur = (String) request.getAttribute("erreur");
             if(messageErreur != null && !messageErreur.isEmpty()) {
         %>
-        <p style='color: red'><%= messageErreur %></p></br>
+        <p style='color: red'><%= messageErreur %></p>
         <%
                 }
             }

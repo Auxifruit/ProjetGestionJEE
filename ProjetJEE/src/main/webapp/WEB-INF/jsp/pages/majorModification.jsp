@@ -11,44 +11,49 @@
 <html>
 <head>
     <title>Modification de filière</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Modification d'une filière</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
+<div>
+    <h1>Modification d'une filière</h1>
+    <%
+        Integer userId = (Integer) session.getAttribute("user");
+        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
 
-    Major major = (Major) request.getAttribute("major");
+        Major major = (Major) request.getAttribute("major");
 
-    if (major == null) {
-%>
-<p>La filière n'existe pas</p>
-<%
-} else {
-%>
-<h3>Ancienne information</h3>
-<p>Ancien nom de la filière : <%= major.getMajorName() %></p>
-<form action="majorModification-servlet" method="post">
-    <label>Nouveau nom de la filière : </label>
-    <input type="text" name="majorNewName" required>
-    <input name="majorId" value="<%= major.getMajorId() %>" style="visibility: hidden">
+        if (major == null) {
+    %>
+    <p>La filière n'existe pas</p>
+    <%
+    } else {
+    %>
+    <div id="OldInfos">
+        <h3>Ancienne information</h3>
+        <p>Ancien nom de la filière : <%= major.getMajorName() %></p>
+    </div>
+    <form action="majorModification-servlet" method="post">
+        <h3>Nouvelle information</h3>
+        <label>Nouveau nom de la filière : </label>
+        <input type="text" name="majorNewName" required>
+        <input name="majorId" value="<%= major.getMajorId() %>" style="display: none">
 
-    </br></br>
-    <button type="submit" onclick="confirmModify(event)">Modifier</button>
-</form>
-<%
-    }
-%>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if (messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %></p></br>
-<%
-    }
-%>
+        <%
+            }
+        %>
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %></p></br>
+        <%
+            }
+        %>
+        <button type="submit" onclick="confirmModify(event)">Modifier</button>
+    </form>
+</div>
 </body>
 <script>
     function confirmModify(event) {

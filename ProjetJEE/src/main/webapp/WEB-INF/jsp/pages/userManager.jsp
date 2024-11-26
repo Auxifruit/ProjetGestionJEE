@@ -128,18 +128,17 @@
             }
         %>
     </table>
-    </br>
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if(messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %></p></br>
+        <%
+                }
+            }
+        %>
     <button type="submit" formaction="userModification-servlet">Modifier</button>
     <button type="submit" formaction="userDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
     </form>
-    <% String messageErreur = (String) request.getAttribute("erreur");
-        if(messageErreur != null && !messageErreur.isEmpty()) {
-    %>
-    <p style='color: red'><%= messageErreur %></p></br>
-    <%
-        }
-        }
-    %>
 </div>
 </body>
 <script>

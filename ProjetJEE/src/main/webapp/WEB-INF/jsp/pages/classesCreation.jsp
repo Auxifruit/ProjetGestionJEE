@@ -16,6 +16,8 @@
 </head>
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <div>
     <h1>Création d'une nouvelle classe</h1>
     <%

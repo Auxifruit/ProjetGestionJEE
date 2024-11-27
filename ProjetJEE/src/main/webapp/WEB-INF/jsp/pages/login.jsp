@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
 
 <form id="form" action="login" method="post">
     <h1>Connexion</h1>

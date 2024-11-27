@@ -30,9 +30,18 @@ public class EntryNoteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int teacherID = Integer.parseInt(request.getParameter("teacherID"));
-        int courseId = Integer.parseInt(request.getParameter("courseId"));
-        int classId = Integer.parseInt(request.getParameter("classId"));
+        String teacherIdString = request.getParameter("teacherID");
+        String courseIdString = request.getParameter("courseId");
+        String classIdString = request.getParameter("classId");
+
+        if((courseIdString == null || courseIdString.isEmpty()) || (classIdString == null || classIdString.isEmpty())) {
+            response.sendRedirect("entry-note-servlet?userId=" + teacherIdString);
+            return;
+        }
+
+        int teacherID = Integer.parseInt(teacherIdString);
+        int courseId = Integer.parseInt(courseIdString);
+        int classId = Integer.parseInt(classIdString);
 
         System.out.println("ID Discipline: " + courseId + " ; ID Class: " + classId);
 

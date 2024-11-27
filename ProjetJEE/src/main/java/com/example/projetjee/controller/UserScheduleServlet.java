@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -18,15 +19,18 @@ import java.util.*;
 public class UserScheduleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userIdString = request.getParameter("userId");
+        doPost(request, response);
+    }
 
-        if(userIdString == null || userIdString.isEmpty()) {
-            request.setAttribute("erreur", "Erreur : Veuillez choisir un étudiant.");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        Integer userId = (Integer) session.getAttribute("user");
+
+        if(userId == null) {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
 
-        int userId = Integer.parseInt(userIdString);
         Map<LocalDate, List<Lesson>> lessonsByDay = new TreeMap<>();
         Role userRole = UserDAO.getUserById(userId).getUserRole();
 

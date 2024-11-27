@@ -20,7 +20,7 @@ public class UserManagerServlet extends HttpServlet {
             roleFilter = Role.valueOf(roleFilterString);
         }
 
-        List<Users> usersList = UserDAO.getAllUsers(roleFilter);
+        List<Users> usersList = UserDAO.getAllUsersByFilter(roleFilter);
 
         request.setAttribute("users", usersList);
 

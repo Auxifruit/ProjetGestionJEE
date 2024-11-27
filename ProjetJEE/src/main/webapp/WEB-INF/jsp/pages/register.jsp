@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <form id="form" action="register" method="post" onsubmit="validateForm(event)">
     <h1>Inscription</h1>
     <label for="firstName">Prénom :</label>

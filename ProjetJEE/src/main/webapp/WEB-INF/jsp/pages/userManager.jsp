@@ -142,6 +142,9 @@
     <%
         }
     %>
+    <form action="userCreation-servlet" method="get">
+        <button type="submit">Créer</button>
+    </form>
 </div>
 </body>
 <script>

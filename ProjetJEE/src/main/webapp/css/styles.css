@@ -20,7 +20,6 @@ form {
     padding: 30px;
     border-radius: 15px;
     width: 100%;
-    max-width: 500px; /* Limite la largeur du conteneur */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre douce pour un effet plus élégant */
 }
 
@@ -29,6 +28,10 @@ form {
     display: flex;
     flex-direction: column;
     gap: 20px; /* Espacement entre les éléments */
+}
+
+#form {
+    max-width: 500px; /* Limite la largeur du conteneur */
 }
 
 label {

@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClasseDAO {
@@ -112,5 +113,30 @@ public class ClasseDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static List<Classes> getAllTeacherClassByTeacherId(int teacherId) {
+        List<Classes> classesList = new ArrayList<>();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            SELECT DISTINCT c 
+            FROM Classes c 
+            JOIN Lessonclass lc ON c.classId = lc.lessonClassId 
+            JOIN Lesson l ON lc.lessonClassId = l.lessonId 
+            WHERE l.teacherId = :teacherId
+            """;
+
+            Query<Classes> query = session.createQuery(hql, Classes.class);
+            query.setParameter("teacherId", teacherId);
+
+            classesList = query.getResultList();
+
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des classes : " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return classesList;
     }
 }

@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             request.getSession().setAttribute("user", userId.intValue());
-            request.getRequestDispatcher("WEB-INF/jsp/pages/dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }

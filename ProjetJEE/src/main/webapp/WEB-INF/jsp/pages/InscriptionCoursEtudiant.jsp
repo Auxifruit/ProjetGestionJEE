@@ -5,6 +5,8 @@
   <title>Choisir cours disponible</title>
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <h3>Choisir cours disponible pour votre formation</h3>
 
 <!-- Choix du cours  -->

@@ -159,7 +159,7 @@ public class StudentDAO {
             JOIN Course co ON l.courseId = co.courseId 
             WHERE co.courseId = :courseId 
               AND c.classId = :classId 
-              AND u.userRole = :role 
+              AND u.userRole = :userRole 
               AND l.teacherId = :teacherID
         """;
 

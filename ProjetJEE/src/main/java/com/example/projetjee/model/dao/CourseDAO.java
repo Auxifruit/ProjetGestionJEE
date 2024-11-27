@@ -6,7 +6,9 @@ import com.example.projetjee.util.HibernateUtil;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDAO {
@@ -112,40 +114,28 @@ public class CourseDAO {
         return course != null ? course.getSubjectId() : -1;
     }
 
-    public static boolean isCourseInTableByNameAndSubject(String courseName, int subjectId) {
-        if (courseName == null || courseName.isEmpty() || subjectId <= 0) {
-            return false;
-        }
+    // send back a list of all the Course teach by the teacher
+    public static List<Course> getAllTeacherCourseByTeacherId(int teacherId) {
+        List<Course> disciplines = new ArrayList<>();
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "SELECT COUNT(c) FROM Course c WHERE c.courseName = :courseName AND c.subjectId = :subjectId";
-            Long count = session.createQuery(hql, Long.class)
-                    .setParameter("courseName", courseName)
-                    .setParameter("subjectId", subjectId)
-                    .uniqueResult();
+            String hql = """
+            SELECT DISTINCT c 
+            FROM Course c 
+            JOIN Lesson l ON c.courseId = l.courseId 
+            WHERE l.teacherId = :teacherId
+            """;
 
-            return count != null && count > 0;
+            Query<Course> query = session.createQuery(hql, Course.class);
+            query.setParameter("teacherId", teacherId);
+
+            disciplines = query.getResultList();
+
         } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des disciplines : " + e.getMessage());
             e.printStackTrace();
         }
-        return false;
-    }
 
-    public static boolean isCourseInTableById(int courseId) {
-        if (courseId <= 0) {
-            return false;
-        }
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "SELECT COUNT(c) FROM Course c WHERE c.courseId = :courseId";
-            Long count = session.createQuery(hql, Long.class)
-                    .setParameter("courseId", courseId)
-                    .uniqueResult();
-
-            return count != null && count > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return disciplines;
     }
 }

@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <div>
     <h1>Modification d'un cours</h1>
     <%

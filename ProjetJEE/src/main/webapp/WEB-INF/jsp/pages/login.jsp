@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form action="login" method="post">
+<form id="form" action="login" method="post">
     <h1>Connexion</h1>
     <label for="email">Email :</label>
     <input type="email" name="email" id="email" placeholder="Saisissez votre Email" required><br>

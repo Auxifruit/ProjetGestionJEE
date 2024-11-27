@@ -19,9 +19,10 @@
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
 <div>
     <h1>Création d'un nouveau cours</h1>
+    <div id="OldInfos">
+        <h3>Cours existant : </h3>
     <%
         Integer userId = (Integer) session.getAttribute("user");
         if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -38,8 +39,6 @@
     <%
     } else {
     %>
-    <div id="OldInfos">
-        <h3>Cours existant : </h3>
         <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
         <table border="1" id="existingTable" style="display: table">
             <th>Nom du cours</th>
@@ -70,15 +69,16 @@
         <%
             }
         %>
-        <%
-            if(subjectList == null || subjectList.isEmpty()) {
-        %>
-        <p>Il n'y a de matière disponible pour créer un cours</p>
-        <%
-            }
-            else {
-        %>
     </div>
+    <%
+        if(subjectList == null || subjectList.isEmpty()) {
+    %>
+    <h2>Il n'y a de matière disponible pour créer un cours</h2>
+    <p><a href="${pageContext.request.contextPath}/subjectCreation-servlet">Créer une matière</a></p>
+    <%
+        }
+        else {
+    %>
     <form action="courseCreation-servlet" method="post">
         <h3>Nouveau cours :</h3>
         <label>Choix de la matière : </label>

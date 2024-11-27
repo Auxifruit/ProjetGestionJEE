@@ -17,11 +17,9 @@
 </head>
 <script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
 <div>
     <h1>Liste des cours</h1>
-    <label for="searchInput">Rechercher :</label>
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
-    </br></br>
     <%
         Integer userId = (Integer) session.getAttribute("user");
         if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -33,10 +31,13 @@
 
         if (courseList == null || courseList.isEmpty()) {
     %>
-    <p>Il n'y a pas encore de cours</p>
+    <h2>Il n'y a pas encore de cours</h2>
     <%
     } else {
     %>
+    <label for="searchInput">Rechercher :</label>
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+    </br></br>
     <form method="get">
         <table border="1">
             <th>Nom du cours</th>
@@ -76,12 +77,12 @@
         <button type="submit" formaction="courseModification-servlet">Modifier</button>
         <button type="submit" formaction="courseDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
     </form>
-    <form action="courseCreation-servlet" method="get">
-        <button type="submit">Créer</button>
-    </form>
     <%
         }
     %>
+    <form action="courseCreation-servlet" method="get">
+        <button type="submit">Créer</button>
+    </form>
 </div>
 </body>
 <script>

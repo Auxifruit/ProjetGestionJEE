@@ -10,8 +10,7 @@
 </head>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
-<form id="form" action="register" method="post" onsubmit="validateForm(event)">
+<form action="register" method="post" onsubmit="validateForm(event)">
     <h1>Inscription</h1>
     <label for="firstName">Prénom :</label>
     <input type="text" name="firstName" id="firstName" placeholder="Prénom" required><br>
@@ -20,7 +19,7 @@
     <input type="text" name="lastName" id="lastName" placeholder="Nom" required><br>
 
     <label for="email">Email :</label>
-    <input type="email" name="email" id="email" placeholder="exemple@xyz.com" required><br>
+    <input type="email" name="email" id="email" placeholder="Email exemple@xyz.com" required><br>
 
     <label for="password">Mot de passe :</label>
     <input type="password" name="password" id="password" required><br>
@@ -39,17 +38,17 @@
 
         if(majorList != null && !majorList.isEmpty()) {
     %>
-        <label for="major" class="majorChoice">Filière :</label>
-        <select name="major" id="major" class="majorChoice">
-            <option value="" selected="selected">Choisir une filière</option>
-            <%
-                for(Major major : majorList) {
-            %>
-            <option value="<%= major.getMajorId() %>"><%= major.getMajorName() %></option>
-            <%
-                }
-            %>
-        </select><br>
+    <label for="major" class="majorChoice">Filière :</label>
+    <select name="major" id="major" class="majorChoice">
+        <option value="" selected="selected">Choisir une filière</option>
+        <%
+            for(Major major : majorList) {
+        %>
+        <option value="<%= major.getMajorId() %>"><%= major.getMajorName() %></option>
+        <%
+            }
+        %>
+    </select><br>
     <%
         }
     %>

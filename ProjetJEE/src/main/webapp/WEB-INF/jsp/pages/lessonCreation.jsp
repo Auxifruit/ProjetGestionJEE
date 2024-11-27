@@ -18,9 +18,10 @@
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
 <div>
   <h1>Création d'une séance</h1>
+  <div id="OldInfos">
+    <h3>Séance existante :</h3>
   <%
     Integer userId = (Integer) session.getAttribute("user");
     if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -29,23 +30,14 @@
     }
 
     List<Course> coursesList = (List<Course>) request.getAttribute("courses");
-
-    if (coursesList == null || coursesList.isEmpty()) {
-  %>
-  <h2>Pas de cours pour faire une séance</h2>
-  <%
-  } else {
-  %>
-  <%
     List<Lesson> lessonList = (List<Lesson>) request.getAttribute("lessons");
-    if (lessonList == null || lessonList.isEmpty()) {
+
+  if (lessonList == null || lessonList.isEmpty()) {
   %>
   <h2>Pas de séance pour l'instant</h2>
   <%
   } else {
   %>
-  <div id="OldInfos">
-    <label>Séance existante :</label>
     <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
     <table border="1" id="existingTable" style="display: table">
       <tr>
@@ -96,29 +88,41 @@
   %>
   </div>
   <form action="lessonCreation-servlet" method="post">
-  <label>Choix du cours : </label>
-  <select name="course">
     <%
-      for (Course course : coursesList) {
+      List<Course> courseList = (List<Course>) request.getAttribute("courses");
+
+      if (courseList == null || courseList.isEmpty()) {
     %>
-    <option value=<%= course.getCourseId() %>><%= course.getCourseName()%></option>
+    <h3>Pas de cours pour faire la séance</h3>
+    <%
+    } else {
+    %>
+        <label>Choix du cours : </label>
+        <select name="course">
+          <%
+            for (Course course : coursesList) {
+          %>
+          <option value=<%= course.getCourseId() %>><%= course.getCourseName()%></option>
+          <%
+            }
+          %>
+        </select>
     <%
       }
     %>
-  </select>
-  </br></br>
+
   <label>Date de début : </label>
   <input name="startDate" type="datetime-local" required/>
-  </br>
+
   <label>Date de fin : </label>
   <input name="endDate" type="datetime-local" required/>
-  </br></br>
+
   <%
     List<Teacher> teacherList = (List<Teacher>) request.getAttribute("teachers");
 
     if (teacherList == null || teacherList.isEmpty()) {
   %>
-  <h3>Pas de professeur pour faire le cours</h3>
+  <h3>Pas d'enseignant pour faire la séance</h3>
   <%
   } else {
   %>
@@ -139,13 +143,14 @@
       }
     %>
   </select>
+    <%
+        }
+    %>
     <% String messageErreur = (String) request.getAttribute("erreur");
       if(messageErreur != null && !messageErreur.isEmpty()) {
     %>
     <p style='color: red'><%= messageErreur %></p>
     <%
-          }
-        }
       }
     %>
   <button type="submit" onclick="confirmCreate(event)">Valider</button>

@@ -17,12 +17,8 @@
 <script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
 <div>
     <h1>Liste des classes</h1>
-    <label for="searchInput">Rechercher :</label>
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
-    </br></br>
     <%
         Integer userId = (Integer) session.getAttribute("user");
         if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -34,10 +30,13 @@
 
         if (classList == null || classList.isEmpty()) {
     %>
-    <p>Il n'y a pas encore de classe</p>
+    <h2>Il n'y a pas encore de classe</h2>
     <%
     } else {
     %>
+    <label for="searchInput">Rechercher :</label>
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+    </br></br>
     <form method="get">
         <table border="1">
             <th>Nom de la classe</th>

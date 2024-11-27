@@ -17,26 +17,25 @@
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
 <div>
     <h1>Création d'une nouvelle matière</h1>
-    <%
-        Integer userId = (Integer) session.getAttribute("user");
-        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-            response.sendRedirect("index.jsp");
-            return;
-        }
-
-        List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
-
-        if (subjectList == null || subjectList.isEmpty()) {
-    %>
-    <p>Il n'y a pas encore de matière</p>
-    <%
-    } else {
-    %>
     <div id="OldInfos">
         <h3>Matière existante : </h3>
+        <%
+            Integer userId = (Integer) session.getAttribute("user");
+            if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
+
+            List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
+
+            if (subjectList == null || subjectList.isEmpty()) {
+        %>
+        <p>Il n'y a pas encore de matière</p>
+        <%
+        } else {
+        %>
         <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
         <table border="1" id="existingTable" style="display: table">
             <th>Nom de la matière</th>
@@ -62,7 +61,8 @@
         <% String messageErreur = (String) request.getAttribute("erreur");
             if (messageErreur != null && !messageErreur.isEmpty()) {
         %>
-        <p style='color: red'><%= messageErreur %></p>
+        <p style='color: red'><%= messageErreur %>
+        </p>
         <%
             }
         %>

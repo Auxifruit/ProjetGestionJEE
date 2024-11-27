@@ -22,9 +22,6 @@
 <jsp:include page="/elements/sidebar.jsp" />
 <div>
     <h1>List des utilisateurs à valider</h1>
-    <label for="searchInput">Rechercher :</label>
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
-    </br></br>
     <%
         Integer userId = (Integer) session.getAttribute("user");
         if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -40,6 +37,10 @@
     <%
     } else {
     %>
+    <label for="searchInput">Rechercher :</label>
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
+    </br></br>
+
     <form method="post" id="userForm">
         <table border="1px">
             <tr>

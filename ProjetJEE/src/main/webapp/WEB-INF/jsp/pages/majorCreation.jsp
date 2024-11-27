@@ -17,9 +17,10 @@
 <script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
 <div>
     <h1>Création d'une nouvelle filière</h1>
+    <div id="OldInfos">
+        <h3>Filière existante : </h3>
     <%
         Integer userId = (Integer) session.getAttribute("user");
         if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
@@ -35,8 +36,6 @@
     <%
     } else {
     %>
-    <div id="OldInfos">
-        <h3>Filière existante : </h3>
         <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
         <table border="1" id="existingTable" style="display: table">
             <th>Nom de la filière</th>

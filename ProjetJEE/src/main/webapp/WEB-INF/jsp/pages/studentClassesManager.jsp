@@ -18,7 +18,6 @@ Created by IntelliJ IDEA.
 </head>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
 <div>
     <h1>Assignation d'étudiants à des classes</h1>
     <%
@@ -94,6 +93,7 @@ Created by IntelliJ IDEA.
     %>
     </form>
     <form action="studentClassesUnassignation-servlet" method="post">
+        <h3>Étudiant(s) participants(s) : </h3>
     <%
         List<Student> participatingStudent = StudentDAO.getStudentListFromClassesId(classe.getClassId());
         if(participatingStudent == null || participatingStudent.isEmpty()) {
@@ -102,7 +102,6 @@ Created by IntelliJ IDEA.
     <%
         } else {
     %>
-        <h3>Étudiant(s) participantes(s) : </h3>
         <table border="1">
             <tr>
                 <th>Nom de l'étudiant</th>
@@ -146,10 +145,11 @@ Created by IntelliJ IDEA.
         <p style='color: red'><%= messageErreur %></p>
         <%
                 }
+        %>
+        <button type="submit" onclick="confirmAction(event, 'unassign')">Désassigner</button>
+        <%
             }
         %>
-
-        <button type="submit" onclick="confirmAction(event, 'unassign')">Désassigner</button>
     </form>
     <%
         }

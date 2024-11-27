@@ -69,7 +69,7 @@
 <body>
 
 
-<form action="editInformations" method="post">
+<form id="form" action="editInformations" method="post">
   <h1>Modifier mes informations</h1>
   <!-- Champ caché pour l'ID utilisateur -->
   <input type="hidden" id="userId" name="userId" value="<%= user.getUserId() %>">

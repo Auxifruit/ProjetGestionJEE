@@ -57,7 +57,7 @@ public class LessonCreationServlet extends HttpServlet {
         int courseId = Integer.parseInt(courseIdString);
         int teacherId = Integer.parseInt(teacherIdString);
 
-        if(startDate == null || startDate.isEmpty() || endDate == null || endDate.isEmpty()) {
+        if((startDate == null || startDate.isEmpty()) || (endDate == null || endDate.isEmpty())) {
             request.setAttribute("erreur", "Erreur : Veuillez saisir les 2 dates nécessaire pour la création d'une séance.");
             doGet(request, response);
             return;

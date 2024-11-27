@@ -41,8 +41,8 @@ public class GradeCreationServlet extends HttpServlet {
         String newGradeStudentIdString = request.getParameter("newGradeStudentId");
         String newGradeTeacherIdString = request.getParameter("newGradeTeacherId");
 
-        if((newGradeName == null || newGradeName.isEmpty()) && (newGradeCourseIdString == null || newGradeCourseIdString.isEmpty()) && (newGradeValueString == null || newGradeValueString.isEmpty())
-                && (newGradeCoefficientString == null || newGradeCoefficientString.isEmpty()) && (newGradeStudentIdString == null || newGradeStudentIdString.isEmpty()) && (newGradeTeacherIdString == null || newGradeTeacherIdString.isEmpty())) {
+        if((newGradeName == null || newGradeName.isEmpty()) || (newGradeCourseIdString == null || newGradeCourseIdString.isEmpty()) || (newGradeValueString == null || newGradeValueString.isEmpty())
+                || (newGradeCoefficientString == null || newGradeCoefficientString.isEmpty()) || (newGradeStudentIdString == null || newGradeStudentIdString.isEmpty()) || (newGradeTeacherIdString == null || newGradeTeacherIdString.isEmpty())) {
             request.setAttribute("erreur", "Erreur : Veuillez remplir tous les champs.");
             doGet(request, response);
             return;

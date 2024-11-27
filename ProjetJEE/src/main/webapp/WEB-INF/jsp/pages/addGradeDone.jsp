@@ -52,6 +52,8 @@
   </style>
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <div class="container">
   <div class="message">
     <p>✓ La note a bien été enregistrée</p>

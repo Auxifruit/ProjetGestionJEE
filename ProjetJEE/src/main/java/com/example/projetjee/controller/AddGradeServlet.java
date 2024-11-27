@@ -1,5 +1,6 @@
 package com.example.projetjee.controller;
 
+import com.example.projetjee.model.dao.GradeDAO;
 import com.example.projetjee.model.entities.Grade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,8 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static com.example.projetjee.model.dao.GradeDAO.insertGrade;
 
 @WebServlet(name = "AddGradeServlet", value = "/add-grade-servlet")
 public class AddGradeServlet extends HttpServlet {
@@ -65,7 +64,7 @@ public class AddGradeServlet extends HttpServlet {
 
             // insert grades in the database
             for (Grade grade : grades) {
-                if (insertGrade(grade)) {
+                if (GradeDAO.addGradeInTable(grade) != null) {
                     System.out.println("Note insérée avec succès pour l'étudiant ID: " + grade.getStudentId());
                 } else {
                     System.out.println("Erreur d'insertion de la note de l'étudiant ID: " + grade.getStudentId());

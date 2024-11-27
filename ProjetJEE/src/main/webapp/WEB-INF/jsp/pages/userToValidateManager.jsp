@@ -17,6 +17,8 @@
     <title>Liste Userss</title>
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <h1>List des Userss</h1>
 
 <%

@@ -16,6 +16,8 @@
 </head>
 <script src="${pageContext.request.contextPath}/js/filterTable.js"></script>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <div>
     <h1>Liste des classes</h1>
     <label for="searchInput">Rechercher :</label>

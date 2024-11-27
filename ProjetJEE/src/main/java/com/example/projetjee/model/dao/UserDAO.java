@@ -13,16 +13,17 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDAO {
-    private static final String USER_TABLE = "users";
-    private static final String USER_ID = "userId";
-    private static final String USER_PASSWORD = "userPassword";
-    private static final String USER_LASTNAME = "userLastName";
-    private static final String USER_NAME = "userName";
-    private static final String USER_EMAIL = "userEmail";
-    private static final String USER_BIRTHDATE = "userBirthdate";
-    private static final String USER_ROLE = "userRole";
+    public static List<Users> getAllUsers() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-    public static List<Users> getAllUsers(Role roleFilter) {
+            return session.createQuery("FROM Users ", Users.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<Users> getAllUsersByFilter(Role roleFilter) {
         List<Users> userList = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

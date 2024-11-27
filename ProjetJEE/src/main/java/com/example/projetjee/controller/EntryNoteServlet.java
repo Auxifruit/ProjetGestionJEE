@@ -18,7 +18,14 @@ import jakarta.servlet.annotation.*;
 public class EntryNoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int teacherID = Integer.parseInt(request.getParameter("userId"));
+        HttpSession session = request.getSession(false);
+        Integer teacherID = (Integer) session.getAttribute("user");
+
+        if(!UserDAO.getUserById(teacherID).getUserRole().equals(Role.teacher)) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+        
         setCommonAttributes(request,teacherID);
         request.setAttribute("teacherID", teacherID);
         try {

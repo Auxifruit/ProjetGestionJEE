@@ -13,140 +13,146 @@ Created by IntelliJ IDEA.
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Assigner des cours</title>
+    <title>Assigner des étudiant</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Assignation des séances à des Classs</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
-
-    Classes classe = (Classes) request.getAttribute("classe");
-
-    if (classe == null) {
-%>
-<h2>La classe n'existe pas</h2>
-<%
-} else {
-%>
-<h3>Informations de la classe :</h3>
-<p>Nom : <%= classe.getClassName() %> </p>
-</br>
-<%
-    List<Student> availableStudentList = (List<Student>) request.getAttribute("availableStudents");
-
-    if(availableStudentList == null || availableStudentList.isEmpty()) {
-%>
-<p>Aucun étudiant n'est disponible pour la classe</p>
-<%
-    } else {
-%>
-<h3>Étudiant(s) disponible(s) : </h3>
-<form action="studentClassesAssignation-servlet" method="post">
-<table border="1">
-    <tr>
-        <th>Nom de l'étudiant</th>
-        <th>Prénom de l'étudiant</th>
-        <th>Filière de l'étudiant</th>
-        <th>Selection</th>
-    </tr>
+<div>
+    <h1>Assignation d'étudiants à des classes</h1>
     <%
-        for(Student student : availableStudentList) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+
+        Classes classe = (Classes) request.getAttribute("classe");
+
+        if (classe == null) {
     %>
-    <tr>
-        <td><%= UserDAO.getUserById(student.getStudentId()).getUserLastName()  %></td>
-        <td><%= UserDAO.getUserById(student.getStudentId()).getUserName()  %></td>
-        <td>
-            <% String majorName = null;
-                if(student.getMajorId() != null) {
-                    majorName = MajorDAO.getMajorById(student.getMajorId()).getMajorName();
-                }
-                if(majorName == null) {
-            %>
-            Aucune
+    <h2>La classe n'existe pas</h2>
+    <%
+    } else {
+    %>
+    <div id="OldInfos">
+        <h3>Informations de la classe :</h3>
+        <p>Nom : <%= classe.getClassName() %> </p>
+    </div>
+    <form action="studentClassesAssignation-servlet" method="post">
+        <h3>Étudiant(s) disponible(s) : </h3>
+    <%
+        List<Student> availableStudentList = (List<Student>) request.getAttribute("availableStudents");
+
+        if(availableStudentList == null || availableStudentList.isEmpty()) {
+    %>
+    <p>Aucun étudiant n'est disponible pour la classe</p>
+    <%
+        } else {
+    %>
+        <table border="1">
+            <tr>
+                <th>Nom de l'étudiant</th>
+                <th>Prénom de l'étudiant</th>
+                <th>Filière de l'étudiant</th>
+                <th>Selection</th>
+            </tr>
             <%
-                } else {
+                for(Student student : availableStudentList) {
             %>
-            <%= majorName %>
+            <tr>
+                <td><%= UserDAO.getUserById(student.getStudentId()).getUserLastName()  %></td>
+                <td><%= UserDAO.getUserById(student.getStudentId()).getUserName()  %></td>
+                <td>
+                    <% String majorName = null;
+                        if(student.getMajorId() != null) {
+                            majorName = MajorDAO.getMajorById(student.getMajorId()).getMajorName();
+                        }
+                        if(majorName == null) {
+                    %>
+                    Aucune
+                    <%
+                        } else {
+                    %>
+                    <%= majorName %>
+                    <%
+                        }
+                    %>
+                </td>
+                <td><input type="radio" name="studentId" value="<%= student.getStudentId() %>"></td>
+            </tr>
             <%
                 }
             %>
-        </td>
-        <td><input type="radio" name="studentId" value="<%= student.getStudentId() %>"></td>
-    </tr>
+        </table>
+        <input type="text" name="classesId" value="<%= classe.getClassId() %>" style="display: none">
+
+        <button type="submit" onclick="confirmAction(event, 'assign')">Assigner</button>
     <%
         }
     %>
-</table>
-    <input type="text" name="classesId" value="<%= classe.getClassId() %>" style="visibility: hidden">
-    </br>
-    <button type="submit" onclick="confirmAction(event, 'assign')">Assigner</button>
-</form>
-<%
-    }
+    </form>
+    <form action="studentClassesUnassignation-servlet" method="post">
+    <%
+        List<Student> participatingStudent = StudentDAO.getStudentListFromClassesId(classe.getClassId());
+        if(participatingStudent == null || participatingStudent.isEmpty()) {
+    %>
+    <p>Aucune étudiant n'est dans la classe</p>
+    <%
+        } else {
+    %>
+        <h3>Étudiant(s) participantes(s) : </h3>
+        <table border="1">
+            <tr>
+                <th>Nom de l'étudiant</th>
+                <th>Prénom de l'étudiant</th>
+                <th>Filière de l'étudiant</th>
+                <th>Selection</th>
+            </tr>
+            <%
+                for(Student student : participatingStudent) {
+            %>
+            <tr>
+                <td><%= UserDAO.getUserById(student.getStudentId()).getUserLastName()  %></td>
+                <td><%= UserDAO.getUserById(student.getStudentId()).getUserName()  %></td>
+                <td>
+                    <% String majorName = null;
+                        if(student.getMajorId() != null) {
+                            majorName = MajorDAO.getMajorById(student.getMajorId()).getMajorName();
+                        }
+                        if(majorName == null) {
+                    %>
+                    Aucune
+                    <%
+                    } else {
+                    %>
+                    <%= majorName %>
+                    <%
+                        }
+                    %>
+                </td>
+                <td><input type="radio" name="studentId" value="<%= student.getStudentId() %>"></td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+        <input type="text" name="classesId" value="<%= classe.getClassId() %>" style="display: none">
 
-    List<Student> participatingStudent = StudentDAO.getStudentListFromClassesId(classe.getClassId());
-    if(participatingStudent == null || participatingStudent.isEmpty()) {
-%>
-<p>Aucune étudiant n'est dans la classe</p>
-<%
-    } else {
-%>
-<h3>Étudiant(s) participantes(s) : </h3>
-<form action="studentClassesUnassignation-servlet" method="post">
-    <table border="1">
-        <tr>
-            <th>Nom de l'étudiant</th>
-            <th>Prénom de l'étudiant</th>
-            <th>Filière de l'étudiant</th>
-            <th>Selection</th>
-        </tr>
-        <%
-            for(Student student : participatingStudent) {
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if(messageErreur != null && !messageErreur.isEmpty()) {
         %>
-        <tr>
-            <td><%= UserDAO.getUserById(student.getStudentId()).getUserLastName()  %></td>
-            <td><%= UserDAO.getUserById(student.getStudentId()).getUserName()  %></td>
-            <td>
-                <% String majorName = null;
-                    if(student.getMajorId() != null) {
-                        majorName = MajorDAO.getMajorById(student.getMajorId()).getMajorName();
-                    }
-                    if(majorName == null) {
-                %>
-                Aucune
-                <%
-                } else {
-                %>
-                <%= majorName %>
-                <%
-                    }
-                %>
-            </td>
-            <td><input type="radio" name="studentId" value="<%= student.getStudentId() %>"></td>
-        </tr>
+        <p style='color: red'><%= messageErreur %></p>
         <%
+                }
             }
         %>
-    </table>
-    <input type="text" name="classesId" value="<%= classe.getClassId() %>" style="visibility: hidden">
-    </br>
-    <button type="submit" onclick="confirmAction(event, 'unassign')">Désassigner</button>
-</form>
-<%
-    }
-%>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if(messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %></p></br>
-<%
-    }
-}
-%>
+
+        <button type="submit" onclick="confirmAction(event, 'unassign')">Désassigner</button>
+    </form>
+    <%
+        }
+    %>
+</div>
 </body>
 <script>
     function confirmAction(event, action) {

@@ -5,7 +5,8 @@ import java.nio.file.FileStore;
 import java.util.List;
 
 import com.example.projetjee.model.dao.StudentDAO;
-import com.example.projetjee.model.dao.TeacherDAO;
+import com.example.projetjee.model.dao.ClasseDAO;
+import com.example.projetjee.model.dao.CourseDAO;
 import com.example.projetjee.model.entities.Classes;
 import com.example.projetjee.model.entities.Course;
 import com.example.projetjee.model.entities.Users;
@@ -52,8 +53,8 @@ public class EntryNoteServlet extends HttpServlet {
 
     private void setCommonAttributes(HttpServletRequest request, int teacherID) {
         // get disciplines and classes and set them as attributes
-        List<Course> disciplines = TeacherDAO.getAllDiscipline(teacherID);
-        List<Classes> classes = TeacherDAO.getAllClasses(teacherID);
+        List<Course> disciplines = CourseDAO.getAllTeacherCourseByTeacherId(teacherID);
+        List<Classes> classes = ClasseDAO.getAllTeacherClassByTeacherId(teacherID);
 
         request.setAttribute("disciplines", disciplines);
         request.setAttribute("classes", classes);

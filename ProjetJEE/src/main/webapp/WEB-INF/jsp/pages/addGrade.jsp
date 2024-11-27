@@ -114,6 +114,18 @@
       // Mettre à jour le champ caché avec l'ID de la classe
       document.getElementById('selected-class-id').value = classId;
     }
+
+    function validateCriteria() {
+          const courseId = document.getElementById('selected-course-id').value;
+          const classId = document.getElementById('selected-class-id').value;
+    
+          if (!courseId || !classId) {
+            alert("Veuillez sélectionner un cours et une classe avant de continuer.");
+            return false; // Empêche la soumission
+          }
+    
+          document.getElementById('criteria-form').submit();
+        }
   </script>
 </head>
 <body>
@@ -184,7 +196,7 @@
     <input type="hidden" name="courseId" id="selected-course-id" value="">
     <input type="hidden" name="classId" id="selected-class-id" value="">
     <input type="hidden" name="teacherID" value="<%=request.getAttribute("teacherID")%>">
-    <button type="submit" id="submit-button">OK</button>
+    <button type="submit" id="submit-button" onclick="validateCriteria()>OK</button>
   </form>
 
   <hr>

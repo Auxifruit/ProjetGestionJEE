@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<form action="register" method="post" onsubmit="validateForm(event)">
+<form id="form" action="register" method="post" onsubmit="validateForm(event)">
     <h1>Inscription</h1>
     <label for="firstName">Prénom :</label>
     <input type="text" name="firstName" id="firstName" placeholder="Prénom" required><br>
@@ -18,7 +18,7 @@
     <input type="text" name="lastName" id="lastName" placeholder="Nom" required><br>
 
     <label for="email">Email :</label>
-    <input type="email" name="email" id="email" placeholder="Email exemple@xyz.com" required><br>
+    <input type="email" name="email" id="email" placeholder="exemple@xyz.com" required><br>
 
     <label for="password">Mot de passe :</label>
     <input type="password" name="password" id="password" required><br>

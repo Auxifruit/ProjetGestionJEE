@@ -19,6 +19,8 @@ Created by IntelliJ IDEA.
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <div>
     <h1>Assignation des classes à des séances</h1>
     <%

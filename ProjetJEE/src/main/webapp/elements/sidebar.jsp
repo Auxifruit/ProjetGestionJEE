@@ -59,7 +59,7 @@
 </style>
 <body>
 <div class="sidebar">
-    <h2>Menu</h2>
+    <a href="index.jsp"><img src="${pageContext.request.contextPath}/css/logo.png" alt="logo" style="width:120px;height:120px;"></a>
     <%
         Integer userId = (Integer) session.getAttribute("user");
     %>

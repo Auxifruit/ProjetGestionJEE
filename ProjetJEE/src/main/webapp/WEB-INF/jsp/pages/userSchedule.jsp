@@ -111,8 +111,10 @@
                             }
                         %>
                     </td>
-                    <td>
                     <% if(!isTeacher) {
+                    %>
+                    <td>
+                    <%
                             Integer teacherId = lesson.getTeacherId();
                             if(teacherId != null) {
                     %>

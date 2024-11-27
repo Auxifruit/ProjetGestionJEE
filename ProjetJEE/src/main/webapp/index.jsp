@@ -30,7 +30,7 @@
   } else {
     if(!Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
 %>
-  <a href="${pageContext.request.contextPath}/userSchedule-servlet?userId=<%= userId.intValue() %>">Emploi du temps</a></br>
+  <a href="${pageContext.request.contextPath}/userSchedule-servlet">Emploi du temps</a></br>
   <%
     }
   %>

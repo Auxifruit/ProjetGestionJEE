@@ -129,6 +129,8 @@
   </script>
 </head>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+
 <div class="container">
 
   <!-- Teacher -->

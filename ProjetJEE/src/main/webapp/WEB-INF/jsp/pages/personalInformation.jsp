@@ -67,7 +67,7 @@
   </script>
 </head>
 <body>
-
+<jsp:include page="/elements/sidebar.jsp" />
 
 <form id="form" action="editInformations" method="post">
   <h1>Modifier mes informations</h1>

@@ -128,7 +128,7 @@
         <%
             }
         %>
-    </table>
+        </table>
         <% String messageErreur = (String) request.getAttribute("erreur");
             if(messageErreur != null && !messageErreur.isEmpty()) {
         %>
@@ -136,8 +136,15 @@
         <%
                 }
         %>
-    <button type="submit" formaction="userModification-servlet">Modifier</button>
-    <button type="submit" formaction="userDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
+        <button type="submit" formaction="userModification-servlet">Modifier</button>
+        <button type="submit" formaction="userDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
+        <%
+            if(roleFilter != null && !roleFilter.equals(Role.administrator)) {
+        %>
+        <button type="submit" formaction="userSchedule-servlet" formmethod="post">Voir l'emploi du temps de l'utilisateur</button>
+        <%
+            }
+        %>
     </form>
     <%
         }

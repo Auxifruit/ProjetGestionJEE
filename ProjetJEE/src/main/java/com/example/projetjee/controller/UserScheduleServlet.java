@@ -31,6 +31,11 @@ public class UserScheduleServlet extends HttpServlet {
             return;
         }
 
+        String userIdForm = request.getParameter("userId");
+        if(userIdForm != null) {
+            userId = Integer.parseInt(userIdForm);
+        }
+
         Map<LocalDate, List<Lesson>> lessonsByDay = new TreeMap<>();
         Role userRole = UserDAO.getUserById(userId).getUserRole();
 
@@ -44,7 +49,7 @@ public class UserScheduleServlet extends HttpServlet {
                 lessonList = LessonDAO.getTeacherLessonFromId(userId);
                 break;
             default:
-                request.setAttribute("erreur", "Erreur : rôle non supporté.");
+                System.out.println("Erreur : rôle non supporté.");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
                 return;
         }

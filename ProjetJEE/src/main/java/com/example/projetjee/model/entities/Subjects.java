@@ -1,6 +1,9 @@
 package com.example.projetjee.model.entities;
 
+import com.example.projetjee.util.HibernateUtil;
 import jakarta.persistence.*;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 @Entity
 @Table(name="subjects")
@@ -50,4 +53,5 @@ public class Subjects {
         result = 31 * result + (subjectName != null ? subjectName.hashCode() : 0);
         return result;
     }
+
 }

@@ -4,10 +4,30 @@ import com.example.projetjee.model.entities.Grade;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
 public class GradeDAO {
+
+    public static List<Grade> getGradeByStudentId(int studentId) {
+        if (studentId <= 0) {
+            throw new IllegalArgumentException("studentId can't be less or equal to 0");
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // HQL
+            String hql = "FROM Grade g WHERE g.studentId = :studentId";
+
+            Query<Grade> query = session.createQuery(hql, Grade.class);
+            query.setParameter("studentId", studentId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de récupération des notes pour studentID: " + studentId, e);
+        }
+    }
 
     public static List<Grade> getGradesByTeacherAndClass(int teacherId, int classId) {
         if (teacherId <= 0 || classId <= 0) {
@@ -67,6 +87,5 @@ public class GradeDAO {
         // Return true if the insertion was successful, otherwise false
         return success;
     }
-
 
 }

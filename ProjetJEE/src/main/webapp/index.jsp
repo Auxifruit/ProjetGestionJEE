@@ -34,8 +34,10 @@
   }
 %>
 <a href="${pageContext.request.contextPath}/personalInformation-servlet">Informations personnelles</a></br>
-<a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
+<a href="${pageContext.request.contextPath}/student-grade-report-servlet?userId=<%= userId.intValue() %>">PDF TEST</a>
 <a href="${pageContext.request.contextPath}/entry-note-servlet?userId=<%= userId.intValue() %>">Saisie de note</a></br>
+<a href="${pageContext.request.contextPath}/student-grade-report-servlet?userId=<%= userId.intValue() %>">Bulletin de note</a></br>
+<a href="${pageContext.request.contextPath}/LogoutServlet">Deconexion</a></br>
 <%
   }
 %>

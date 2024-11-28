@@ -78,6 +78,16 @@ public class StudentDAO {
         return success;
     }
 
+    public static Student getStudentById(int studentId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            return session.get(Student.class, studentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // this is an use for a teacher and need a version without teacherID for student or admin i guess
     public static List<Users> getStudentsByDisciplineAndClass(int courseId, int classId, int teacherID) {
         List<Users> users = new ArrayList<>();

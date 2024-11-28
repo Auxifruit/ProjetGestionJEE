@@ -5,6 +5,7 @@ import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -145,4 +146,28 @@ public class CourseDAO {
         }
         return false;
     }
+
+    public static List<Course> getCoursesBySubjectId(int subjectId) {
+        if (subjectId <= 0) {
+            throw new IllegalArgumentException("subjectId doit être supérieur à 0");
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // HQL
+            String hql = """
+            SELECT c
+            FROM Course c
+            WHERE c.subjectId = :subjectId
+        """;
+
+            Query<Course> query = session.createQuery(hql, Course.class);
+            query.setParameter("subjectId", subjectId);
+
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de la récupération des cours pour le subjectId: " + subjectId, e);
+        }
+    }
+
 }

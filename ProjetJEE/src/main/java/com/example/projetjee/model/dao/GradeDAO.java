@@ -129,29 +129,6 @@ public class GradeDAO {
         return null;
     }
 
-    public static boolean insertGrade(Grade grade) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = null;
-        boolean success = false;
-
-        try {
-            tx = session.beginTransaction();
-            session.persist(grade);
-            tx.commit();
-            success = true;
-
-        } catch (Exception e) {
-            // In case of any error
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace(); 
-        } finally {
-            session.close();
-        }
-        return success;
-    }
-
     public static List<Grade> getGradeByStudentId(int studentId) {
         if (studentId <= 0) {
             throw new IllegalArgumentException("studentId can't be less or equal to 0");

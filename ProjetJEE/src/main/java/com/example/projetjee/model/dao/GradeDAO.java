@@ -5,6 +5,7 @@ import com.example.projetjee.util.HibernateUtil;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -149,5 +150,24 @@ public class GradeDAO {
             session.close();
         }
         return success;
+    }
+
+    public static List<Grade> getGradeByStudentId(int studentId) {
+        if (studentId <= 0) {
+            throw new IllegalArgumentException("studentId can't be less or equal to 0");
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // HQL
+            String hql = "FROM Grade g WHERE g.studentId = :studentId";
+
+            Query<Grade> query = session.createQuery(hql, Grade.class);
+            query.setParameter("studentId", studentId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de récupération des notes pour studentID: " + studentId, e);
+        }
     }
 }

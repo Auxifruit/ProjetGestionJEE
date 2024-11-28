@@ -39,7 +39,7 @@
 
         if(lessonList == null || lessonList.isEmpty()) {
     %>
-    <p>Il n'y a pas de cours dans l'emploi du temps</p>
+    <h2>L'emploi du temps est vide</h2>
     <%
         } else {
             Map<LocalDate, List<Lesson>> pastLessons = new TreeMap<>();

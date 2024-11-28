@@ -5,6 +5,7 @@ import com.example.projetjee.util.HibernateUtil;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -97,5 +98,56 @@ public class SubjectDAO {
         }
 
         return null;
+    }
+
+    public static List<Subjects> getSubjectsByStudentId(int studentId) {
+        if (studentId <= 0) {
+            throw new IllegalArgumentException("studentId can't be less or equal to 0");
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // HQL
+            String hql = """
+                SELECT DISTINCT s 
+                FROM Subjects s
+                JOIN Course c ON c.subjectId = s.subjectId
+                JOIN Grade g ON g.courseId = c.courseId
+                WHERE g.studentId = :studentId
+            """;
+
+            Query<Subjects> query = session.createQuery(hql, Subjects.class);
+            query.setParameter("studentId", studentId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de récupération des matières pour studentID: " + studentId, e);
+        }
+    }
+
+    public static int getSubjectIdByGradeId(int gradeId) {
+        if (gradeId <= 0) {
+            throw new IllegalArgumentException("gradeId doit être supérieur à 0");
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // HQL
+            String hql = """
+                SELECT s.subjectId
+                FROM Grade g
+                JOIN Course c ON g.courseId = c.courseId
+                JOIN Subjects s ON c.subjectId = s.subjectId
+                WHERE g.gradeId = :gradeId
+            """;
+
+            Query<Integer> query = session.createQuery(hql, Integer.class);
+            query.setParameter("gradeId", gradeId);
+
+            // Retourne le résultat unique
+            return query.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de la récupération du subjectId pour le gradeId: " + gradeId, e);
+        }
     }
 }

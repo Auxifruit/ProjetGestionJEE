@@ -205,4 +205,14 @@ public class StudentDAO {
         return users;
     }
 
+    public static Student getStudentById(int studentId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            return session.get(Student.class, studentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

@@ -15,69 +15,86 @@
 <html>
 <head>
     <title>Modification de cours</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Modification d'un cours</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
+<jsp:include page="/elements/sidebar.jsp" />
 
-    Course course = (Course) request.getAttribute("course");
-    List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
+<div>
+    <h1>Modification d'un cours</h1>
+    <%
+        Integer userId = (Integer) session.getAttribute("user");
+        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
 
-    if (course == null) {
-%>
-<p>Le cours n'existe pas</p>
-<%
-} else {
-%>
-<h3>Anciennes informations</h3>
-<p>Ancien nom : <%= course.getCourseName() %></p>
-<p>Ancienne matière : <%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %></p>
+        Course course = (Course) request.getAttribute("course");
+        List<Subjects> subjectList = (List<Subjects>) request.getAttribute("subjects");
 
-<form action="courseModification-servlet" method="post">
+        if (course == null) {
+    %>
+    <p>Le cours n'existe pas</p>
+    <%
+    } else {
+            Integer subjectId = course.getSubjectId();
+    %>
+    <div id="OldInfos">
+        <h3>Anciennes informations</h3>
+        <p>Ancien nom : <%= course.getCourseName() %></p>
+        <p>Ancienne matière :
+            <% if(subjectId == null) {
+            %>
+            Pas de maitère associée
+            <%
+            } else {
+            %>
+            <%= SubjectDAO.getSubjectById(course.getSubjectId()).getSubjectName() %>
+            <%
+                }
+            %>
+        </p>
+    </div>
+    <form action="courseModification-servlet" method="post">
+        <h3>Nouvelles informations</h3>
+    <%
+        if(subjectList == null || subjectList.isEmpty()) {
+    %>
+    <p>Il n'y a de matière disponible pour modifier le cours</p>
+    <%
+        }
+        else {
+    %>
+        <label>Choix de la matière : </label>
+        <select name="newCourseSubjectId">
+            <option value="">Ne pas modifier la matière</option>
+            <%
+                for (Subjects subject : subjectList) {
+            %>
+            <option value="<%= subject.getSubjectId() %>"><%= subject.getSubjectName() %></option>
+            <%
+                }
+            %>
+        </select>
+        <label>Choix du nouveau nom du cours : </label>
+        <input type="text" name="newCourseName"/>
 
-<%
-    if(subjectList == null || subjectList.isEmpty()) {
-%>
-<p>Il n'y a de matière disponible pour modifier le cours</p>
-<%
-    }
-    else {
-%>
-    <label>Choix de la matière : </label>
-    <select name="newCourseSubjectId">
-        <option value="">Ne pas modifier la matière</option>
-        <%
-            for (Subjects subject : subjectList) {
+        <input name="courseId" value="<%= course.getCourseId() %>" style="display: none">
+
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
         %>
-        <option value="<%= subject.getSubjectId() %>"><%= subject.getSubjectName() %></option>
+        <p style='color: red'><%= messageErreur %></p>
         <%
             }
         %>
-    </select>
-    </br></br>
-    <label>Choix du nouveau nom du cours : </label>
-    <input type="text" name="newCourseName"/>
-    <input name="courseId" value="<%= course.getCourseId() %>" style="visibility: hidden">
-    </br></br>
-    <button type="submit" onclick="confirmModify(event)">Modifier</button>
-</form>
-<%
-    }
-%>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if (messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %>
-</p></br>
-<%
-    }
-    }
-%>
+        <button type="submit" onclick="confirmModify(event)">Modifier</button>
+    </form>
+    <%
+        }
+        }
+    %>
+</div>
 </body>
 <script>
     function confirmModify(event) {

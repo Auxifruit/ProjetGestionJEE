@@ -31,7 +31,7 @@ import static javax.mail.Message.RecipientType.TO;
 
 public class GMailer {
 
-    private static final String TEST_EMAIL = "daanounisi@cy-tech.fr";
+    private static final String TEST_EMAIL = "promocytech@gmail.com";  // Ton adresse d'envoi
     private static final String CLIENT_SECRET_FILE = "client_secret_1049703125334-n5b8tgccv8egh5vmrujjvec2qj7ashmm.apps.googleusercontent.com(2emeversion).json";
     private final Gmail service;
 
@@ -43,9 +43,9 @@ public class GMailer {
                 .build();
     }
 
+    // Charger les credentials OAuth2 pour l'application
     private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
-        // Charge le fichier JSON depuis les ressources
         InputStream in = GMailer.class.getClassLoader().getResourceAsStream(CLIENT_SECRET_FILE);
         if (in == null) {
             throw new IOException("Fichier JSON introuvable dans les ressources : " + CLIENT_SECRET_FILE);
@@ -63,24 +63,29 @@ public class GMailer {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public void sendMail(String subject, String message) throws Exception {
+    // Méthode d'envoi d'email
+    public void sendMail(String subject, String messageText, String recipientEmail) throws Exception {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);
-        email.setFrom(new InternetAddress(TEST_EMAIL));
-        email.addRecipient(TO, new InternetAddress(TEST_EMAIL));
-        email.setSubject(subject);
-        email.setText(message);
 
+        email.setFrom(new InternetAddress(TEST_EMAIL));
+        email.addRecipient(TO, new InternetAddress(recipientEmail));  // L'adresse du destinataire
+
+        email.setSubject(subject);
+        email.setText(messageText);  // Le corps du message
+
+        // Convertir l'email en format MIME pour l'API Gmail
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         email.writeTo(buffer);
         byte[] rawMessageBytes = buffer.toByteArray();
         String encodedEmail = Base64.encodeBase64URLSafeString(rawMessageBytes);
+
         Message msg = new Message();
-        msg.setRaw(encodedEmail);
+        msg.setRaw(encodedEmail);  // Message prêt à l'envoi
 
         try {
-            msg = service.users().messages().send("me", msg).execute();
+            msg = service.users().messages().send("me", msg).execute();  // Envoi via Gmail API
             System.out.println("Message id: " + msg.getId());
             System.out.println(msg.toPrettyString());
         } catch (GoogleJsonResponseException e) {
@@ -93,12 +98,12 @@ public class GMailer {
         }
     }
 
+    // Pour tester l'envoi de l'email
     public static void main(String[] args) throws Exception {
-        new GMailer().sendMail("confirmation d'inscription", """
-                Bonjour, 
-                Vous êtes bien inscrit à CYTECH, vous allez découvrir la joie et le bonheur ! 
-                Bien cordialement.
-                L'administration cool de CYTECH. 
-                """);
+        // Exemple d'envoi
+        new GMailer().sendMail("Confirmation d'inscription",
+                "Bonjour, vous êtes inscrit avec succès à CYTECH.\n" +
+                        "Nous vous souhaitons une excellente année.",
+                "promocytech@gmail.com");  // L'adresse email du destinataire
     }
 }

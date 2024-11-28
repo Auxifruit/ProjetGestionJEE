@@ -1,6 +1,8 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.GradeDAO;
+import com.example.projetjee.model.dao.UserDAO;
+import com.example.projetjee.util.GMailer;
 import com.example.projetjee.model.entities.Grade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,8 +24,10 @@ public class AddGradeServlet extends HttpServlet {
         Map<String, String[]> parameterMap = request.getParameterMap();
         // create a list of grade for easy manipulation
         List<Grade> grades = new ArrayList<>();
+        GMailer gMailer = null;
 
         try {
+            gMailer = new GMailer();
             // global parameters
             String courseIdParam = request.getParameter("courseId");
             String gradeName = request.getParameter("gradeName");
@@ -35,7 +39,6 @@ public class AddGradeServlet extends HttpServlet {
 
             int courseId = Integer.parseInt(courseIdParam);
             int gradeCoefficient = Integer.parseInt(gradeCoefficientParam);
-            System.out.println("flag_grade1");
 
             // create each grade element
             for (String paramName : parameterMap.keySet()) {
@@ -51,25 +54,33 @@ public class AddGradeServlet extends HttpServlet {
                         grade.setGradeCoefficient(gradeCoefficient);
                         grade.setStudentId(studentId);
                         grade.setCourseId(courseId);
-                        grade.setTeacherId(teacherId); // teacher's ID (could be dynamic later)
+                        grade.setTeacherId(teacherId); // teacher's ID
 
                         grades.add(grade);  // Add the grade to the list
-                        System.out.println("Grade added: " + grade.getGradeName() + " for student ID: " + grade.getStudentId());
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
-                        System.out.println("Erreur de format pour les notes ou les IDs des étudiants.");
                     }
                 }
             }
 
-            // insert grades in the database
+            // insert grades in the database and send emails
             for (Grade grade : grades) {
                 if (GradeDAO.addGradeInTable(grade) != null) {
-                    System.out.println("Note insérée avec succès pour l'étudiant ID: " + grade.getStudentId());
+                    // Get the student's email
+                    String studentEmail = UserDAO.getUserEmailById(grade.getStudentId());
+
+                    // Send email to the student
+                    String subject = "Nouvelle Note ajoutée";
+                    String message = "Bonjour,\n\nUne nouvelle note a été ajoutée à votre dossier pour le cours " +
+                            grade.getGradeName() + ".\nNote : " + grade.getGradeValue() + "\nCordialement,\nL'équipe pédagogique.";
+
+                    // Envoi du mail
+                    gMailer.sendMail(subject, message, studentEmail);
                 } else {
-                    System.out.println("Erreur d'insertion de la note de l'étudiant ID: " + grade.getStudentId());
+                    System.out.println("Erreur d'insertion de la note pour l'étudiant ID: " + grade.getStudentId());
                 }
             }
+
             // set back the ID for another use
             request.setAttribute("teacherID", teacherId);
             // forward to a success page

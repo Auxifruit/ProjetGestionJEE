@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>Page admin</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <%
     Integer userId = (Integer) session.getAttribute("user");
@@ -19,13 +20,21 @@
     }
 %>
 <body>
+<jsp:include page="/elements/sidebar.jsp" />
+<div>
 <h1>Page admin</h1>
-<a href="${pageContext.request.contextPath}/userToValidateManager-servlet">Gérer les inscriptions</a></br>
-<a href="${pageContext.request.contextPath}/userManager-servlet?roleFilter=student">Gérer les utilisateurs</a></br>
-<a href="${pageContext.request.contextPath}/lessonManager-servlet">Gérer les séances</a></br>
-<a href="${pageContext.request.contextPath}/subjectManager-servlet">Gérer les matières</a></br>
-<a href="${pageContext.request.contextPath}/courseManager-servlet">Gérer les cours</a></br>
-<a href="${pageContext.request.contextPath}/majorManager-servlet">Gérer les filières</a></br>
-<a href="${pageContext.request.contextPath}/classesManager-servlet">Gérer les classes</a></br>
+    <div id="OldInfos">
+        <ul>
+            <li><a href="${pageContext.request.contextPath}/userToValidateManager-servlet">Gérer les inscriptions</a></li>
+            <li><a href="${pageContext.request.contextPath}/userManager-servlet?roleFilter=student">Gérer les utilisateurs</a></li>
+            <li><a href="${pageContext.request.contextPath}/lessonManager-servlet">Gérer les séances</a></li>
+            <li><a href="${pageContext.request.contextPath}/subjectManager-servlet">Gérer les matières</a></li>
+            <li><a href="${pageContext.request.contextPath}/courseManager-servlet">Gérer les cours</a></li>
+            <li><a href="${pageContext.request.contextPath}/majorManager-servlet">Gérer les filières</a></li>
+            <li><a href="${pageContext.request.contextPath}/gradeManager-servlet">Gérer les notes</a></li>
+            <li><a href="${pageContext.request.contextPath}/classesManager-servlet">Gérer les classes</a></li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>

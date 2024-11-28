@@ -8,6 +8,7 @@ import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.model.entities.Users;
 import com.example.projetjee.model.entities.Userstovalidate;
+import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -77,6 +78,25 @@ public class ValidateUserServlet extends HttpServlet {
                 request.setAttribute("erreur", "Erreur : Erreur dans le rôle de l'utilisateur");
                 request.getRequestDispatcher("userToValidateManager-servlet").forward(request, response);
                 return;
+        }
+
+        // L'utilisateur est maintenant validé, on peut envoyer l'email
+        String subject = "Votre inscription a été validée";
+        String body = "Bonjour " + user.getUserName() + ",\n\n" +
+                "Nous avons le plaisir de vous informer que votre inscription a été validée.\n" +
+                "Vous pouvez maintenant accéder à votre espace étudiant.\n\n" +
+                "Cordialement,\nL'équipe pédagogique";
+        String email = user.getUserEmail();
+
+        // Envoi de l'email via GMailer
+        try {
+            GMailer gmailer = new GMailer();
+            gmailer.sendMail(subject, body, email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erreur", "Erreur : Impossible d'envoyer l'email de validation.");
+            request.getRequestDispatcher("userToValidateManager-servlet").forward(request, response);
+            return;
         }
 
         if(UserToValidateDAO.deleteUserstovalidateFromTable(userToValidateId) == true) {

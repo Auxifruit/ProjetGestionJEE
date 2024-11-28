@@ -11,44 +11,52 @@
 <html>
 <head>
     <title>Modification de filière</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Modification d'une filière</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
+<jsp:include page="/elements/sidebar.jsp" />
 
-    Classes classes = (Classes) request.getAttribute("classe");
+<div>
+    <h1>Modification d'une classe</h1>
+    <div id="OldInfos">
+        <%
+            Integer userId = (Integer) session.getAttribute("user");
+            if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
 
-    if (classes == null) {
-%>
-<p>La classe n'existe pas</p>
-<%
-} else {
-%>
-<h3>Ancienne information</h3>
-<p>Ancien nom de la classe : <%= classes.getClassName() %></p>
-<form action="classesModification-servlet" method="post">
-    <label>Nouveau nom de la classe : </label>
-    <input type="text" name="classesNewName" required>
-    <input name="classesId" value="<%= classes.getClassId() %>" style="visibility: hidden">
+            Classes classes = (Classes) request.getAttribute("classe");
 
-    </br></br>
-    <button type="submit" onclick="confirmModify(event)">Modifier</button>
-</form>
-<%
-    }
-%>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if (messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %></p></br>
-<%
-    }
-%>
+            if (classes == null) {
+        %>
+        <p>La classe n'existe pas</p>
+        <%
+        } else {
+        %>
+
+        <h3>Ancienne information</h3>
+        <p>Ancien nom de la classe : <%= classes.getClassName() %></p>
+    </div>
+    <form action="classesModification-servlet" method="post">
+        <h3>Nouvelle information</h3>
+        <label>Nouveau nom de la classe : </label>
+        <input type="text" name="classesNewName" required>
+        <input name="classesId" value="<%= classes.getClassId() %>" style="display: none">
+
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %></p>
+        <%
+            }
+        %>
+        <button type="submit" onclick="confirmModify(event)">Modifier</button>
+    </form>
+    <%
+        }
+    %>
+</div>
 </body>
 <script>
     function confirmModify(event) {

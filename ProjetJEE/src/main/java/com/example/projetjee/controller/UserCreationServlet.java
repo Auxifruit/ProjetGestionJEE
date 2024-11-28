@@ -5,6 +5,7 @@ import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.TeacherDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.*;
+import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -71,7 +72,26 @@ public class UserCreationServlet extends HttpServlet {
                     doGet(request, response);
                     return;
                 }
+
+                String subject = "Bienvenue à l'école";
+                String body = "Bonjour " + student.getUser().getUserName() + ",\n\n" +
+                        "Nous avons le plaisir de vous informer que vous avez été ajouté(e) à notre école en tant qu'étudiant(e).\n\n" +
+                        "Cordialement,\nL'équipe pédagogique";
+
+                String email = student.getUser().getUserEmail();  // Récupérer l'email de l'étudiant
+
+                try {
+                    // Envoyer l'email de notification
+                    GMailer gmailer = new GMailer();
+                    gmailer.sendMail(subject, body, email);  // Subject, Body, Email
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("erreur", "Erreur : Impossible d'envoyer l'email de bienvenue.");
+                    doGet(request, response);
+                    return;
+                }
                 break;
+
             case teacher:
                 Teacher teacher = new Teacher();
                 teacher.setTeacherId(user.getUserId());

@@ -2,6 +2,7 @@ package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.entities.Student;
+import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,12 +34,32 @@ public class StudentClassesUnassignationServlet extends HttpServlet {
 
         String error = StudentDAO.modifyStudentFromTable(student);
         if(error == null) {
+            // Si la désaffectation réussie, envoyer un email de notification
+            String subject = "Désaffectation de classe";
+            String body = "Bonjour " + student.getUser().getUserName() + ",\n\n" +
+                    "Nous avons le regret de vous informer que vous n'êtes plus affecté(e) à la classe suivante :\n" +
+                    "Classe ID : " + classeId + "\n\n" +
+                    "Cordialement,\nL'équipe pédagogique";
+
+            String email = student.getUser().getUserEmail();  // Accéder à l'email de l'étudiant
+
+            try {
+                // Envoyer l'email de notification
+                GMailer gmailer = new GMailer();
+                gmailer.sendMail(subject, body, email);  // Subject, Body, Email
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("erreur", "Erreur : Impossible d'envoyer l'email de notification.");
+                request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
+                return;
+            }
+
+            // Rediriger vers le gestionnaire de classes
             request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
-        }
-        else {
+        } else {
+            // Si la désaffectation a échoué, afficher une erreur
             request.setAttribute("erreur", error);
             request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
         }
     }
 }
-

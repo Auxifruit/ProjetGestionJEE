@@ -1,12 +1,12 @@
 package com.example.projetjee.controller;
 
-import com.example.projetjee.model.dao.CourseDAO;
-import com.example.projetjee.model.dao.LessonDAO;
-import com.example.projetjee.model.dao.TeacherDAO;
+import com.example.projetjee.model.dao.*;
 import com.example.projetjee.model.entities.Course;
+import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Teacher;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.util.DateUtil;
+import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -123,13 +123,34 @@ public class LessonModificationServlet extends HttpServlet {
 
         String error = LessonDAO.modifyLessonFromTable(lesson);
         if(error == null) {
+            // Récupérer les étudiants inscrits à la séance modifiée
+            List<Student> studentsInLesson = LessonClassesDAO.getStudentsByLessonId(lessonId);
+
+            // Pour chaque étudiant, envoyer un email de notification
+            for (Student student : studentsInLesson) {
+                String studentEmail = UserDAO.getUserEmailById(student.getStudentId());
+
+                if (studentEmail != null) {
+                    String subject = "Modification de votre séance";
+                    String body = "Bonjour,\n\n" +
+                            "Nous vous informons que la séance pour la matière " + lesson.getCourseId() + " a été modifiée.\n" +
+                            "Nouvelle date : " + newStartDate + " - " + newEndDate + "\n\n" +
+                            "Cordialement,\nL'équipe pédagogique";
+
+                    try {
+                        GMailer gmailer = new GMailer();  // Créer une instance de GMailer
+                        gmailer.sendMail(subject, body, studentEmail);  // Envoyer l'email
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            // Rediriger vers la page de gestion des séances
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
-        }
-        else {
+        } else {
             request.setAttribute("erreur", error);
             doGet(request, response);
         }
-
     }
 
 

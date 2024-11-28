@@ -11,44 +11,50 @@
 <html>
 <head>
     <title>Modification de matière</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Modification d'une matière</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
+<jsp:include page="/elements/sidebar.jsp" />
 
-    Subjects subject = (Subjects) request.getAttribute("subject");
+<div>
+    <h1>Modification d'une matière</h1>
+    <%
+        Integer userId = (Integer) session.getAttribute("user");
+        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
 
-    if (subject == null) {
-%>
-<p>La matière n'existe pas</p>
-<%
-} else {
-%>
-<h3>Ancienne information</h3>
-<p>Ancien nom de la matière : <%= subject.getSubjectName() %></p>
-<form action="subjectModification-servlet" method="post">
-    <label>Nouveau nom de la matière : </label>
-    <input type="text" name="subjectNewName" required>
-    <input name="subjectId" value="<%= subject.getSubjectId() %>" style="visibility: hidden">
+        Subjects subject = (Subjects) request.getAttribute("subject");
 
-    </br></br>
-    <button type="submit" onclick="confirmModify(event)">Modifier</button>
-</form>
-<%
-    }
-%>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if (messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %></p></br>
-<%
-    }
-%>
+        if (subject == null) {
+    %>
+    <p>La matière n'existe pas</p>
+    <%
+    } else {
+    %>
+    <div id="OldInfos">
+        <h3>Ancienne information</h3>
+        <p>Ancien nom de la matière : <%= subject.getSubjectName() %></p>
+    </div>
+    <form action="subjectModification-servlet" method="post">
+        <label>Nouveau nom de la matière : </label>
+        <input type="text" name="subjectNewName" required>
+        <input name="subjectId" value="<%= subject.getSubjectId() %>" style="display: none">
+        <%
+            }
+        %>
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %></p>
+        <%
+            }
+        %>
+
+        <button type="submit" onclick="confirmModify(event)">Modifier</button>
+    </form>
+</div>
 </body>
 <script>
     function confirmModify(event) {

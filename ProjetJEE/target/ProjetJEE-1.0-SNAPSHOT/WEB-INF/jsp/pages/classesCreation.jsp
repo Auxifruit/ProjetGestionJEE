@@ -12,55 +12,64 @@
 <html>
 <head>
     <title>Création de filière</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
+<script src="${pageContext.request.contextPath}/js/showTable.js"></script>
 <body>
-<h1>Création d'une nouvelle filière</h1>
-<%
-    Integer userId = (Integer) session.getAttribute("user");
-    if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
-
-    List<Classes> classesList = (List<Classes>) request.getAttribute("classes");
-
-    if (classesList == null || classesList.isEmpty()) {
-%>
-<p>Il n'y a pas encore de classe</p>
-<%
-} else {
-%>
-<h3>Classe existante : </h3>
-<table border="1">
-    <th>Nom de la classe</th>
+<jsp:include page="/elements/sidebar.jsp" />
+<div>
+    <h1>Création d'une nouvelle classe</h1>
+    <div id="OldInfos">
+        <h3>Classe existante : </h3>
     <%
-        for (Classes classe : classesList) {
-    %>
-    <tr>
-        <td><%= classe.getClassName() %></td>
-    </tr>
-    <%
+        Integer userId = (Integer) session.getAttribute("user");
+        if(userId == null || !Role.administrator.equals(UserDAO.getUserById(userId).getUserRole())) {
+            response.sendRedirect("index.jsp");
+            return;
         }
+
+        List<Classes> classesList = (List<Classes>) request.getAttribute("classes");
+
+        if (classesList == null || classesList.isEmpty()) {
     %>
-</table>
-<%
-    }
-%>
-<h3>Nouvelle classe :</h3>
-<form action="classesCreation-servlet" method="post">
-    <label>Choix du nom de la classe : </label>
-    <input type="text" name="newClasses" required/>
-    </br></br>
-    <button type="submit" onclick="confirmCreate(event)">Créer</button>
-</form>
-<% String messageErreur = (String) request.getAttribute("erreur");
-    if (messageErreur != null && !messageErreur.isEmpty()) {
-%>
-<p style='color: red'><%= messageErreur %>
-</p></br>
-<%
-    }
-%>
+    <p>Il n'y a pas encore de classe</p>
+    <%
+    } else {
+    %>
+        <button onclick="toggleTable()">Afficher/Masquer le tableau</button></br></br>
+        <table border="1" id="existingTable" style="display: table">
+            <th>Nom de la classe</th>
+            <%
+                for (Classes classe : classesList) {
+            %>
+            <tr>
+                <td><%= classe.getClassName() %></td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+        <%
+            }
+        %>
+    </div>
+    <form action="classesCreation-servlet" method="post">
+        <h3>Nouvelle classe :</h3>
+        <label>Choix du nom de la classe : </label>
+        <input type="text" name="newClasses" required/>
+
+        <% String messageErreur = (String) request.getAttribute("erreur");
+            if (messageErreur != null && !messageErreur.isEmpty()) {
+        %>
+        <p style='color: red'><%= messageErreur %>
+        </p></br>
+        <%
+            }
+        %>
+
+        <button type="submit" onclick="confirmCreate(event)">Créer</button>
+    </form>
+</div>
 </body>
 <script>
     function confirmCreate(event) {

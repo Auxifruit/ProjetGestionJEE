@@ -1,8 +1,12 @@
 package com.example.projetjee.model.dao;
 
+
 import com.example.projetjee.model.entities.*;
 import com.example.projetjee.util.HibernateUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -351,4 +355,56 @@ public class UserDAO {
         }
         return userId;
     }
-}
+    public static String getUserEmailById(int studentId) {
+        //Session factory bien config ?
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        String userEmail = null;
+
+        try {
+            String hql = "SELECT u.userEmail FROM Users u WHERE u.userId = :studentId";
+            Query<String> query = session.createQuery(hql, String.class);
+            query.setParameter("studentId", studentId);
+
+            userEmail = query.uniqueResult();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return userEmail;
+
+    }
+
+     // Méthode pour récupérer un utilisateur par l'ID de l'étudiant avec Hibernate
+        public static Users getUserByStudentId(int studentId) {
+            Session session = null;
+            Users user = null;
+
+            try {
+                // Ouvre une session Hibernate
+                session = HibernateUtil.getSessionFactory().openSession();
+
+                // Créer la requête HQL
+                String hql = "FROM Users u WHERE u.student.studentId = :studentId";
+                Query<Users> query = session.createQuery(hql, Users.class);
+                query.setParameter("studentId", studentId);
+
+                // Récupère l'utilisateur
+                user = query.uniqueResult();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (session != null) {
+                    session.close(); // Toujours fermer la session
+                }
+            }
+            return user;
+        }
+    }
+
+
+
+
+

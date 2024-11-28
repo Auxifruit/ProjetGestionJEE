@@ -3,6 +3,8 @@ package com.example.projetjee.model.dao;
 import com.example.projetjee.model.entities.Classes;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.model.entities.Lessonclass;
+import com.example.projetjee.model.entities.Student;
+import com.example.projetjee.util.GMailer;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -17,6 +19,15 @@ public class LessonClassesDAO {
     private static String LESSON_CLASS_ID = "lessonClassId";
     private static String LESSON_ID = "lessonId";
     private static String CLASS_ID = "classId";
+
+    private static GMailer gMailer;
+    static {
+        try {
+            gMailer = new GMailer();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static List<Lessonclass> getAllLessonClasses() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -148,5 +159,86 @@ public class LessonClassesDAO {
 
         return canParticipate;
     }
+
+
+    public static List<Student> getStudentsByClassId(int classId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Student> students = new ArrayList<>();
+
+        try {
+            // Requête HQL pour récupérer les étudiants associés à une classe (classId)
+            String hql = """
+        SELECT s
+        FROM Student s
+        WHERE s.classId = :classId
+        """;
+
+            // Créer la requête
+            Query<Student> query = session.createQuery(hql, Student.class);
+
+            // Définir le paramètre classId
+            query.setParameter("classId", classId);
+
+            // Exécuter la requête et récupérer les résultats
+            students = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();  // Toujours fermer la session après utilisation
+        }
+
+        return students;
+    }
+
+
+    public static List<Student> getStudentsByLessonId(int lessonId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Student> students = new ArrayList<>();
+
+        try {
+            // Requête HQL pour récupérer les étudiants associés à une séance (lessonId)
+            String hql = """
+        SELECT s
+        FROM Student s
+        JOIN Lessonclass lc ON lc.classId = s.classId
+        WHERE lc.lessonId = :lessonId
+        """;
+
+            // Créer la requête
+            Query<Student> query = session.createQuery(hql, Student.class);
+
+            // Définir le paramètre lessonId
+            query.setParameter("lessonId", lessonId);
+
+            // Exécuter la requête et récupérer les résultats
+            students = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();  // Toujours fermer la session après utilisation
+        }
+
+        return students;
+    }
+
+    public static String getLessonNameById(int lessonId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        String lessonName = null;
+
+        try {
+            // Récupérer la leçon par son ID
+            Lesson lesson = session.get(Lesson.class, lessonId);
+            if (lesson != null && lesson.getCourse() != null) {
+                lessonName = lesson.getCourse().getCourseName(); // Récupérer le nom du cours (matière)
+            }
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return lessonName;
+    }
+
 
 }

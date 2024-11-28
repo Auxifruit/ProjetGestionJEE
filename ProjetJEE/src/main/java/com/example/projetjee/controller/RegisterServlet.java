@@ -5,6 +5,7 @@ import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.dao.UserToValidateDAO;
 import com.example.projetjee.model.entities.*;
+import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -80,10 +81,22 @@ public class RegisterServlet extends HttpServlet {
         }
 
         try {
-            request.setAttribute("success", "Inscription réussie !");
+            String subject = "Inscription en attente de validation";
+            String body = "Bonjour " + firstName + ",\n\n" +
+                    "Votre inscription à notre établissement est en attente de validation. Vous serez informé dès que votre compte sera activé.\n\n" +
+                    "Cordialement,\nL'équipe pédagogique";
+
+            // Utilisation de GMailer pour envoyer l'email
+            GMailer gmailer = new GMailer();
+            gmailer.sendMail(email, subject, body);
+
+            // Rediriger vers la page de succès
+            request.setAttribute("success", "Inscription réussie, en attente de validation.");
             request.getRequestDispatcher("WEB-INF/jsp/pages/succes.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "Erreur : Impossible d'envoyer l'email de confirmation.");
+            doGet(request, response);
         }
     }
 }

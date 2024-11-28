@@ -6,18 +6,20 @@
 <html>
 <head>
     <title>Inscription</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Inscription</h1>
+<jsp:include page="/elements/sidebar.jsp" />
 <form action="register" method="post" onsubmit="validateForm(event)">
+    <h1>Inscription</h1>
     <label for="firstName">Prénom :</label>
-    <input type="text" name="firstName" id="firstName" required><br>
+    <input type="text" name="firstName" id="firstName" placeholder="Prénom" required><br>
 
     <label for="lastName">Nom :</label>
-    <input type="text" name="lastName" id="lastName" required><br>
+    <input type="text" name="lastName" id="lastName" placeholder="Nom" required><br>
 
     <label for="email">Email :</label>
-    <input type="email" name="email" id="email" required><br>
+    <input type="email" name="email" id="email" placeholder="Email exemple@xyz.com" required><br>
 
     <label for="password">Mot de passe :</label>
     <input type="password" name="password" id="password" required><br>
@@ -31,29 +33,28 @@
         <option value="<%= Role.teacher %>">Enseignant</option>
     </select></br>
 
-    <div id="majorChoice">
     <%
         List<Major> majorList =(List<Major>) request.getAttribute("majors");
 
         if(majorList != null && !majorList.isEmpty()) {
     %>
-        <label for="major">Filière :</label>
-        <select name="major" id="major">
-            <option value="" selected="selected">Choisir une filière</option>
-            <%
-                for(Major major : majorList) {
-            %>
-            <option value="<%= major.getMajorId() %>"><%= major.getMajorName() %></option>
-            <%
-                }
-            %>
-        </select><br>
+    <label for="major" class="majorChoice">Filière :</label>
+    <select name="major" id="major" class="majorChoice">
+        <option value="" selected="selected">Choisir une filière</option>
+        <%
+            for(Major major : majorList) {
+        %>
+        <option value="<%= major.getMajorId() %>"><%= major.getMajorName() %></option>
+        <%
+            }
+        %>
+    </select><br>
     <%
         }
     %>
-    </div>
 
     <button type="submit">S'inscrire</button>
+    <p>Pas encore de compte ? <a href="${pageContext.request.contextPath}/login">Connectez-vous.</a></p>
 </form>
 
 <% if (request.getAttribute("error") != null) { %>
@@ -66,13 +67,17 @@
 <script>
     function toggleMajorChoice() {
         const roleSelect = document.getElementById("role");
-        const majorChoice = document.getElementById("majorChoice");
+        const majorChoices = document.getElementsByClassName("majorChoice");
         const majorSelect = document.getElementById("major");
 
         if (roleSelect.value === "student") {
-            majorChoice.style.display = "block";
+            for (let i = 0; i < majorChoices.length; i++) {
+                majorChoices[i].style.display = "block";
+            }
         } else {
-            majorChoice.style.display = "none";
+            for (let i = 0; i < majorChoices.length; i++) {
+                majorChoices[i].style.display = "none";
+            }
             majorSelect.value = "";
         }
     }

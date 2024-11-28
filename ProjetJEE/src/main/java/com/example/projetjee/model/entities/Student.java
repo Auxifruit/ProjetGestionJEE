@@ -14,6 +14,10 @@ public class Student {
     @Column(name = "majorId")
     private Integer majorId;
 
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId", insertable = false, updatable = false)
+    private Users user;  // Association à la classe Users
+
     public int getStudentId() {
         return studentId;
     }
@@ -38,6 +42,14 @@ public class Student {
         this.majorId = majorId;
     }
 
+    // Getters et setters pour l'attribut 'user'
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

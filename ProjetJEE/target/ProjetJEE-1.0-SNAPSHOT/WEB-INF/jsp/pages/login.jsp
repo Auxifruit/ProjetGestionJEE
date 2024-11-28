@@ -3,18 +3,24 @@
 <html>
 <head>
     <title>Connexion</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<h1>Connexion</h1>
-<form action="login" method="post">
+<jsp:include page="/elements/sidebar.jsp" />
+
+<form id="form" action="login" method="post">
+    <h1>Connexion</h1>
     <label for="email">Email :</label>
-    <input type="email" name="email" id="email" required><br>
+    <input type="email" name="email" id="email" placeholder="Saisissez votre Email" required><br>
     <label for="password">Mot de passe :</label>
-    <input type="password" name="password" id="password" required><br>
+    <input type="password" name="password" id="password" placeholder="Saisissez votre mot de passe" required><br>
+    <% if (request.getAttribute("error") != null) { %>
+    <p style="color: red;"><%= request.getAttribute("error") %></p><br>
+    <% } %>
     <button type="submit">Se connecter</button>
+    <p>Pas encore de compte ? <a href="${pageContext.request.contextPath}/register">Inscrivez-vous.</a></p>
 </form>
-<% if (request.getAttribute("error") != null) { %>
-<p style="color: red;"><%= request.getAttribute("error") %></p>
-<% } %>
+
+
 </body>
 </html>

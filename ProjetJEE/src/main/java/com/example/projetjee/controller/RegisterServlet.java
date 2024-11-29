@@ -57,7 +57,7 @@ public class RegisterServlet extends HttpServlet {
         }
 
         Userstovalidate user = new Userstovalidate();
-        user.setUserToValidatePassword(password);
+        user.setUserToValidatePassword(HashPswdUtil.hashPassword(password));
         user.setUserToValidateLastName(lastName);
         user.setUserToValidateName(firstName);
         user.setUserToValidateEmail(email);

@@ -3,8 +3,6 @@ package com.example.projetjee.controller;
 import com.example.projetjee.model.dao.*;
 import com.example.projetjee.model.entities.*;
 import com.example.projetjee.model.entities.Users;
-
-import com.example.projetjee.util.DateUtil;
 import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -85,11 +83,11 @@ public class GradeCreationServlet extends HttpServlet {
             if (studentEmail != null) {
                 // Préparer le sujet et le corps de l'email
                 String subject = "Nouvelle note reçue";
-                String body = "Bonjour,\n\n" +
-                        "Vous avez reçu une nouvelle note pour le cours : " + grade.getGradeName() + ".\n" +
-                        "Note : " + grade.getGradeValue() + "/20\n" +
-                        "Coefficient : " + grade.getGradeCoefficient() + "\n\n" +
-                        "Cordialement,\nL'équipe pédagogique";
+                String body = "Bonjour,\n\n"
+                    + "Vous avez reçu une nouvelle note pour le cours : " + grade.getGradeName() + ".\n"
+                    + "Note : " + grade.getGradeValue() + "/20\n"
+                    + "Coefficient : " + grade.getGradeCoefficient() + "\n\n"
+                    + "Cordialement,\nL'équipe pédagogique";
 
                 // Envoi de l'email
                 try {
@@ -99,18 +97,18 @@ public class GradeCreationServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                     request.setAttribute("erreur", "Erreur lors de l'envoi de l'email.");
-                    doGet(request, response);
+                    request.getRequestDispatcher("gradeManager-servlet").forward(request, response);
                 }
             } else {
                 request.setAttribute("erreur", "Utilisateur non trouvé pour l'étudiant.");
                 doGet(request, response);
             }
-
         } else {
             // Si une erreur survient lors de l'ajout de la note
             request.setAttribute("erreur", error);
             doGet(request, response);
         }
     }
+
 
 }

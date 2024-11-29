@@ -1,5 +1,6 @@
 package com.example.projetjee.controller;
 
+import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.Role;
 import com.example.projetjee.model.entities.Users;
@@ -50,7 +51,12 @@ public class StudentGradeReportServlet extends HttpServlet {
         request.setAttribute("student", getUserById(userId));
 
         // set className
-        request.setAttribute("className", getClasseById(getStudentById(getUserById(userId).getUserId()).getClassId()).getClassName());
+        Integer classId = StudentDAO.getStudentById(userId).getClassId();
+        if(classId == null) {
+            request.setAttribute("className", "Aucune");
+        } else {
+            request.setAttribute("className", getClasseById(classId).getClassName());
+        }
 
         // set mean (with the mean calculator of the PDF generator
         double overallMean = pdfGenerator.calculateAverage(getGradeByStudentId(userId)); // get the mean

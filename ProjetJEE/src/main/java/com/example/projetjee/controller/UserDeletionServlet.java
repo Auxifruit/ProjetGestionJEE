@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -21,6 +22,8 @@ public class UserDeletionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        Integer connectedUserId = (Integer) session.getAttribute("user");
         String userIdString = request.getParameter("userId");
 
         if(userIdString == null || userIdString.isEmpty()) {
@@ -30,9 +33,14 @@ public class UserDeletionServlet extends HttpServlet {
         }
 
         int userId = Integer.parseInt(userIdString);
-
         Users user = UserDAO.getUserById(userId);
         Role role = user.getUserRole();
+
+        if(connectedUserId.equals(userId)) {
+            request.setAttribute("erreur", "Erreur : Vous ne pouvez pas vous supprimer vous-même.");
+            request.getRequestDispatcher("userManager-servlet?roleFilter="+role).forward(request, response);
+            return;
+        }
 
         if(user == null) {
             request.setAttribute("erreur", "Erreur : L'utilisateur n'existe pas.");

@@ -374,35 +374,8 @@ public class UserDAO {
         }
 
         return userEmail;
-
     }
-
-     // Méthode pour récupérer un utilisateur par l'ID de l'étudiant avec Hibernate
-        public static Users getUserByStudentId(int studentId) {
-            Session session = null;
-            Users user = null;
-
-            try {
-                // Ouvre une session Hibernate
-                session = HibernateUtil.getSessionFactory().openSession();
-
-                // Créer la requête HQL
-                String hql = "FROM Users u WHERE u.student.studentId = :studentId";
-                Query<Users> query = session.createQuery(hql, Users.class);
-                query.setParameter("studentId", studentId);
-
-                // Récupère l'utilisateur
-                user = query.uniqueResult();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (session != null) {
-                    session.close(); // Toujours fermer la session
-                }
-            }
-            return user;
-        }
-    }
+}
 
 
 

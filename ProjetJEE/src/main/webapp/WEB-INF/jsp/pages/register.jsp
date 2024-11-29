@@ -53,16 +53,16 @@
         }
     %>
 
+    <% if (request.getAttribute("error") != null) { %>
+    <p style="color: red;"><%= request.getAttribute("error") %></p>
+    <% } %>
+    <% if (request.getAttribute("success") != null) { %>
+    <p style="color: green;"><%= request.getAttribute("success") %></p>
+    <% } %>
+
     <button type="submit">S'inscrire</button>
     <p>Pas encore de compte ? <a href="${pageContext.request.contextPath}/login">Connectez-vous.</a></p>
 </form>
-
-<% if (request.getAttribute("error") != null) { %>
-<p style="color: red;"><%= request.getAttribute("error") %></p>
-<% } %>
-<% if (request.getAttribute("success") != null) { %>
-<p style="color: green;"><%= request.getAttribute("success") %></p>
-<% } %>
 </body>
 <script>
     function toggleMajorChoice() {

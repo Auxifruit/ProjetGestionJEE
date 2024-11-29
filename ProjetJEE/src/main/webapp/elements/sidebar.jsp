@@ -80,6 +80,9 @@
         <% if (Role.teacher.equals(UserDAO.getUserById(userId).getUserRole())) { %>
         <li><a href="${pageContext.request.contextPath}/entry-note-servlet?userId=<%= userId %>">Saisie note</a></li>
         <% } %>
+        <% if (Role.student.equals(UserDAO.getUserById(userId).getUserRole())) { %>
+        <li><a href="${pageContext.request.contextPath}/student-grade-report-servlet?userId=<%= userId %>">Ses notes</a></li>
+        <% } %>
         <li><a href="${pageContext.request.contextPath}/personalInformation-servlet">Informations personnelles</a></li>
         <li><a href="${pageContext.request.contextPath}/LogoutServlet">Déconnexion</a></li>
         <% } %>

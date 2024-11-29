@@ -161,6 +161,7 @@
         <button onclick="toggleDisplay()">Afficher ou non les cours passés</button>
     </div>
     <div id="OldInfos">
+            <h2>Cours à venir :</h2>
             <%
                 if(futureLessons == null || futureLessons.isEmpty()) {
             %>

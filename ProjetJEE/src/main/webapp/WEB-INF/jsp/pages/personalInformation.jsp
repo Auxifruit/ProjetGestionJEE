@@ -2,6 +2,10 @@
 <%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="com.example.projetjee.model.entities.Role" %>
+<%@ page import="com.example.projetjee.model.dao.StudentDAO" %>
+<%@ page import="com.example.projetjee.model.dao.ClasseDAO" %>
+<%@ page import="com.example.projetjee.model.dao.MajorDAO" %>
 
 <%
   Integer userId = (Integer) session.getAttribute("user");
@@ -68,33 +72,72 @@
 </head>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
-
-<form id="form" action="editInformations" method="post">
-  <h1>Modifier mes informations</h1>
-  <!-- Champ caché pour l'ID utilisateur -->
-  <input type="hidden" id="userId" name="userId" value="<%= user.getUserId() %>">
-
-  <label>Email :</label>
-  <input type="text" id="email" name="email" value="<%= user.getUserEmail() %>" readonly>
-
-  <label>Nom :</label>
-  <input type="text" id="nom" name="nom" value="<%= user.getUserLastName() %>" readonly>
-
-  <label>Prénom :</label>
-  <input type="text" id="prenom" name="prenom" value="<%= user.getUserName() %>" readonly>
-
-  <label>Date de naissance :</label>
-  <input type="date" id="dateNaissance" name="dateNaissance" value="<%= user.getUserBirthdate() %>" readonly>
-
-  <label>Mot de passe :</label>
-  <div>
-    <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getUserPassword() %>" readonly>
+<div>
+  <h1>Mes informations</h1>
+  <%
+    if(user.getUserRole().equals(Role.student)) {
+      Integer classId = StudentDAO.getStudentById(userId).getClassId();
+      Integer majorId = StudentDAO.getStudentById(userId).getMajorId();
+  %>
+  <div id="OldInfos">
+    <h3>Informations étudiantes</h3>
+    <p>Classe :
+      <%
+        if(classId != null) {
+      %>
+      <%= ClasseDAO.getClasseById(classId).getClassName() %>
+      <%
+      } else {
+      %>
+      Aucune
+      <%
+        }
+      %>
+    </p>
+    <p>Filière :
+      <%
+        if(majorId != null) {
+      %>
+      <%= MajorDAO.getMajorById(majorId).getMajorName() %>
+      <%
+      } else {
+      %>
+      Aucune
+      <%
+        }
+      %>
+    </p>
   </div>
+  <%
+    }
+  %>
+  <form action="editInformations" method="post">
+    <h3>Informations personnelles</h3>
+    <!-- Champ caché pour l'ID utilisateur -->
+    <input type="hidden" id="userId" name="userId" value="<%= user.getUserId() %>">
 
-  <!-- Boutons -->
-  <button type="button" id="btnModify" onclick="toggleEditMode(true)">Modifier</button>
-  <button type="submit" id="btnSave" style="display: none;">Enregistrer</button>
-  <button type="button" id="btnCancel" style="display: none;" onclick="cancelEdit()">Annuler</button>
-</form>
+    <label>Email :</label>
+    <input type="text" id="email" name="email" value="<%= user.getUserEmail() %>" readonly>
+
+    <label>Nom :</label>
+    <input type="text" id="nom" name="nom" value="<%= user.getUserLastName() %>" readonly>
+
+    <label>Prénom :</label>
+    <input type="text" id="prenom" name="prenom" value="<%= user.getUserName() %>" readonly>
+
+    <label>Date de naissance :</label>
+    <input type="date" id="dateNaissance" name="dateNaissance" value="<%= user.getUserBirthdate() %>" readonly>
+
+    <label>Mot de passe :</label>
+    <div>
+      <input type="password" id="motDePasse" name="motDePasse" value="<%= user.getUserPassword() %>" readonly>
+    </div>
+
+    <!-- Boutons -->
+    <button type="button" id="btnModify" onclick="toggleEditMode(true)">Modifier</button>
+    <button type="submit" id="btnSave" style="display: none;">Enregistrer</button>
+    <button type="button" id="btnCancel" style="display: none;" onclick="cancelEdit()">Annuler</button>
+  </form>
+</div>
 </body>
 </html>

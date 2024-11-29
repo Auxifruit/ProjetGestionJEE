@@ -6,6 +6,7 @@ import com.example.projetjee.model.dao.TeacherDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.*;
 import com.example.projetjee.util.GMailer;
+import com.example.projetjee.util.HashPswdUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -49,7 +50,7 @@ public class UserCreationServlet extends HttpServlet {
         user.setUserLastName(newUserLastName);
         user.setUserName(newUserName);
         user.setUserEmail(newUserEmail);
-        user.setUserPassword(newUserPassword);
+        user.setUserPassword(HashPswdUtil.hashPassword(newUserPassword));
         user.setUserBirthdate(newUserBirthdate);
         user.setUserRole(Role.valueOf(newUserRole));
 

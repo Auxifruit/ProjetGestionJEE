@@ -198,7 +198,7 @@
     <input type="hidden" name="courseId" id="selected-course-id" value="">
     <input type="hidden" name="classId" id="selected-class-id" value="">
     <input type="hidden" name="teacherID" value="<%=request.getAttribute("teacherID")%>">
-    <button type="submit" id="submit-button" onclick="validateCriteria()>OK</button>
+    <button type="submit" id="submit-button" onclick="validateCriteria()">OK</button>
   </form>
 
   <hr>

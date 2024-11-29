@@ -1,10 +1,10 @@
 package com.example.projetjee.controller;
 
+import com.example.projetjee.model.dao.ClasseDAO;
 import com.example.projetjee.model.dao.LessonClassesDAO;
+import com.example.projetjee.model.dao.LessonDAO;
 import com.example.projetjee.model.dao.UserDAO;
-import com.example.projetjee.model.entities.Lessonclass;
-import com.example.projetjee.model.entities.Student;
-import com.example.projetjee.model.entities.Users;
+import com.example.projetjee.model.entities.*;
 import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +19,20 @@ import java.util.List;
 public class LessonClassesAssignationServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        List<Lesson> lessonList = LessonDAO.getAllLesson();
+
+        request.setAttribute("lessons", lessonList);
+
+        try {
+            request.getRequestDispatcher("WEB-INF/jsp/pages/lessonManager.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String classeIdString = request.getParameter("classId");
         String lessonIdString = request.getParameter("lessonId");
 
@@ -28,7 +41,7 @@ public class LessonClassesAssignationServlet extends HttpServlet {
 
         if(classeIdString == null || classeIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une classe.");
-            request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
+            doGet(request, response);
             return;
         }
 
@@ -36,7 +49,7 @@ public class LessonClassesAssignationServlet extends HttpServlet {
 
         if(LessonClassesDAO.canClassParticipate(classeId, lessonId) == false) {
             request.setAttribute("erreur", "Erreur : La classe a une séance à ces horaires.");
-            request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
+            doGet(request, response);
             return;
         }
 
@@ -84,7 +97,7 @@ public class LessonClassesAssignationServlet extends HttpServlet {
         }
         else {
             request.setAttribute("erreur", "Erreur : Erreur lors de l'assignation de la classe.");
-            request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
+            doGet(request, response);
         }
     }
 }

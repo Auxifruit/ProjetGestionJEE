@@ -145,6 +145,13 @@
         <%
             }
         %>
+        <%
+            if(roleFilter != null && roleFilter.equals(Role.student)) {
+        %>
+        <button type="submit" formaction="student-grade-report-servlet">Voir les notes de l'utilisateur</button>
+        <%
+            }
+        %>
     </form>
     <%
         }

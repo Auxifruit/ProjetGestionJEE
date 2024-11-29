@@ -10,13 +10,9 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class SubjectDAO {
-    private static final String SUBJECT_TABLE = "Subjects";
-    private static final String SUBJECT_ID = "subjectId";
-    private static final String SUBJECT_NAME = "subjectName";
-
     public static List<Subjects> getAllSubjects() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Subjects> subjects = session.createQuery("FROM " + SUBJECT_TABLE, Subjects.class).list();
+        List<Subjects> subjects = session.createQuery("FROM Subjects ", Subjects.class).list();
         session.close();
         return subjects;
     }

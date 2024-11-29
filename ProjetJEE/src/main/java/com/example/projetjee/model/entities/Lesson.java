@@ -24,10 +24,12 @@ public class Lesson {
     @Column(name = "teacherId")
     private Integer teacherId;
 
+    /*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "courseId", referencedColumnName = "courseId", insertable = false, updatable = false)
     private Course course; // Relation vers Course
-
+    */
+    
     public int getLessonId() {
         return lessonId;
     }
@@ -60,6 +62,7 @@ public class Lesson {
         this.courseId = courseId;
     }
 
+    /*
     public Course getCourse() {
         return course;
     }
@@ -67,6 +70,7 @@ public class Lesson {
     public void setCourse(Course course) {
         this.course = course;
     }
+    */
 
     public Integer getTeacherId() {
         return teacherId;

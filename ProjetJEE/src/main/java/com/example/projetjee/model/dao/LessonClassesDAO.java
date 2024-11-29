@@ -4,7 +4,6 @@ import com.example.projetjee.model.entities.Classes;
 import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.model.entities.Lessonclass;
 import com.example.projetjee.model.entities.Student;
-import com.example.projetjee.util.GMailer;
 import com.example.projetjee.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -15,19 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LessonClassesDAO {
-    private static String LESSON_CLASS_TABLE = "Lessonclass";
-    private static String LESSON_CLASS_ID = "lessonClassId";
-    private static String LESSON_ID = "lessonId";
-    private static String CLASS_ID = "classId";
-
-    private static GMailer gMailer;
-    static {
-        try {
-            gMailer = new GMailer();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static List<Lessonclass> getAllLessonClasses() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -69,7 +55,7 @@ public class LessonClassesDAO {
 
     public static Lessonclass getLessonClassByLessonIdAndClassId(int lessonId, int classId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Lessonclass lessonclass = session.createQuery("From Lessonclass where " + LESSON_ID + " = :lessonId AND " + CLASS_ID + " = :classId", Lessonclass.class).setParameter("lessonId", lessonId).setParameter("classId", classId).getSingleResultOrNull();
+        Lessonclass lessonclass = session.createQuery("From Lessonclass where lessonId = :lessonId AND classId = :classId", Lessonclass.class).setParameter("lessonId", lessonId).setParameter("classId", classId).getSingleResultOrNull();
         session.close();
         return lessonclass;
     }
@@ -160,7 +146,6 @@ public class LessonClassesDAO {
         return canParticipate;
     }
 
-
     public static List<Student> getStudentsByClassId(int classId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Student> students = new ArrayList<>();
@@ -189,7 +174,6 @@ public class LessonClassesDAO {
 
         return students;
     }
-
 
     public static List<Student> getStudentsByLessonId(int lessonId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -228,8 +212,8 @@ public class LessonClassesDAO {
         try {
             // Récupérer la leçon par son ID
             Lesson lesson = session.get(Lesson.class, lessonId);
-            if (lesson != null && lesson.getCourse() != null) {
-                lessonName = lesson.getCourse().getCourseName(); // Récupérer le nom du cours (matière)
+            if (lesson != null && CourseDAO.getCourseById(lesson.getCourseId()) != null) {
+                lessonName = CourseDAO.getCourseById(lesson.getCourseId()).getCourseName(); // Récupérer le nom du cours (matière)
             }
         } catch (HibernateException e) {
             e.printStackTrace();
@@ -239,6 +223,5 @@ public class LessonClassesDAO {
 
         return lessonName;
     }
-
 
 }

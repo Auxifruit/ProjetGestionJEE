@@ -1,8 +1,7 @@
 package com.example.projetjee.controller;
 
-import com.example.projetjee.model.dao.LessonClassesDAO;
 import com.example.projetjee.model.dao.StudentDAO;
-import com.example.projetjee.model.entities.Lessonclass;
+import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
@@ -38,12 +37,12 @@ public class StudentClassesAssignationServlet extends HttpServlet {
         if(error == null) {
             // Si l'affectation a réussi, envoyer un email de notification
             String subject = "Nouvelle affectation de classe";
-            String body = "Bonjour " + student.getUser().getUserName() + ",\n\n" +
-                    "Nous avons le plaisir de vous informer que vous avez été affecté(e) à une nouvelle classe :\n" +
-                    "Classe ID : " + classeId + "\n\n" +
-                    "Cordialement,\nL'équipe pédagogique";
+            String body = "Bonjour " + UserDAO.getUserById(student.getStudentId()).getUserName() + ",\n\n"
+                    + "Nous avons le plaisir de vous informer que vous avez été affecté(e) à une nouvelle classe :\n"
+                    + "Classe ID : " + classeId + "\n\n"
+                    + "Cordialement,\nL'équipe pédagogique";
 
-            String email = student.getUser().getUserEmail();  // Accéder à l'email via getUser().getUserEmail()
+            String email = UserDAO.getUserById(student.getStudentId()).getUserEmail();  // Accéder à l'email via getUser().getUserEmail()
 
             try {
                 // Envoyer l'email de notification
@@ -58,10 +57,12 @@ public class StudentClassesAssignationServlet extends HttpServlet {
 
             // Rediriger vers le gestionnaire de classes
             request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
-        } else {
+        }
+        else {
             // Si l'affectation a échoué, afficher une erreur
             request.setAttribute("erreur", error);
             request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
         }
     }
 }
+

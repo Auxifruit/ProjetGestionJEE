@@ -112,21 +112,18 @@ public class LessonClassesDAO {
         boolean canParticipate = false;
 
         try {
-            // Récupérer la leçon pour les dates
             Lesson lesson = LessonDAO.getLessonById(lessonId);
 
             String hql = """
-            SELECT COUNT(*)
-            FROM Lessonclass sc
-            JOIN Lesson s
-            WHERE sc.classId = :classId
-              AND s.lessonId != :excludedLessonId
-              AND (
-                    (s.lessonStartDate < :startDate AND s.lessonEndDate > :endDate)
-                 OR (s.lessonStartDate < :startDate AND s.lessonEndDate > :endDate)
-                 OR (s.lessonStartDate >= :startDate AND s.lessonEndDate <= :endDate)
-                  )
-            """;
+                SELECT COUNT(*)
+                FROM Lessonclass lc
+                JOIN Lesson l ON lc.lessonId = l.lessonId
+                WHERE lc.classId = :classId
+                  AND l.lessonId != :excludedLessonId
+                  AND (
+                        (l.lessonStartDate < :endDate AND l.lessonEndDate > :startDate)
+                      )
+                """;
 
             Query<Long> query = session.createQuery(hql, Long.class);
             query.setParameter("classId", classId);
@@ -135,12 +132,12 @@ public class LessonClassesDAO {
             query.setParameter("endDate", lesson.getLessonEndDate());
 
             Long count = query.uniqueResult();
-            canParticipate = count == 0; // Pas de conflit, participation possible
+            canParticipate = count == 0;
 
         } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
-            session.close(); // Toujours fermer la session après utilisation
+            session.close();
         }
 
         return canParticipate;

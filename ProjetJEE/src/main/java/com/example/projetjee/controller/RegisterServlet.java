@@ -85,7 +85,7 @@ public class RegisterServlet extends HttpServlet {
 
             // Utilisation de GMailer pour envoyer l'email
             GMailer gmailer = new GMailer();
-            gmailer.sendMail(email, subject, body);
+            gmailer.sendMail(subject, body, email);
 
             // Rediriger vers la page de succès
             request.setAttribute("success", "Inscription réussie, en attente de validation.");

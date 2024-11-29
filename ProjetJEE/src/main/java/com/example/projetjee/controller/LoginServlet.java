@@ -1,6 +1,7 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.UserDAO;
+import com.example.projetjee.util.HashPswdUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,7 +36,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        Integer userId = UserDAO.userConnection(email, password);
+        Integer userId = UserDAO.userConnection(email, HashPswdUtil.hashPassword(password));
 
         if(userId == null) {
             request.setAttribute("error", "Erreur : L'email ou le mot de passe est incorrecte");

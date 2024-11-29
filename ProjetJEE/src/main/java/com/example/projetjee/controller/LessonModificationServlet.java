@@ -71,6 +71,7 @@ public class LessonModificationServlet extends HttpServlet {
         if(newStartDate == null || newStartDate.isEmpty()) {
             newStartDate = lesson.getLessonStartDate().toString();
             newStartDate = newStartDate.substring(0, 16);
+            newStartDate = newStartDate.replace(" ", "T");
         }
         else {
             dateModified = true;
@@ -79,6 +80,7 @@ public class LessonModificationServlet extends HttpServlet {
         if(newEndDate == null || newEndDate.isEmpty()) {
             newEndDate = lesson.getLessonEndDate().toString();
             newEndDate = newEndDate.substring(0, 16);
+            newEndDate = newEndDate.replace(" ", "T");
         }
         else {
             dateModified = true;
@@ -103,11 +105,13 @@ public class LessonModificationServlet extends HttpServlet {
             teacherModified = true;
         }
 
-        String erreur = DateUtil.areDatesValid(newStartDate, newEndDate);
-        if(dateModified == true && erreur != null) {
-            request.setAttribute("erreur", erreur);
-            doGet(request, response);
-            return;
+        if(dateModified == true) {
+            String erreur = DateUtil.areDatesValid(newStartDate, newEndDate);
+            if(erreur != null) {
+                request.setAttribute("erreur", erreur);
+                doGet(request, response);
+                return;
+            }
         }
 
         if((dateModified == true || teacherModified == true ) && LessonDAO.isLessonPossible(lessonId, newTeacherId, newStartDate, newEndDate) == false) {
@@ -116,8 +120,10 @@ public class LessonModificationServlet extends HttpServlet {
             return;
         }
 
-        lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(newStartDate));
-        lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(newEndDate));
+        if(dateModified == true) {
+            lesson.setLessonStartDate(DateUtil.dateStringToTimestamp(newStartDate));
+            lesson.setLessonEndDate(DateUtil.dateStringToTimestamp(newEndDate));
+        }
         lesson.setCourseId(newCourseId);
         lesson.setTeacherId(newTeacherId);
 
@@ -126,31 +132,38 @@ public class LessonModificationServlet extends HttpServlet {
             // Récupérer les étudiants inscrits à la séance modifiée
             List<Student> studentsInLesson = LessonClassesDAO.getStudentsByLessonId(lessonId);
 
-            // Pour chaque étudiant, envoyer un email de notification
-            for (Student student : studentsInLesson) {
-                String studentEmail = UserDAO.getUserEmailById(student.getStudentId());
+            System.out.println("studentsInLesson size : " + studentsInLesson.size());
 
-                if (studentEmail != null) {
-                    String subject = "Modification de votre séance";
-                    String body = "Bonjour,\n\n" +
-                            "Nous vous informons que la séance pour la matière " + lesson.getCourseId() + " a été modifiée.\n" +
-                            "Nouvelle date : " + newStartDate + " - " + newEndDate + "\n\n" +
-                            "Cordialement,\nL'équipe pédagogique";
+            if(studentsInLesson != null && !studentsInLesson.isEmpty()) {
+                // Pour chaque étudiant, envoyer un email de notification
+                for (Student student : studentsInLesson) {
+                    String studentEmail = UserDAO.getUserEmailById(student.getStudentId());
 
-                    try {
-                        GMailer gmailer = new GMailer();  // Créer une instance de GMailer
-                        gmailer.sendMail(subject, body, studentEmail);  // Envoyer l'email
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (studentEmail != null) {
+                        String subject = "Modification de votre séance";
+                        String body = "Bonjour,\n\n"
+                                + "Nous vous informons que la séance pour la matière " + lesson.getCourseId() + " a été modifiée.\n"
+                                + "Nouvelle date : " + newStartDate + " - " + newEndDate + "\n\n"
+                                + "Cordialement,\nL'équipe pédagogique";
+
+                        try {
+                            GMailer gmailer = new GMailer();
+                            gmailer.sendMail(subject, body, studentEmail);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
+
             // Rediriger vers la page de gestion des séances
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
-        } else {
+        }
+        else {
             request.setAttribute("erreur", error);
             doGet(request, response);
         }
+
     }
 
 

@@ -79,6 +79,7 @@
         <% } %>
         <% if (Role.teacher.equals(UserDAO.getUserById(userId).getUserRole())) { %>
         <li><a href="${pageContext.request.contextPath}/entry-note-servlet?userId=<%= userId %>">Saisie note</a></li>
+        <li><a href="${pageContext.request.contextPath}/teacherGrade-servlet">Voir les notes saisies</a></li>
         <% } %>
         <% if (Role.student.equals(UserDAO.getUserById(userId).getUserRole())) { %>
         <li><a href="${pageContext.request.contextPath}/student-grade-report-servlet?userId=<%= userId %>">Ses notes</a></li>

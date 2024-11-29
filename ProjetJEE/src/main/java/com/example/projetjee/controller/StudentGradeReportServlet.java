@@ -1,6 +1,7 @@
 package com.example.projetjee.controller;
 
-import com.example.projetjee.model.entities.Grade;
+import com.example.projetjee.model.dao.UserDAO;
+import com.example.projetjee.model.entities.Role;
 import com.example.projetjee.model.entities.Users;
 import com.example.projetjee.util.GeneratorPdfGradeReport;
 import jakarta.servlet.ServletException;
@@ -8,15 +9,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static com.example.projetjee.model.dao.ClasseDAO.getClasseById;
 import static com.example.projetjee.model.dao.GradeDAO.getGradeByStudentId;
-import static com.example.projetjee.model.dao.GradeDAO.insertGrade;
 import static com.example.projetjee.model.dao.StudentDAO.getStudentById;
 import static com.example.projetjee.model.dao.UserDAO.getUserById;
 
@@ -25,11 +23,24 @@ public class StudentGradeReportServlet extends HttpServlet {
     private final GeneratorPdfGradeReport pdfGenerator = new GeneratorPdfGradeReport();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        HttpSession session = request.getSession(false);
+        Integer connectedUserId = (Integer) session.getAttribute("user");
+        String userIdString = request.getParameter("userId");
+
+        if(connectedUserId == null || (userIdString == null || userIdString.isEmpty())) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
+
+        Users connectedUser = UserDAO.getUserById(connectedUserId);
+        Integer userId = Integer.parseInt(userIdString);
+
+        if(connectedUser.getUserRole().equals(Role.student) && !connectedUserId.equals(userId)) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
 
         // if not a student go home
-        if(getUserById(userId).getRoleId() != 1) {
-            request.getRequestDispatcher("/WEB-INF/jsp/pages/index.jsp").forward(request, response);
+        if(getUserById(userId).getUserRole() != Role.student) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
 
         // get the function initialy use for the PDF generator (had to set it public)
@@ -79,4 +90,3 @@ public class StudentGradeReportServlet extends HttpServlet {
         }
     }
 }
-

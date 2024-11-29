@@ -1,5 +1,7 @@
 package com.example.projetjee.util;
 
+import com.example.projetjee.model.dao.ClasseDAO;
+import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.entities.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -60,7 +62,13 @@ public class GeneratorPdfGradeReport {
         Font infoFont = new Font(Font.FontFamily.HELVETICA, 12);
         document.add(new Paragraph("Étudiant: " + user.getUserName() + " " + user.getUserLastName(), infoFont));
         document.add(new Paragraph("Mail: " + user.getUserEmail(), infoFont));
-        String class_name = getClasseById(getStudentById(user.getUserId()).getClassId()).getClassName();
+        String class_name = "Aucune";
+
+        Integer classId = StudentDAO.getStudentById(user.getUserId()).getClassId();
+        if(classId != null) {
+            class_name = ClasseDAO.getClasseById(classId).getClassName();
+        }
+
         document.add(new Paragraph("Classe: " + class_name, infoFont));
         document.add(Chunk.NEWLINE);
     }

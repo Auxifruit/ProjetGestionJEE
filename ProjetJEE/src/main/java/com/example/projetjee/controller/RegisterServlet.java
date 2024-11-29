@@ -5,6 +5,7 @@ import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.dao.UserToValidateDAO;
 import com.example.projetjee.model.entities.*;
 import com.example.projetjee.util.GMailer;
+import com.example.projetjee.util.HashPswdUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

@@ -147,4 +147,23 @@ public class GradeDAO {
             throw new RuntimeException("Erreur de récupération des notes pour studentID: " + studentId, e);
         }
     }
+
+    public static List<Grade> getGradeByTeacherId(int teacherId) {
+        if (teacherId <= 0) {
+            throw new IllegalArgumentException("studentId can't be less or equal to 0");
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // HQL
+            String hql = "FROM Grade g WHERE g.teacherId = :teacherId";
+
+            Query<Grade> query = session.createQuery(hql, Grade.class);
+            query.setParameter("teacherId", teacherId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de récupération des notes pour teacherId: " + teacherId, e);
+        }
+    }
 }

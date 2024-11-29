@@ -1,7 +1,9 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.LessonClassesDAO;
+import com.example.projetjee.model.dao.LessonDAO;
 import com.example.projetjee.model.dao.UserDAO;
+import com.example.projetjee.model.entities.Lesson;
 import com.example.projetjee.model.entities.Lessonclass;
 import com.example.projetjee.model.entities.Student;
 import com.example.projetjee.model.entities.Users;
@@ -17,6 +19,19 @@ import java.util.List;
 
 @WebServlet(name = "lessonClassesUnassignationServlet", value = "/lessonClassesUnassignation-servlet")
 public class LessonClassesUnassignationServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        List<Lesson> lessonList = LessonDAO.getAllLesson();
+
+        request.setAttribute("lessons", lessonList);
+
+        try {
+            request.getRequestDispatcher("WEB-INF/jsp/pages/lessonManager.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{

@@ -1,7 +1,6 @@
 package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.MajorDAO;
-import com.example.projetjee.model.dao.StudentDAO;
 import com.example.projetjee.model.dao.UserDAO;
 import com.example.projetjee.model.dao.UserToValidateDAO;
 import com.example.projetjee.model.entities.*;
@@ -82,9 +81,7 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             String subject = "Inscription en attente de validation";
-            String body = "Bonjour " + firstName + ",\n\n" +
-                    "Votre inscription à notre établissement est en attente de validation. Vous serez informé dès que votre compte sera activé.\n\n" +
-                    "Cordialement,\nL'équipe pédagogique";
+            String body = "Bonjour " + firstName + ",\n\n Votre inscription à notre établissement est en attente de validation. Vous serez informé dès que votre compte sera activé.\n\nCordialement,\nL'équipe pédagogique";
 
             // Utilisation de GMailer pour envoyer l'email
             GMailer gmailer = new GMailer();

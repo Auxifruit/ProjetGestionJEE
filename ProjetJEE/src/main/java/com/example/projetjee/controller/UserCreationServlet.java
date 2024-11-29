@@ -74,11 +74,11 @@ public class UserCreationServlet extends HttpServlet {
                 }
 
                 String subject = "Bienvenue à l'école";
-                String body = "Bonjour " + student.getUser().getUserName() + ",\n\n" +
-                        "Nous avons le plaisir de vous informer que vous avez été ajouté(e) à notre école en tant qu'étudiant(e).\n\n" +
-                        "Cordialement,\nL'équipe pédagogique";
+                String body = "Bonjour " + UserDAO.getUserById(student.getStudentId()).getUserName() + ",\n\n"
+                        + "Nous avons le plaisir de vous informer que vous avez été ajouté(e) à notre école en tant qu'étudiant(e).\n\n"
+                        + "Cordialement,\nL'équipe pédagogique";
 
-                String email = student.getUser().getUserEmail();  // Récupérer l'email de l'étudiant
+                String email = UserDAO.getUserById(student.getStudentId()).getUserEmail();  // Récupérer l'email de l'étudiant
 
                 try {
                     // Envoyer l'email de notification
@@ -87,11 +87,10 @@ public class UserCreationServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                     request.setAttribute("erreur", "Erreur : Impossible d'envoyer l'email de bienvenue.");
-                    doGet(request, response);
                     return;
                 }
-                break;
 
+                break;
             case teacher:
                 Teacher teacher = new Teacher();
                 teacher.setTeacherId(user.getUserId());
@@ -124,6 +123,4 @@ public class UserCreationServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
-
 }

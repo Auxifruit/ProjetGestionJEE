@@ -12,6 +12,10 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
+      background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+      url('css/banner.jpg');
+      background-size: cover;
+      background-attachment: fixed;
     }
 
     h1 {

@@ -19,101 +19,126 @@
     <button type="submit"><i class="fas fa-file-pdf" style="margin-right: 5px;"></i> Télécharger au format PDF</button>
   </form>
   <h1>Relevé de notes</h1>
-  <div id="OldInfos">
 
-    <!-- Student information -->
-    <div class="student-info">
-      <p><strong>Étudiant :</strong>
-        <%= ((Users) request.getAttribute("student")) != null ? ((Users) request.getAttribute("student")).getUserName() + " " + ((Users) request.getAttribute("student")).getUserLastName() : "Non disponible" %>
-      </p>
-      <p><strong>Mail :</strong>
-        <%= ((Users) request.getAttribute("student")) != null ? ((Users) request.getAttribute("student")).getUserEmail() : "Non disponible" %>
-      </p>
-      <p><strong>Classe :</strong> <%= request.getAttribute("className") != null ? request.getAttribute("className") : "Non disponible" %></p>
-    </div>
+  <table id="gradesTable">
+    <thead>
+    <tr>
+      <th>Matière</th>
+      <th>Moyenne</th>
+      <th>Notes(Coefficient)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Moyenne générale -->
+    <tr>
+      <td><strong>Moyenne Générale</strong></td>
+      <td>
+        <%
+          double totalGeneral = 0;
+          int totalSubjects = 0;
+          Map<String, Map<String, List<Grade>>> subjectCourseGrades = (Map<String, Map<String, List<Grade>>>) request.getAttribute("subjectCourseGrades");
 
-    <!-- show the subjects, the courses and the grades of the student -->
+          if (subjectCourseGrades != null && !subjectCourseGrades.isEmpty()) {
+            for (Map.Entry<String, Map<String, List<Grade>>> subjectEntry : subjectCourseGrades.entrySet()) {
+              double subjectAverage = 0;
+              int totalGradesForSubject = 0;
+              double totalGradeValueForSubject = 0;
+              int totalCoefficientForSubject = 0;
+
+              Map<String, List<Grade>> subjectCourses = subjectEntry.getValue();
+              for (Map.Entry<String, List<Grade>> courseEntry : subjectCourses.entrySet()) {
+                List<Grade> grades = courseEntry.getValue();
+                for (Grade grade : grades) {
+                  totalGradeValueForSubject += grade.getGradeValue() * grade.getGradeCoefficient();
+                  totalCoefficientForSubject += grade.getGradeCoefficient();
+                }
+                totalGradesForSubject++;
+              }
+              subjectAverage = (totalCoefficientForSubject > 0) ? (totalGradeValueForSubject / totalCoefficientForSubject) : 0;
+
+              totalGeneral += subjectAverage;
+              totalSubjects++;
+            }
+          }
+          double generalAverage = (totalSubjects > 0) ? totalGeneral / totalSubjects : 0;
+        %>
+        <%= String.format("%.2f", generalAverage) %>
+      </td>
+      <td></td>
+    </tr>
+
+    <!-- Parcours des UE -->
     <%
-      // we use the same pattern for the PDF Generator
-      Map<String, Map<String, List<Grade>>> subjectCourseGrades = (Map<String, Map<String, List<Grade>>>) request.getAttribute("subjectCourseGrades");
-
       if (subjectCourseGrades != null && !subjectCourseGrades.isEmpty()) {
-        // for every subject ..
         for (Map.Entry<String, Map<String, List<Grade>>> subjectEntry : subjectCourseGrades.entrySet()) {
           String subjectName = subjectEntry.getKey();
     %>
-    <div class="subject">
-      <h3><%= subjectName %></h3>
-      <%
-        // for every course ..
-        Map<String, List<Grade>> courses = subjectEntry.getValue();
-        for (Map.Entry<String, List<Grade>> courseEntry : courses.entrySet()) {
-          String courseName = courseEntry.getKey();
-          List<Grade> grades = courseEntry.getValue();
+    <tr>
+      <td><strong><%= subjectName %></strong></td>
+      <td>
+        <%
+          double subjectAverage = 0;
+          int totalGradesForSubject = 0;
+          double totalGradeValueForSubject = 0;
+          int totalCoefficientForSubject = 0;
 
-          // calculate the average for the course
-          double courseAverage = 0.0;
-          int totalCoeff = 0;
-          if (grades != null && !grades.isEmpty()) {
+          Map<String, List<Grade>> subjectCoursesUE = subjectEntry.getValue();
+          for (Map.Entry<String, List<Grade>> courseEntry : subjectCoursesUE.entrySet()) {
+            List<Grade> grades = courseEntry.getValue();
             for (Grade grade : grades) {
-              courseAverage += grade.getGradeValue() * grade.getGradeCoefficient();
-              totalCoeff += grade.getGradeCoefficient();
+              totalGradeValueForSubject += grade.getGradeValue() * grade.getGradeCoefficient();
+              totalCoefficientForSubject += grade.getGradeCoefficient();
             }
-            courseAverage = (totalCoeff > 0) ? (courseAverage / totalCoeff) : 0.0;
+            totalGradesForSubject++;
           }
-      %>
-      <h4><%= courseName %></h4>
-      <table>
-        <thead>
-        <tr>
-          <th>Intitulé</th>
-          <th>Note</th>
-          <th>Coefficient</th>
-        </tr>
-        </thead>
-        <tbody>
-        <%
-          if (grades != null && !grades.isEmpty()) {
-            // .. enumerate every grade
-            for (Grade grade : grades) {
+          subjectAverage = (totalCoefficientForSubject > 0) ? (totalGradeValueForSubject / totalCoefficientForSubject) : 0;
         %>
-        <tr>
-          <td><%= grade.getGradeName() %></td>
-          <td><%= grade.getGradeValue() %></td>
-          <td><%= grade.getGradeCoefficient() %></td>
-        </tr>
-        <%
-          }
-        } else {
-        %>
-        <tr>
-          <td colspan="3" style="text-align: center;">Aucune note disponible</td>
-        </tr>
-        <%
-          }
-        %>
-        </tbody>
-      </table>
-      <!-- mean/average of the course -->
-      <p><strong>Moyenne du cours :</strong> <%= String.format("%.2f", courseAverage) %></p>
-      <%
-        }
-      %>
-    </div>
-    <%
-      }
-    } else {
-    %>
-    <p>Aucune matière disponible.</p>
-    <%
-      }
-    %>
+        <%= String.format("%.2f", subjectAverage) %>
+      </td>
+      <td></td>
+    </tr>
 
-    <!-- Mean/Average -->
-    <div class="student-info">
-      <p><strong>Moyenne Générale :</strong> <%= request.getAttribute("mean") %></p>
-    </div>
-  </div>
+    <!-- Parcours des matières sous chaque UE -->
+    <%
+      Map<String, List<Grade>> subjectCoursesMatiere = subjectEntry.getValue();
+      for (Map.Entry<String, List<Grade>> courseEntry : subjectCoursesMatiere.entrySet()) {
+        String courseName = courseEntry.getKey();
+        List<Grade> grades = courseEntry.getValue();
+    %>
+    <tr>
+      <td><%= courseName %></td>
+      <td>
+        <%
+          double courseAverage = 0;
+          double totalGradeValueForCourse = 0;
+          int totalCoefficientForCourse = 0;
+
+          for (Grade grade : grades) {
+            totalGradeValueForCourse += grade.getGradeValue() * grade.getGradeCoefficient();
+            totalCoefficientForCourse += grade.getGradeCoefficient();
+          }
+
+          courseAverage = (totalCoefficientForCourse > 0) ? (totalGradeValueForCourse / totalCoefficientForCourse) : 0;
+        %>
+        <%= String.format("%.2f", courseAverage) %>
+      </td>
+      <td>
+        <%
+          for (Grade grade : grades) {
+        %>
+        <span title="<%= grade.getGradeName() %>"><%= grade.getGradeValue() %> (<%= grade.getGradeCoefficient() %>)</span><%= grades.indexOf(grade) < grades.size() - 1 ? " " : "" %>
+        <%
+          }
+        %>
+      </td>
+    </tr>
+    <%
+          }
+        }
+      }
+    %>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

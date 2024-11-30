@@ -175,10 +175,8 @@ div#OldInfos {
     border-radius: 15px;
     width: 70%; /* 70% de la largeur de l'écran */
     margin: 0 auto; /* Centrer le div horizontalement */
-    margin-bottom: 10px
+    margin-bottom: 10px;
 }
-
-
 
 h3 {
     color: #77A4C6;
@@ -190,13 +188,12 @@ h3 {
 }
 
 .wide-form {
-    width: 80%; !important;/* Largeur spécifique pour ce formulaire */
+    width: 80% !important; /* Largeur spécifique pour ce formulaire */
     max-width: 1000px; /* Limite maximale */
     margin: 0 auto; /* Centrer horizontalement */
     padding: 30px; /* Gérer le padding selon les besoins */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Si vous voulez ajouter une ombre */
 }
-
 
 form#downloadbutton {
     background: rgba(255, 255, 255, 0); /* Fond transparent */
@@ -227,3 +224,44 @@ form#downloadbutton button {
 form#downloadbutton button:hover {
     background-color: #669dc7; /* Couleur plus foncée au survol */
 }
+
+/* Table spécifique pour #gradesTable */
+#gradesTable {
+    width: 100% !important; /* Le tableau prend toute la largeur de l'écran */
+    max-width: 100%; /* Limite à 100% de l'écran */
+    margin: 0 auto; /* Centrer le tableau horizontalement */
+    border-collapse: collapse; /* Empêche les bordures de se chevaucher */
+}
+
+/* Style pour les cellules du tableau de notes avec un padding x10 uniquement sur la colonne "Notes" */
+#gradesTable th, #gradesTable td {
+    padding: 12px !important; /* Padding standard pour toutes les autres colonnes */
+    text-align: left !important;
+    border: 1px solid #77A4C6 !important; /* Bordure bleue */
+}
+
+/* Spécifique à la colonne "Notes" (troisième colonne) */
+#gradesTable td:nth-child(3), #gradesTable th:nth-child(3) {
+    padding: 12px 8px !important; /* Espacement interne plus petit */
+    width: 500px !important;  /* Largeur forcée à 120px */
+    text-align: left !important; /* Aligner à gauche */
+    overflow: hidden; /* Cache le débordement de texte */
+    white-space: nowrap; /* Empêche le texte de se couper à la ligne */
+}
+
+/* Appliquer une couleur bleue pour la Moyenne Générale et les UE */
+#gradesTable td:nth-child(2), #gradesTable td.ue {
+    color: #333 !important; /* Texte noir pour "Moyenne Générale" et "UE" */
+}
+
+/* Réaction au survol des lignes dans le tableau */
+#gradesTable tr:hover {
+    background-color: #f1f1f1 !important; /* Fond clair au survol */
+}
+
+/* Style de la première ligne (titres des colonnes) */
+#gradesTable th {
+    background-color: #abdbff !important; /* Fond bleu clair pour l'en-tête */
+    font-weight: bold !important; /* Texte en gras pour les en-têtes */
+}
+

@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         if(email == null || email.isEmpty()) {
-            request.setAttribute("error", "Erreur : Veuillez saisir l'email.");
+            request.setAttribute("error", "Erreur : Veuillez saisir un email.");
             request.getRequestDispatcher("WEB-INF/jsp/pages/login.jsp").forward(request, response);
             return;
         }
@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
         Integer userId = UserDAO.userConnection(email, HashPswdUtil.hashPassword(password));
 
         if(userId == null) {
-            request.setAttribute("error", "Erreur : L'email ou le mot de passe est incorrecte");
+            request.setAttribute("error", "Erreur : L'email ou le mot de passe est incorrect.");
             request.getRequestDispatcher("WEB-INF/jsp/pages/login.jsp").forward(request, response);
             return;
         }

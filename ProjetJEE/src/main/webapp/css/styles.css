@@ -197,25 +197,33 @@ h3 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Si vous voulez ajouter une ombre */
 }
 
-.download-button {
-    position: absolute; /* Positionner en relatif par rapport au body */
-    top: 20px; /* Distance du haut de la page */
-    right: 20px; /* Distance de la droite de la page */
-    z-index: 1000; /* S'assurer que le bouton reste au-dessus des autres éléments */
+
+form#downloadbutton {
+    background: rgba(255, 255, 255, 0); /* Fond transparent */
+    padding: 10px 15px; /* Réduire l'espacement */
+    border-radius: 10px; /* Coins moins arrondis */
+    width: auto; /* Largeur automatique */
+    max-width: 300px; /* Limiter la largeur pour qu'il soit plus petit */
+    display: flex;
+    justify-content: center; /* Centrer le contenu du formulaire */
+    position: absolute; /* Positionner par rapport à l'écran */
+    top: 20px; /* À 20px du haut */
+    right: 20px; /* À 20px de la droite */
+    z-index: 1000; /* Pour s'assurer qu'il soit au-dessus des autres éléments */
 }
 
-.download-button button {
-    padding: 10px 20px;
+form#downloadbutton button {
+    padding: 8px 15px; /* Bouton plus petit */
     background-color: #77A4C6; /* Couleur bleu clair */
     color: white;
     border: none;
-    border-radius: 10px; /* Coins arrondis */
+    border-radius: 5px; /* Coins moins arrondis */
     cursor: pointer;
-    font-size: 14px;
+    font-size: 14px; /* Police plus petite */
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
-.download-button button:hover {
-    background-color: #669dc7; /* Couleur légèrement plus foncée au survol */
+form#downloadbutton button:hover {
+    background-color: #669dc7; /* Couleur plus foncée au survol */
 }

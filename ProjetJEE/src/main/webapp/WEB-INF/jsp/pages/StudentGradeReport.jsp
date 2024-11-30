@@ -15,7 +15,10 @@
 <div>
   <h1>Relevé de notes</h1>
   <div id="OldInfos">
-
+    <form id="downloadbutton" action="<%= request.getContextPath() %>/student-grade-report-servlet" method="post">
+      <input type="hidden" name="userId" value="<%= ((Users) request.getAttribute("student")).getUserId() %>">
+      <button type="submit">Télécharger au format PDF</button>
+    </form>
     <!-- Student information -->
     <div class="student-info">
       <p><strong>Étudiant :</strong>
@@ -108,13 +111,6 @@
     <div class="student-info">
       <p><strong>Moyenne Générale :</strong> <%= request.getAttribute("mean") %></p>
     </div>
-  </div>
-  <!-- button pdf file -->
-  <div class="download-button">
-    <form action="<%= request.getContextPath() %>/student-grade-report-servlet" method="post">
-      <input type="hidden" name="userId" value="<%= ((Users) request.getAttribute("student")).getUserId() %>">
-      <button type="submit">Télécharger au format PDF</button>
-    </form>
   </div>
 </div>
 </body>

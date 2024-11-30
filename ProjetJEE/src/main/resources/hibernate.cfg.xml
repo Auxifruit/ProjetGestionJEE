@@ -24,5 +24,6 @@
         <mapping class="com.example.projetjee.model.entities.Subjects"/>
         <mapping class="com.example.projetjee.model.entities.Teacher"/>
         <mapping class="com.example.projetjee.model.entities.Users"/>
+        <mapping class="com.example.projetjee.model.entities.Userstovalidate"/>
     </session-factory>
 </hibernate-configuration>

@@ -98,7 +98,7 @@
       }
     }
   %>
-  <h1>Bienvenue sur CY EASE</h1>
+  <h1>Bienvenue sur CY-EASE</h1>
   <h2><%= greeting %></h2>
 
   <div class="video-container">
@@ -111,7 +111,7 @@
             allowfullscreen>
     </iframe>
   </div>
-  <h2>Cy-Ease, la plateforme innovante qui simplifie la gestion scolaire pour tous</h2>
+  <h3>Cy-Ease, la plateforme innovante qui simplifie la gestion scolaire pour tous.</h3>
 </div>
 </body>
 </html>

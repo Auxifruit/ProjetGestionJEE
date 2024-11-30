@@ -8,17 +8,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Relevé de notes</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
 <div>
+  <form id="downloadbutton" action="<%= request.getContextPath() %>/student-grade-report-servlet" method="post">
+    <input type="hidden" name="userId" value="<%= ((Users) request.getAttribute("student")).getUserId() %>">
+    <button type="submit"><i class="fas fa-file-pdf" style="margin-right: 5px;"></i> Télécharger au format PDF</button>
+  </form>
   <h1>Relevé de notes</h1>
   <div id="OldInfos">
-    <form id="downloadbutton" action="<%= request.getContextPath() %>/student-grade-report-servlet" method="post">
-      <input type="hidden" name="userId" value="<%= ((Users) request.getAttribute("student")).getUserId() %>">
-      <button type="submit">Télécharger au format PDF</button>
-    </form>
+
     <!-- Student information -->
     <div class="student-info">
       <p><strong>Étudiant :</strong>

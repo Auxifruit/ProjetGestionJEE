@@ -22,8 +22,6 @@
         top: 0;
         left: 0;
         z-index: 1000;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
     }
 
     .sidebar h2 {

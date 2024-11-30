@@ -17,9 +17,10 @@
     <p style="color: red;"><%= request.getAttribute("error") %></p><br>
     <% } %>
     <button type="submit">Se connecter</button>
-    <p>Pas encore de compte ? <a href="${pageContext.request.contextPath}/register">Inscrivez-vous.</a></p>
+    <p style="display: flex; justify-content: center; align-items: center; text-align: center;">
+        Vous n'avez pas encore de compte ? <a href="${pageContext.request.contextPath}/register"> Inscrivez-vous.</a>
+    </p>
 </form>
-
 
 </body>
 </html>

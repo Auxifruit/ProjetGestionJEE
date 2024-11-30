@@ -15,7 +15,7 @@
         position: fixed;
         width: 250px;
         height: 100%;
-        background-color: #77A4C6;
+        background-color: #283348; /* Fond de la sidebar */
         color: white;
         padding: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -44,17 +44,26 @@
     }
 
     .sidebar ul li a {
-        color: white;
+        color: #283348; /* Couleur du texte du lien */
         text-decoration: none;
         font-size: 16px;
-        padding: 10px;
+        padding: 15px; /* Augmenté pour plus d'espace autour du texte */
         display: block;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
+        border-radius: 20px; /* Coins très arrondis */
+        background-color: #C4DFE9; /* Arrière-plan des liens */
+        text-align: center; /* Centrer le texte horizontalement */
+        transition: background-color 0.3s ease, border-radius 0.3s ease; /* Transition pour le survol */
     }
 
     .sidebar ul li a:hover {
-        background-color: #A6BBD6;
+        background-color: #A6BBD6; /* Fond bleu clair au survol */
+        border-radius: 25px; /* Augmenter encore l'arrondi au survol */
+    }
+
+    /* Centrer l'image dans la sidebar */
+    .sidebar img {
+        display: block;
+        margin: 0 auto;
     }
 </style>
 <body>
@@ -62,7 +71,7 @@
     <%
         Integer userId = (Integer) session.getAttribute("user");
     %>
-    <a href="index.jsp"><img src="${pageContext.request.contextPath}/css/logo.png" alt="logo" style="width:120px;height:120px;"></a>
+    <center><a href="index.jsp"><img src="${pageContext.request.contextPath}/css/logo.png" alt="logo" style="width:120px;height:120px;"></a></center>
     </br></br>
     <div style="background-color: #333333; height: 2px;" ></div>
     <ul>
@@ -79,7 +88,6 @@
         <% } %>
         <% if (Role.teacher.equals(UserDAO.getUserById(userId).getUserRole())) { %>
         <li><a href="${pageContext.request.contextPath}/entry-note-servlet?userId=<%= userId %>">Saisie note</a></li>
-        <li><a href="${pageContext.request.contextPath}/teacherGrade-servlet">Voir les notes saisies</a></li>
         <% } %>
         <% if (Role.student.equals(UserDAO.getUserById(userId).getUserRole())) { %>
         <li><a href="${pageContext.request.contextPath}/student-grade-report-servlet?userId=<%= userId %>">Ses notes</a></li>

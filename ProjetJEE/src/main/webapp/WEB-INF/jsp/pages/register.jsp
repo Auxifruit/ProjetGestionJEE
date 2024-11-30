@@ -8,24 +8,56 @@
     <title>Inscription</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
+
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 550px;
+        margin: 0 auto;
+    }
+
+    label {
+        margin-bottom: 9px;
+    }
+
+    input, select, button {
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #283348;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #4a5672;
+    }
+</style>
+
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
 <form action="register" method="post" onsubmit="validateForm(event)">
     <h1>Inscription</h1>
     <label for="firstName">Prénom :</label>
-    <input type="text" name="firstName" id="firstName" placeholder="Prénom" required><br>
+    <input type="text" name="firstName" id="firstName" placeholder="Prénom" required>
 
     <label for="lastName">Nom :</label>
-    <input type="text" name="lastName" id="lastName" placeholder="Nom" required><br>
+    <input type="text" name="lastName" id="lastName" placeholder="Nom" required>
 
     <label for="email">Email :</label>
-    <input type="email" name="email" id="email" placeholder="Email exemple@xyz.com" required><br>
+    <input type="email" name="email" id="email" placeholder="Email exemple@xyz.com" required>
 
     <label for="password">Mot de passe :</label>
-    <input type="password" name="password" id="password" required><br>
+    <input type="password" name="password" id="password" required>
 
     <label for="birthdate">Date de naissance :</label>
-    <input type="date" name="birthdate" id="birthdate" required><br>
+    <input type="date" name="birthdate" id="birthdate" required>
 
     <label for="role">Choix du role :</label>
     <select type="date" name="role" id="role" onchange="toggleMajorChoice()" required>
@@ -61,7 +93,10 @@
     <% } %>
 
     <button type="submit">S'inscrire</button>
-    <p>Pas encore de compte ? <a href="${pageContext.request.contextPath}/login">Connectez-vous.</a></p>
+
+    <p style="display: flex; justify-content: center; align-items: center; text-align: center;">
+        Vous avez déjà un compte ? <a href="${pageContext.request.contextPath}/login">Connectez-vous.</a>
+    </p>
 </form>
 </body>
 <script>

@@ -55,7 +55,7 @@ public class GradeCreationServlet extends HttpServlet {
         int courseId = Integer.parseInt(newGradeCourseIdString);
         int teacherId = Integer.parseInt(newGradeTeacherIdString);
 
-        if(value < 0 || value > 200) {
+        if(value < 0 || value > 20) {
             request.setAttribute("erreur", "Erreur : Veuillez saisir une note entre 0 et 20.");
             doGet(request, response);
             return;

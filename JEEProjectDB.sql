@@ -146,7 +146,7 @@ INSERT INTO Classes VALUES (3, "GSI3");
 INSERT INTO Major VALUES (1, "GI");
 INSERT INTO Major VALUES (2, "GM");
 INSERT INTO Major VALUES (3, "BTC");
-INSERT INTO Major VALUES (4, "CACA");
+INSERT INTO Major VALUES (4, "MF");
 
 INSERT INTO subjects VALUES (1, "Mathématiques");
 INSERT INTO subjects VALUES (2, "Informatique");

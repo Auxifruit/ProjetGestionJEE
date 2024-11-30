@@ -41,46 +41,42 @@
     %>
     <h2>L'emploi du temps est vide</h2>
     <%
-        } else {
-            Map<LocalDate, List<Lesson>> pastLessons = new TreeMap<>();
-            Map<LocalDate, List<Lesson>> futureLessons = new TreeMap<>();
-            LocalDate today = LocalDate.now();
+    } else {
+        Map<LocalDate, List<Lesson>> pastLessons = new TreeMap<>();
+        Map<LocalDate, List<Lesson>> futureLessons = new TreeMap<>();
+        LocalDate today = LocalDate.now();
 
-            for (Map.Entry<LocalDate, List<Lesson>> entry : lessonList.entrySet()) {
-                if (entry.getKey().isBefore(today)) {
-                    pastLessons.put(entry.getKey(), entry.getValue());
-                } else {
-                    futureLessons.put(entry.getKey(), entry.getValue());
-                }
+        for (Map.Entry<LocalDate, List<Lesson>> entry : lessonList.entrySet()) {
+            if (entry.getKey().isBefore(today)) {
+                pastLessons.put(entry.getKey(), entry.getValue());
+            } else {
+                futureLessons.put(entry.getKey(), entry.getValue());
             }
+        }
     %>
     <div id="OldInfos">
-        <h2>Cours passés :</h2>
         <div style="display: none" id="pastCoursesTable">
             <%
                 if(pastLessons == null || pastLessons.isEmpty()) {
             %>
             <h2>Pas de cours passés</h2>
             <%
-                } else {
-                    for(Map.Entry<LocalDate, List<Lesson>> entry : pastLessons.entrySet()) {
-                        LocalDate day = entry.getKey();
-                        List<Lesson> lessons = entry.getValue();
+            } else {
+                for(Map.Entry<LocalDate, List<Lesson>> entry : pastLessons.entrySet()) {
+                    LocalDate day = entry.getKey();
+                    List<Lesson> lessons = entry.getValue();
             %>
             <h3><%= day.format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy")) %></h3>
 
             <table border="1">
                 <tr>
-                    <th>Nom du cours</th>
-                    <% if(!isTeacher) {
-                    %>
-                        <th>Nom prénom de l'enseignant</th>
-                    <%
-                    }
-                    %>
                     <th>Heure de début</th>
                     <th>Heure de fin</th>
+                    <th>Nom du cours</th>
                     <th>Classe participante</th>
+                    <% if(!isTeacher) { %>
+                    <th>Nom prénom de l'enseignant</th>
+                    <% } %>
                 </tr>
 
                 <%
@@ -90,6 +86,8 @@
                         List<Classes> participantClass = LessonClassesDAO.getLessonClasses(lesson.getLessonId());
                 %>
                 <tr>
+                    <td><%= startDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
+                    <td><%= endDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
                     <td>
                         <%
                             Integer courseId = lesson.getCourseId();
@@ -98,41 +96,23 @@
                         %>
                         <div style="color: red">CM</div>
                         <%
-                                } else {
+                        } else {
                         %>
                         <div style="color: blue">TD</div>
                         <%
-                                }
+                            }
                         %>
-                            <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+                        <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
                         <%
-                            } else {
+                        } else {
                         %>
-                            Pas de cours pour cette
+                        Pas de cours pour cette séance
                         <%
                             }
                         %>
                     </td>
-                    <% if(!isTeacher) {
-                    %>
                     <td>
-                    <%
-                            Integer teacherId = lesson.getTeacherId();
-                            if(teacherId != null) {
-                    %>
-                        <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
-                    <%
-                            } else {
-                    %>
-                        Pas d'enseignant pour cette séance
-                    <%
-                            }
-                        }
-                    %>
-                    </td>
-                    <td><%= startDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
-                    <td><%= endDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
-                    <td>
+
                         <%
                             if(participantClass == null || participantClass.isEmpty()) {
                         %>
@@ -147,87 +127,17 @@
                             }
                         %>
                     </td>
-                </tr>
-                <%
-                    }
-                %>
-
-            </table>
-            <%
-                }
-                }
-            %>
-        </div></br></br>
-        <button onclick="toggleDisplay()">Afficher ou non les cours passés</button>
-    </div>
-    <div id="OldInfos">
-            <h2>Cours à venir :</h2>
-            <%
-                if(futureLessons == null || futureLessons.isEmpty()) {
-            %>
-                <h2>Pas de cours à venir</h2>
-            <%
-                } else {
-                    for(Map.Entry<LocalDate, List<Lesson>> entry : futureLessons.entrySet()) {
-                        LocalDate day = entry.getKey();
-                        List<Lesson> lessons = entry.getValue();
-            %>
-
-            <h3><%= day.format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy")) %></h3>
-
-            <table border="1">
-                <tr>
-                    <th>Nom du cours</th>
-                    <% if(!isTeacher) {
-                    %>
-                    <th>Nom prénom de l'enseignant</th>
-                    <%
-                        }
-                    %>
-                    <th>Heure de début</th>
-                    <th>Heure de fin</th>
-                    <th>Classe participante</th>
-                </tr>
-
-                <%
-                    for(Lesson lesson : lessons) {
-                        LocalDateTime startDate = lesson.getLessonStartDate().toLocalDateTime();
-                        LocalDateTime endDate = lesson.getLessonEndDate().toLocalDateTime();
-                        List<Classes> participantClass = LessonClassesDAO.getLessonClasses(lesson.getLessonId());
-                %>
-                <tr>
+                    <% if(!isTeacher) { %>
                     <td>
                         <%
-                            if(participantClass.size() > 1 ) {
+                            Integer teacherId = lesson.getTeacherId();
+                            if(teacherId != null) {
                         %>
-                        <div style="color: red">CM</div>
+                        <%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %>
                         <%
-                            } else {
+                        } else {
                         %>
-                        <div style="color: blue">TD</div>
-                        <%
-                            }
-                        %>
-                        <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
-                    </td>
-                    <% if(!isTeacher) {
-                    %>
-                    <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
-                    <%
-                        }
-                    %>
-                    <td><%= startDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
-                    <td><%= endDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
-                    <td>
-                        <%
-                            if(participantClass == null || participantClass.isEmpty()) {
-                        %>
-                        <p>Aucune classe ne participe au cours</p>
-                        <%
-                            } else {
-                                for(Classes classe : participantClass) {
-                        %>
-                        <%= classe.getClassName() + " "%>
+                        Pas d'enseignant pour cette séance
                         <%
                                 }
                             }
@@ -239,10 +149,87 @@
                 %>
 
             </table>
-                <%
+            <%
                     }
                 }
             %>
+        </div></br></br>
+        <button onclick="toggleDisplay()">Afficher/Masquer les cours passés</button>
+        <%
+            if(futureLessons == null || futureLessons.isEmpty()) {
+        %>
+        <h2>Pas de cours à venir</h2>
+        <%
+        } else {
+            for(Map.Entry<LocalDate, List<Lesson>> entry : futureLessons.entrySet()) {
+                LocalDate day = entry.getKey();
+                List<Lesson> lessons = entry.getValue();
+        %>
+
+        <h3><%= day.format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy")) %></h3>
+
+        <table border="1">
+            <tr>
+                <th>Heure de début</th>
+                <th>Heure de fin</th>
+                <th>Nom du cours</th>
+                <th>Classe participante</th>
+                <% if(!isTeacher) { %>
+                <th>Nom prénom de l'enseignant</th>
+                <% } %>
+            </tr>
+
+            <%
+                for(Lesson lesson : lessons) {
+                    LocalDateTime startDate = lesson.getLessonStartDate().toLocalDateTime();
+                    LocalDateTime endDate = lesson.getLessonEndDate().toLocalDateTime();
+                    List<Classes> participantClass = LessonClassesDAO.getLessonClasses(lesson.getLessonId());
+            %>
+            <tr>
+                <td><%= startDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
+                <td><%= endDate.format(DateTimeFormatter.ofPattern("HH:mm")) %></td>
+                <td>
+                    <%
+                        if(participantClass.size() > 1) {
+                    %>
+                    <div style="color: red">CM</div>
+                    <%
+                    } else {
+                    %>
+                    <div style="color: blue">TD</div>
+                    <%
+                        }
+                    %>
+                    <%= CourseDAO.getCourseName(lesson.getCourseId()) %>
+                </td>
+                <td>
+                    <%
+                        if(participantClass == null || participantClass.isEmpty()) {
+                    %>
+                    <p>Aucune classe ne participe au cours</p>
+                    <%
+                    } else {
+                        for(Classes classe : participantClass) {
+                    %>
+                    <%= classe.getClassName() + " "%>
+                    <%
+                            }
+                        }
+                    %>
+                </td>
+                <% if(!isTeacher) { %>
+                <td><%= UserDAO.getUserById(lesson.getTeacherId()).getUserLastName() + " " + UserDAO.getUserById(lesson.getTeacherId()).getUserName() %></td>
+                <% } %>
+            </tr>
+            <%
+                }
+            %>
+
+        </table>
+        <%
+                }
+            }
+        %>
     </div>
     <%
         }

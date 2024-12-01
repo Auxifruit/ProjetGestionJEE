@@ -23,7 +23,7 @@ public class ClassesDeletionServlet extends HttpServlet {
 
         if(classIdString == null || classIdString.isEmpty()) {
             request.setAttribute("erreur", "Erreur : Veuillez choisir une classe.");
-            request.getRequestDispatcher("majorManager-servlet").forward(request, response);
+            request.getRequestDispatcher("classesManager-servlet").forward(request, response);
             return;
         }
 

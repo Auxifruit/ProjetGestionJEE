@@ -7,7 +7,8 @@
 <%@ page import="com.example.projetjee.model.entities.Classes" %>
 <%@ page import="com.example.projetjee.model.dao.*" %>
 <%@ page import="java.util.TreeMap" %>
-<%@ page import="com.example.projetjee.model.entities.Role" %><%--
+<%@ page import="com.example.projetjee.model.entities.Role" %>
+<%@ page import="com.example.projetjee.model.entities.Users" %><%--
   Created by IntelliJ IDEA.
   User: CYTech Student
   Date: 19/11/2024
@@ -24,17 +25,32 @@
 <jsp:include page="/elements/sidebar.jsp" />
 
 <div>
-    <h1>Emploi du temps : </h1>
     <%
+        String userIdForm = request.getAttribute("userIdForm").toString();
         Integer userId = (Integer) session.getAttribute("user");
-        if(userId == null) {
+
+        if(userIdForm == null || userIdForm.isEmpty() || userId == null) {
             response.sendRedirect("index.jsp");
             return;
         }
 
-        Role role = UserDAO.getUserById(userId).getUserRole();
+        Users usersSchedule = UserDAO.getUserById(Integer.parseInt(userIdForm));
+        Role role = usersSchedule.getUserRole();
         boolean isTeacher = Role.teacher.equals(role);
+    %>
+    <h1>Emploi du temps
+        <%
+            String userLastName= usersSchedule.getUserLastName();
+            String userName= usersSchedule.getUserName();
 
+            if((userLastName != null && !userLastName.isEmpty()) && (userName != null && !userName.isEmpty())) {
+        %>
+        de <%= userName + " " + userLastName %>
+        <%
+            }
+        %>
+        : </h1>
+    <%
         Map<LocalDate, List<Lesson>> lessonList = (Map<LocalDate, List<Lesson>>) request.getAttribute("lessonList");
 
         if(lessonList == null || lessonList.isEmpty()) {

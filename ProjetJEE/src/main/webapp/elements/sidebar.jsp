@@ -86,7 +86,7 @@
     <%
         Integer userId = (Integer) session.getAttribute("user");
     %>
-    <a href="index.jsp"><img src="${pageContext.request.contextPath}/CSS/logo.png" alt="logo" style="width:120px;height:120px;"></a>
+    <a href="index.jsp"><img src="${pageContext.request.contextPath}/css/logo.png" alt="logo" style="width:120px;height:120px;"></a>
     </br></br>
     <div style="background-color: #333333; height: 2px;" ></div>
     <ul>

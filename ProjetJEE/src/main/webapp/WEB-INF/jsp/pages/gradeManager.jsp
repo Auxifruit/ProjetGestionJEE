@@ -42,7 +42,7 @@
     <%
     } else {
     %>
-    <form method="get" style="max-width: 1000px">
+    <form method="get">
         <table border="1">
             <th>Nom de la note</th>
             <th>Nom du cours</th>
@@ -106,7 +106,7 @@
         <button type="submit" formaction="gradeModification-servlet">Modifier</button>
         <button type="submit" formaction="gradeDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
     </form>
-    <form action="gradeCreation-servlet" method="get" style="max-width: 1000px">
+    <form action="gradeCreation-servlet" method="get">
         <button type="submit">Créer</button>
     </form>
 </div>

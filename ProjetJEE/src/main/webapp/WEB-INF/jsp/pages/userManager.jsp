@@ -60,7 +60,7 @@
     <%
         boolean isStudentSelected = Role.student.equals(roleFilter);
     %>
-    <form method="get" style="max-width: 1000px">
+    <form method="get">
     <table>
         <tr>
             <th>Nom de l'utilisateur</th>

@@ -60,6 +60,7 @@ public class UserScheduleServlet extends HttpServlet {
         }
 
         try {
+            request.setAttribute("userIdForm", userId);
             request.setAttribute("lessonList", lessonsByDay);
             request.getRequestDispatcher("WEB-INF/jsp/pages/userSchedule.jsp").forward(request, response);
         } catch (Exception e) {

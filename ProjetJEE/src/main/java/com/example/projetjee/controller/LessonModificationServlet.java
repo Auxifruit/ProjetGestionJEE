@@ -17,8 +17,22 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * Servlet implementation class LessonModificationServlet.
+ * This servlet handles the modification of lesson details such as the date, course, and teacher.
+ * It allows users to modify a lesson and informs the enrolled students of the changes via email.
+ */
 @WebServlet(name = "lessonModificationServlet", value = "/lessonModification-servlet")
 public class LessonModificationServlet extends HttpServlet {
+    /**
+     * Handles the HTTP GET request to retrieve the lesson data and display the lesson modification page.
+     * It fetches the lesson, course, and teacher information, and forwards the request to the modification page.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws IOException if an I/O error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String lessonIdString = request.getParameter("lessonId");
@@ -43,6 +57,16 @@ public class LessonModificationServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+    /**
+     * Handles the HTTP POST request to modify the lesson details.
+     * It updates the lesson with new information (start date, end date, course, and teacher),
+     * and sends email notifications to the enrolled students if there is a change.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String lessonIdString = request.getParameter("lessonId");
@@ -68,6 +92,7 @@ public class LessonModificationServlet extends HttpServlet {
         int lessonId = Integer.parseInt(lessonIdString);
         Lesson lesson = LessonDAO.getLessonById(lessonId);
 
+        // Handle date modification (start and end dates)
         if(newStartDate == null || newStartDate.isEmpty()) {
             newStartDate = lesson.getLessonStartDate().toString();
             newStartDate = newStartDate.substring(0, 16);
@@ -129,9 +154,8 @@ public class LessonModificationServlet extends HttpServlet {
 
         String error = LessonDAO.modifyLessonFromTable(lesson);
         if(error == null) {
-            // Récupérer les étudiants inscrits à la séance modifiée
+            // Send email notifications to students
             List<Student> studentsInLesson = LessonClassesDAO.getStudentsByLessonId(lessonId);
-
             System.out.println("studentsInLesson size : " + studentsInLesson.size());
 
             if(studentsInLesson != null && !studentsInLesson.isEmpty()) {
@@ -156,7 +180,7 @@ public class LessonModificationServlet extends HttpServlet {
                 }
             }
 
-            // Rediriger vers la page de gestion des séances
+            // Redirect to lesson manager page
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {

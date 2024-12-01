@@ -16,14 +16,24 @@ import java.security.NoSuchAlgorithmException;
 
 import static com.example.projetjee.util.HashPswdUtil.hashPassword;
 
+/**
+ * Servlet implementation for editing user information.
+ * This servlet processes updates to a user's information such as email, name, and password.
+ */
 @WebServlet("/editInformations")
 public class EditInformationsServlet extends HttpServlet {
-
-
-
+    /**
+     * Handles the POST request to update the user information in the database.
+     * It retrieves the data from the request, validates the inputs, and updates the user's information.
+     *
+     * @param request the HttpServletRequest containing form data
+     * @param response the HttpServletResponse to send the result
+     * @throws ServletException if an error occurs during servlet processing
+     * @throws IOException if an input or output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer les informations du formulaire
+        // Retrieve user input from the form
         String email = request.getParameter("email");
         String lastName = request.getParameter("nom");
         String name = request.getParameter("prenom");
@@ -31,7 +41,7 @@ public class EditInformationsServlet extends HttpServlet {
         String password = request.getParameter("motDePasse");
         String hashedPassword = HashPswdUtil.hashPassword(password);
 
-        // ID de l'utilisateur connecté
+        // Get the user ID from the request
         String userIdStr = request.getParameter("userId");
         int userId;
 
@@ -43,7 +53,7 @@ public class EditInformationsServlet extends HttpServlet {
             return;
         }
 
-        // Validation des champs obligatoires
+        // Validate required fields: email and last name
         if (email == null || email.trim().isEmpty() || lastName == null || lastName.trim().isEmpty()) {
             request.setAttribute("message", "Certains champs obligatoires sont vides.");
             request.getRequestDispatcher("WEB-INF/jsp/pages/personalInformation.jsp").forward(request, response);
@@ -57,7 +67,7 @@ public class EditInformationsServlet extends HttpServlet {
         user.setUserEmail(email);
         user.setUserBirthdate(birthDate);
 
-        // Mise à jour des informations dans la base de données
+        // Attempt to update the user information in the database
         String error = UserDAO.modifyUserFromTable(user);
 
         if (error == null) {
@@ -66,7 +76,7 @@ public class EditInformationsServlet extends HttpServlet {
             request.setAttribute("message", error);
         }
 
-        // Rediriger vers la page JSP
+        // Forward to the JSP page to display the result
         request.getRequestDispatcher("WEB-INF/jsp/pages/personalInformation.jsp").forward(request, response);
     }
 

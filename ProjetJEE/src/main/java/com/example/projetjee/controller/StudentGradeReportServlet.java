@@ -19,15 +19,31 @@ import static com.example.projetjee.model.dao.GradeDAO.getGradeByStudentId;
 import static com.example.projetjee.model.dao.StudentDAO.getStudentById;
 import static com.example.projetjee.model.dao.UserDAO.getUserById;
 
+/**
+ * Servlet for generating and displaying a student's grade report.
+ * It retrieves the student's grades and calculates the average grade,
+ * then allows downloading the grade report as a PDF.
+ */
 @WebServlet(name = "StudentGradeReportServlet", value = "/student-grade-report-servlet")
 public class StudentGradeReportServlet extends HttpServlet {
     private final GeneratorPdfGradeReport pdfGenerator = new GeneratorPdfGradeReport();
+    /**
+     * Handles the GET request to display a student's grade report.
+     * This method retrieves the student's grades, calculates the average grade,
+     * and prepares the data for displaying the grade report in the JSP view.
+     *
+     * @param request the HttpServletRequest object containing the request from the client
+     * @param response the HttpServletResponse object containing the response to the client
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if the request for the GET cannot be handled
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession(false);
         Integer connectedUserId = (Integer) session.getAttribute("user");
         String userIdString = request.getParameter("userId");
 
+        // Check if user is logged in and if userId is provided
         if(connectedUserId == null || (userIdString == null || userIdString.isEmpty())) {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
@@ -66,6 +82,15 @@ public class StudentGradeReportServlet extends HttpServlet {
 
         request.getRequestDispatcher("/WEB-INF/jsp/pages/StudentGradeReport.jsp").forward(request, response);
     }
+    /**
+     * Handles the POST request to generate and download the grade report PDF.
+     * It retrieves the student's ID, generates the PDF, and sends it as a download response.
+     *
+     * @param request the HttpServletRequest object containing the request from the client
+     * @param response the HttpServletResponse object containing the response to the client
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if the request for the POST cannot be handled
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
@@ -85,7 +110,7 @@ public class StudentGradeReportServlet extends HttpServlet {
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; filename=\"Relevé_de_notes.pdf\"");
 
-            // send the data
+            // send data
             response.getOutputStream().write(pdfContent);
             response.getOutputStream().flush();
 

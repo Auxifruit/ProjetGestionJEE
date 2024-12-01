@@ -10,9 +10,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Servlet responsible for managing class creation functionality.
+ * This servlet handles displaying existing classes and creating new classes.
+ */
 @WebServlet(name = "classesCreationServlet", value = "/classesCreation-servlet")
 public class ClassesCreationServlet extends HttpServlet {
+    /**
+     * Handles GET requests to display the list of existing classes.
+     * Retrieves all classes from the database and forwards to the creation page.
+     *
+     * @param request  the HttpServletRequest containing the request data
+     * @param response the HttpServletResponse to send the response to the client
+     * @throws IOException if an input or output exception occurs
+     * @throws ServletException if the request cannot be processed
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Classes> classesList = ClasseDAO.getAllClasses();
@@ -25,7 +37,15 @@ public class ClassesCreationServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Handles POST requests to create a new class.
+     * It validates the class name input and adds the new class to the database.
+     *
+     * @param request  the HttpServletRequest containing the request data
+     * @param response the HttpServletResponse to send the response to the client
+     * @throws ServletException if the request cannot be processed
+     * @throws IOException if an input or output exception occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String classesName = request.getParameter("newClasses");
@@ -36,10 +56,13 @@ public class ClassesCreationServlet extends HttpServlet {
             return;
         }
 
+        // Create a new Classes object and set its name
         Classes classe = new Classes();
         classe.setClassName(classesName);
 
+        // Attempt to add the new class to the database
         String error = ClasseDAO.addClasseInTable(classe);
+        // If the class is successfully added, redirect to the classes manager servlet
         if(error == null) {
             request.getRequestDispatcher("classesManager-servlet").forward(request, response);
         }

@@ -16,13 +16,29 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
+/**
+ * Servlet to handle the entry of student grades by the teacher.
+ * This servlet allows a teacher to view students in a class and discipline
+ * and enter grades for them.
+ */
 @WebServlet(name = "EntryNoteServlet", value = "/entry-note-servlet")
 public class EntryNoteServlet extends HttpServlet {
+    /**
+     * Handles the GET request for displaying the grade entry page.
+     * It verifies if the user is a teacher and retrieves the necessary data
+     * to display the grade entry page.
+     *
+     * @param request the HttpServletRequest containing the request data
+     * @param response the HttpServletResponse to send the response
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession(false);
         Integer teacherID = (Integer) session.getAttribute("user");
 
+        // Check if the user is a teacher, otherwise redirect to the index page
         if(!UserDAO.getUserById(teacherID).getUserRole().equals(Role.teacher)) {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
@@ -37,6 +53,17 @@ public class EntryNoteServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles the POST request for entering grades.
+     * It validates the received data (course and class ID), retrieves the
+     * students for the specified course and class, and forwards the data
+     * to the grade entry page.
+     *
+     * @param request the HttpServletRequest containing the request data
+     * @param response the HttpServletResponse to send the response
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String teacherIdString = request.getParameter("teacherID");
@@ -69,6 +96,12 @@ public class EntryNoteServlet extends HttpServlet {
         request.getRequestDispatcher("WEB-INF/jsp/pages/addGrade.jsp").forward(request, response);
     }
 
+    /**
+     * Sets common attributes such as available courses and classes for the teacher.
+     *
+     * @param request the HttpServletRequest containing the request data
+     * @param teacherID the ID of the teacher
+     */
     private void setCommonAttributes(HttpServletRequest request, int teacherID) {
         // get disciplines and classes and set them as attributes
         List<Course> disciplines = CourseDAO.getAllTeacherCourseByTeacherId(teacherID);
@@ -78,6 +111,10 @@ public class EntryNoteServlet extends HttpServlet {
         request.setAttribute("classes", classes);
     }
 
+    /**
+     * Cleanup method called when the servlet is destroyed.
+     * This method can be used to release resources if necessary.
+     */
     @Override
     public void destroy() {
         // Cleanup code if needed

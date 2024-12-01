@@ -2,7 +2,6 @@ package com.example.projetjee.controller;
 
 import com.example.projetjee.model.dao.*;
 import com.example.projetjee.model.entities.*;
-import com.example.projetjee.model.entities.Users;
 import com.example.projetjee.util.GMailer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,8 +12,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet to handle the creation of grades for students.
+ * It displays the grade creation form and handles the form submission to create a new grade entry.
+ */
 @WebServlet(name = "gradeCreationServlet", value = "/gradeCreation-servlet")
 public class GradeCreationServlet extends HttpServlet {
+
+    /**
+     * Handles the GET request to display the grade creation form.
+     * Retrieves the list of grades, courses, students, and teachers and sets them as request attributes.
+     *
+     * @param request the HttpServletRequest containing the request data
+     * @param response the HttpServletResponse to send the response
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if the servlet encounters a problem
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Grade> gradeList = GradeDAO.getAllGrade();
@@ -33,6 +46,16 @@ public class GradeCreationServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Handles the POST request to create a new grade.
+     * Validates the input data and adds the grade to the database. Sends an email to the student after the grade is created.
+     *
+     * @param request the HttpServletRequest containing the request data
+     * @param response the HttpServletResponse to send the response
+     * @throws ServletException if the servlet encounters a problem
+     * @throws IOException if an input or output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String newGradeName = request.getParameter("newGradeName");
@@ -55,6 +78,7 @@ public class GradeCreationServlet extends HttpServlet {
         int courseId = Integer.parseInt(newGradeCourseIdString);
         int teacherId = Integer.parseInt(newGradeTeacherIdString);
 
+        // Additional validation for value and coefficient
         if(value < 0 || value > 20) {
             request.setAttribute("erreur", "Erreur : Veuillez saisir une note entre 0 et 20.");
             doGet(request, response);
@@ -67,6 +91,7 @@ public class GradeCreationServlet extends HttpServlet {
             return;
         }
 
+        // Create grade object
         Grade grade = new Grade();
         grade.setGradeName(newGradeName);
         grade.setGradeValue(value);
@@ -75,13 +100,12 @@ public class GradeCreationServlet extends HttpServlet {
         grade.setCourseId(courseId);
         grade.setTeacherId(teacherId);
 
+        // Add grade to the database
         String error = GradeDAO.addGradeInTable(grade);
         if(error == null) {
             String studentEmail = UserDAO.getUserEmailById(studentId);
-
-            // Vérifier si l'email a bien été trouvé
             if (studentEmail != null) {
-                // Préparer le sujet et le corps de l'email
+                // Email preparation
                 String subject = "Nouvelle note reçue";
                 String body = "Bonjour,\n\n"
                     + "Vous avez reçu une nouvelle note pour le cours : " + grade.getGradeName() + ".\n"
@@ -89,10 +113,10 @@ public class GradeCreationServlet extends HttpServlet {
                     + "Coefficient : " + grade.getGradeCoefficient() + "\n\n"
                     + "Cordialement,\nL'équipe pédagogique";
 
-                // Envoi de l'email
+                // Email sending procedure
                 try {
-                    GMailer gmailer = new GMailer();  // Instancier GMailer
-                    gmailer.sendMail(subject, body, studentEmail);  // Envoyer l'email
+                    GMailer gmailer = new GMailer();  // Instantiate GMailer
+                    gmailer.sendMail(subject, body, studentEmail);  // Send the email
                     request.getRequestDispatcher("gradeManager-servlet").forward(request, response);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -104,7 +128,6 @@ public class GradeCreationServlet extends HttpServlet {
                 doGet(request, response);
             }
         } else {
-            // Si une erreur survient lors de l'ajout de la note
             request.setAttribute("erreur", error);
             doGet(request, response);
         }

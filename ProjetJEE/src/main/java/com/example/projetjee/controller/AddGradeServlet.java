@@ -15,8 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servlet responsible for adding grades for students.
+ * It processes the grade data submitted from the form, adds grades to the database,
+ * and sends an email notification to students about their new grade.
+ */
 @WebServlet(name = "AddGradeServlet", value = "/add-grade-servlet")
 public class AddGradeServlet extends HttpServlet {
+
+    /**
+     * Handles the POST request to add grades for students.
+     * It retrieves grade data from the form, creates grade objects,
+     * saves them to the database, and sends email notifications.
+     *
+     * @param request  the HttpServletRequest containing the data from the client
+     * @param response the HttpServletResponse to send back to the client
+     * @throws IOException if an input or output exception occurs
+     * @throws ServletException if the request cannot be handled
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int teacherId = Integer.parseInt(request.getParameter("teacherID"));
@@ -24,6 +40,7 @@ public class AddGradeServlet extends HttpServlet {
         Map<String, String[]> parameterMap = request.getParameterMap();
         // create a list of grade for easy manipulation
         List<Grade> grades = new ArrayList<>();
+
         GMailer gMailer = null;
 
         try {
@@ -74,7 +91,7 @@ public class AddGradeServlet extends HttpServlet {
                     String message = "Bonjour,\n\nUne nouvelle note a été ajoutée à votre dossier pour le cours " +
                             grade.getGradeName() + ".\nNote : " + grade.getGradeValue() + "\nCordialement,\nL'équipe pédagogique.";
 
-                    // Envoi du mail
+                    // Sending the email
                     gMailer.sendMail(subject, message, studentEmail);
                 } else {
                     System.out.println("Erreur d'insertion de la note pour l'étudiant ID: " + grade.getStudentId());

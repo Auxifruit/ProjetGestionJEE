@@ -13,13 +13,35 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Servlet implementation class LessonDeletionServlet.
+ * This servlet handles the deletion of lessons from the system.
+ * When a lesson is deleted, it also notifies students via email.
+ */
 @WebServlet(name = "lessonDeletionServlet", value = "/lessonDeletion-servlet")
 public class LessonDeletionServlet extends HttpServlet {
+    /**
+     * Handles the HTTP GET request for lesson deletion by forwarding it to the doPost method.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doPost(request, response);
     }
+
+    /**
+     * Handles the HTTP POST request for lesson deletion.
+     * It validates the lesson ID, deletes the lesson, and sends email notifications to students.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an input or output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String lessonIdString = request.getParameter("lessonId");
@@ -38,25 +60,26 @@ public class LessonDeletionServlet extends HttpServlet {
             return;
         }
 
+        // Delete the lesson from the database
         boolean isDeleted = LessonDAO.deleteLessonFromTable(lessonId);
-        if(isDeleted == true) {
-            // Récupérer tous les étudiants associés à la séance supprimée
+        if(isDeleted) {
+            // Retrieve all students associated with the deleted lesson
             List<Student> studentsInLesson = LessonClassesDAO.getStudentsByLessonId(lessonId);
 
             if(studentsInLesson != null && !studentsInLesson.isEmpty()) {
-                // Pour chaque étudiant, envoyer un email pour l'informer de la suppression de la séance
+                // Email each student to inform them
                 for (Student student : studentsInLesson) {
                     String studentEmail = UserDAO.getUserEmailById(student.getStudentId());
 
                     if (studentEmail != null) {
-                        // Sujet et corps du message
+                        // Prepare the email subject and body
                         String subject = "Séance supprimée";
                         String body = "Bonjour,\n\n"
                                 + "Nous vous informons que la séance pour la matière ID " + lessonId + " a été supprimée.\n"
                                 + "Nous vous invitons à consulter votre emploi du temps pour toute mise à jour.\n\n"
                                 + "Cordialement,\nL'équipe pédagogique";
 
-                        // Envoi de l'email via la classe GMailer
+                        // Send the email via the GMailer utility class
                         try {
                             GMailer gmailer = new GMailer();
                             gmailer.sendMail(subject, body, studentEmail);
@@ -67,7 +90,7 @@ public class LessonDeletionServlet extends HttpServlet {
                 }
             }
 
-            // Rediriger vers la page de gestion des séances
+            // Redirect to the lesson manager page
             request.getRequestDispatcher("lessonManager-servlet").forward(request, response);
         }
         else {

@@ -17,9 +17,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet implementation class LessonClassesUnassignationServlet.
+ * This servlet is responsible for unassigning a class from a lesson and notifying students about the cancellation via email.
+ */
 @WebServlet(name = "lessonClassesUnassignationServlet", value = "/lessonClassesUnassignation-servlet")
 public class LessonClassesUnassignationServlet extends HttpServlet {
-
+    /**
+     * Handles the HTTP GET request to display all available lessons.
+     * It retrieves all lessons from the database and forwards the data to the lesson manager JSP page.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Lesson> lessonList = LessonDAO.getAllLesson();
@@ -32,7 +44,15 @@ public class LessonClassesUnassignationServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Handles the HTTP POST request to unassign a class from a lesson.
+     * It removes the class from the specified lesson, and notifies the students via email about the cancellation of the session.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws IOException if an input or output error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         String classeIdString = request.getParameter("classId");
@@ -50,30 +70,31 @@ public class LessonClassesUnassignationServlet extends HttpServlet {
         int classeId = Integer.parseInt(classeIdString);
         Lessonclass lessonclass = LessonClassesDAO.getLessonClassByLessonIdAndClassId(lessonId, classeId);
 
+        // If the class is successfully removed from the lesson
         if(LessonClassesDAO.deleteLessonclassFromTable(lessonclass.getId()) == true) {
-            // Récupérer la liste des étudiants inscrits à cette classe
+            // Retrieve the list of students enrolled in the class
             List<Student> studentsInClass = LessonClassesDAO.getStudentsByClassId(classeId);
 
             if(studentsInClass != null && !studentsInClass.isEmpty()) {
                 String lessonName = LessonClassesDAO.getLessonNameById(lessonId);
 
-                // Pour chaque étudiant, envoyer un email pour lui notifier que la séance a été annulée
+                // For each student, send an email notification about the cancellation
                 for (Student student : studentsInClass) {
-                    // Récupérer l'utilisateur associé à cet étudiant
+                    // Retrieve the user associated with the student
                     Users user = UserDAO.getUserById(student.getStudentId());
                     String studentEmail = user != null ? user.getUserEmail() : null;
 
+                    // If the student's email exists, send the cancellation email
                     if (studentEmail != null) {
-                        // Récupérer le nom de l'utilisateur
-                        String studentUserName = user.getUserName(); // Utiliser le nom de l'utilisateur
+                        String studentUserName = user.getUserName();
 
-                        // Préparer le sujet et le corps du message
+                        // Prepare the subject and body of the email
                         String subject = "Séance annulée : " + lessonName;
                         String body = "Bonjour " + (studentUserName != null ? studentUserName : "Étudiant") + ",\n\n Nous vous informons que la séance assignée à votre classe pour la matière : " + lessonName + " a été annulée.\n Veuillez vérifier votre emploi du temps pour toute mise à jour.\n\n Cordialement,\nL'équipe pédagogique";
-                        // Envoi de l'email via la classe GMailer
+                        // Send the email using the GMailer utility class
                         try {
-                            GMailer gmailer = new GMailer();  // Créer une instance de GMailer
-                            gmailer.sendMail(subject, body, studentEmail);  // Envoyer l'email
+                            GMailer gmailer = new GMailer();  // Create an instance of GMailer
+                            gmailer.sendMail(subject, body, studentEmail);  // Send the email
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -81,7 +102,7 @@ public class LessonClassesUnassignationServlet extends HttpServlet {
                 }
             }
 
-            // Rediriger vers le gestionnaire des séances
+            // Redirect to the lesson classes manager servlet
             request.getRequestDispatcher("lessonClassesManager-servlet").forward(request, response);
         }
         else {

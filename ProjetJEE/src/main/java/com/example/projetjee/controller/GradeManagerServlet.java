@@ -12,8 +12,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 
+/**
+ * Servlet implementation class GradeManagerServlet.
+ * This servlet handles the management and display of grades.
+ * It retrieves all grades from the database and forwards the request to the grade manager page.
+ */
 @WebServlet(name = "gradeManagerServlet", value = "/gradeManager-servlet")
 public class GradeManagerServlet extends HttpServlet {
+    /**
+     * Handles the GET request to retrieve and display all grades.
+     * This method retrieves all grades from the database using the GradeDAO,
+     * sets them as an attribute, and forwards the request to the grade manager page.
+     *
+     * @param request  the HTTP request
+     * @param response the HTTP response
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         List<Grade> gradeList = GradeDAO.getAllGrade();
@@ -27,6 +40,12 @@ public class GradeManagerServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles the POST request by delegating the processing to the GET method.
+     *
+     * @param request  the HTTP request
+     * @param response the HTTP response
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         doGet(request, response);

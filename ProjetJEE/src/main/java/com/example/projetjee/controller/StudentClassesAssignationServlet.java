@@ -11,10 +11,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-
+/**
+ * Servlet implementation class StudentClassesAssignationServlet.
+ * This servlet handles the assignment of students to classes. It processes the form submission
+ * to assign a student to a class and sends a notification email to the student.
+ */
 @WebServlet(name = "studentClassesAssignationServlet", value = "/studentClassesAssignation-servlet")
 public class StudentClassesAssignationServlet extends HttpServlet {
 
+    /**
+     * Handles POST requests to assign a student to a class. It validates the input,
+     * modifies the student record in the database, and sends an email notification to the student.
+     *
+     * @param request  the HttpServletRequest object that contains the request from the client
+     * @param response the HttpServletResponse object that contains the response to be sent to the client
+     * @throws IOException      if an I/O error occurs
+     * @throws ServletException if a servlet-related error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         String classeIdString = request.getParameter("classesId");
@@ -35,7 +48,7 @@ public class StudentClassesAssignationServlet extends HttpServlet {
 
         String error = StudentDAO.modifyStudentFromTable(student);
         if(error == null) {
-            // Si l'affectation a réussi, envoyer un email de notification
+            // If assignment is successful, send email notification to the student
             String subject = "Nouvelle affectation de classe";
             String body = "Bonjour " + UserDAO.getUserById(student.getStudentId()).getUserName() + ",\n\n"
                     + "Nous avons le plaisir de vous informer que vous avez été affecté(e) à une nouvelle classe :\n"
@@ -45,7 +58,6 @@ public class StudentClassesAssignationServlet extends HttpServlet {
             String email = UserDAO.getUserById(student.getStudentId()).getUserEmail();  // Accéder à l'email via getUser().getUserEmail()
 
             try {
-                // Envoyer l'email de notification
                 GMailer gmailer = new GMailer();
                 gmailer.sendMail(subject, body, email);  // Subject, Body, Email
             } catch (Exception e) {
@@ -55,11 +67,11 @@ public class StudentClassesAssignationServlet extends HttpServlet {
                 return;
             }
 
-            // Rediriger vers le gestionnaire de classes
+            // Redirect to the student classes manager page
             request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
         }
         else {
-            // Si l'affectation a échoué, afficher une erreur
+            // If assignment failed, display an error message
             request.setAttribute("erreur", error);
             request.getRequestDispatcher("studentClassesManager-servlet").forward(request, response);
         }

@@ -114,7 +114,7 @@
     </ul>
 </div>
 <button id="return_button" onclick="history.back()">
-    <img src="${pageContext.request.contextPath}/CSS/return_button.png" alt="Retour" class="button_icon">
+    <img src="${pageContext.request.contextPath}/css/return_button.png" alt="Retour" class="button_icon">
 </button>
 
 </body>

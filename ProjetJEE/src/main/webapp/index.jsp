@@ -1,5 +1,4 @@
 <%@ page import="com.example.projetjee.model.dao.UserDAO" %>
-<%@ page import="com.example.projetjee.model.entities.Role" %>
 <%@ page import="com.example.projetjee.model.entities.Users" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -7,6 +6,7 @@
 <head>
   <title>Accueil</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/styles.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
   <style>
     body {
       margin: 0;
@@ -110,12 +110,11 @@
             width="560"
             height="315"
             src="https://www.youtube.com/embed/duW6Er0VZZQ"
-            frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen>
     </iframe>
   </div>
-  <h3>Cy-Ease, la plateforme innovante qui simplifie la gestion scolaire pour tous.</h3>
+  <h2>Cy-Ease, la plateforme innovante qui simplifie la gestion scolaire pour tous!</h2>
 </div>
 </body>
 </html>

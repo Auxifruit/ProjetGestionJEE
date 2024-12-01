@@ -4,13 +4,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
+    <title>sidebar</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/styles.css">
 </head>
 <style>
     body {
         margin-left: 350px;
     }
-
     .sidebar {
         position: fixed;
         width: 250px;
@@ -22,8 +23,9 @@
         top: 0;
         left: 0;
         z-index: 1000;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
-
     .sidebar h2 {
         text-align: center;
         font-size: 24px;
@@ -31,37 +33,52 @@
         border-bottom: 1px solid white;
         padding-bottom: 10px;
     }
-
     .sidebar ul {
         list-style: none;
         padding: 0;
     }
-
     .sidebar ul li {
         margin: 15px 0;
     }
-
     .sidebar ul li a {
-        color: #283348; /* Couleur du texte du lien */
+        color: #283348;
         text-decoration: none;
         font-size: 16px;
-        padding: 15px; /* Augmenté pour plus d'espace autour du texte */
+        padding: 15px;
         display: block;
-        border-radius: 20px; /* Coins très arrondis */
-        background-color: #C4DFE9; /* Arrière-plan des liens */
-        text-align: center; /* Centrer le texte horizontalement */
-        transition: background-color 0.3s ease, border-radius 0.3s ease; /* Transition pour le survol */
+        border-radius: 20px;
+        background-color: #C4DFE9;
+        text-align: center;
+        transition: background-color 0.3s ease, border-radius 0.3s ease;
     }
-
     .sidebar ul li a:hover {
-        background-color: #A6BBD6; /* Fond bleu clair au survol */
-        border-radius: 25px; /* Augmenter encore l'arrondi au survol */
+        background-color: #A6BBD6;
+        border-radius: 25px;
     }
 
-    /* Centrer l'image dans la sidebar */
     .sidebar img {
         display: block;
         margin: 0 auto;
+    }
+
+    #return_button {
+        position: fixed;
+        top: 10px;
+        left: 290px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .button_icon {
+        width: 30px;
+        height: 30px;
+        transition: transform 0.3s ease;
+    }
+
+    #return_button:hover .button_icon {
+        transform: scale(1.2);
     }
 </style>
 <body>
@@ -69,7 +86,7 @@
     <%
         Integer userId = (Integer) session.getAttribute("user");
     %>
-    <center><a href="index.jsp"><img src="${pageContext.request.contextPath}/css/logo.png" alt="logo" style="width:120px;height:120px;"></a></center>
+    <a href="index.jsp"><img src="${pageContext.request.contextPath}/CSS/logo.png" alt="logo" style="width:120px;height:120px;"></a>
     </br></br>
     <div style="background-color: #333333; height: 2px;" ></div>
     <ul>
@@ -96,5 +113,9 @@
         <% } %>
     </ul>
 </div>
+<button id="return_button" onclick="history.back()">
+    <img src="${pageContext.request.contextPath}/CSS/return_button.png" alt="Retour" class="button_icon">
+</button>
+
 </body>
 </html>

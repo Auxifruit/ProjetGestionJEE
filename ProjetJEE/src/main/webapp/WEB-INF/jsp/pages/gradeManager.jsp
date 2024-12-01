@@ -22,7 +22,7 @@
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
 
-<div>
+<div class>
     <h1>Liste des notes</h1>
     <label for="searchInput">Rechercher :</label>
     <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">
@@ -42,7 +42,7 @@
     <%
     } else {
     %>
-    <form method="get">
+    <form method="get" style="max-width: 1000px">
         <table border="1">
             <th>Nom de la note</th>
             <th>Nom du cours</th>
@@ -106,7 +106,7 @@
         <button type="submit" formaction="gradeModification-servlet">Modifier</button>
         <button type="submit" formaction="gradeDeletion-servlet" onclick="confirmDelete(event)">Supprimer</button>
     </form>
-    <form action="gradeCreation-servlet" method="get">
+    <form action="gradeCreation-servlet" method="get" style="max-width: 1000px">
         <button type="submit">Créer</button>
     </form>
 </div>

@@ -22,7 +22,7 @@
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
 
-<div>
+<div class>
     <h1>Liste des notes</h1>
     <label for="searchInput">Rechercher :</label>
     <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Recherche">

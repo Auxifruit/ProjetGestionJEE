@@ -73,12 +73,12 @@
 <body>
 <jsp:include page="/elements/sidebar.jsp" />
 <div id="OldInfos">
+  <form action="editInformations" method="post">
   <%
     if(user.getUserRole().equals(Role.student)) {
       Integer classId = StudentDAO.getStudentById(userId).getClassId();
       Integer majorId = StudentDAO.getStudentById(userId).getMajorId();
   %>
-  <form action="editInformations" method="post">
     <h1>Mes informations</h1>
     <h3>Informations étudiantes</h3>
     <p>Classe :

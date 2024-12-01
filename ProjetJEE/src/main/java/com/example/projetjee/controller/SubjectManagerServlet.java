@@ -29,7 +29,6 @@ public class SubjectManagerServlet extends HttpServlet {
         List<Subjects> subjectList = SubjectDAO.getAllSubjects();
         // Set the list of subjects as a request attribute
         request.setAttribute("subjects", subjectList);
-
         try {
             request.getRequestDispatcher("WEB-INF/jsp/pages/subjectManager.jsp").forward(request, response);
         } catch (Exception e) {

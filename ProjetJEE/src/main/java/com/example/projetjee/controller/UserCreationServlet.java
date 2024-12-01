@@ -15,9 +15,22 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Servlet that handles the creation of a new user in the system.
+ * The user can be of three roles: student, teacher, or administrator.
+ * Upon successful creation, the appropriate role-specific actions are taken
+ */
 @WebServlet(name = "userCreationServlet", value = "/userCreation-servlet")
 public class UserCreationServlet extends HttpServlet {
+    /**
+     * Handles GET requests to display the user creation page.
+     * Retrieves all users from the database and forwards them to the view.
+     *
+     * @param request the HttpServletRequest object containing the client request
+     * @param response the HttpServletResponse object containing the response to be sent to the client
+     * @throws ServletException if the request cannot be processed
+     * @throws IOException if an input or output error occurs during the request processing
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Users> usersList = UserDAO.getAllUsers();
@@ -30,6 +43,21 @@ public class UserCreationServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST requests to create a new user.
+     * It retrieves the user's details from the request, validates the data,
+     * and adds the user to the database. Based on the user role, it performs additional actions.
+     *
+     * - For students, it adds the student to the database and sends a welcome email.
+     * - For teachers and administrators, it adds them to their respective tables in the database.
+     *
+     * After successful creation, the user is redirected to the user manager page.
+     *
+     * @param request the HttpServletRequest object containing the client request
+     * @param response the HttpServletResponse object containing the response to be sent to the client
+     * @throws ServletException if the request cannot be processed
+     * @throws IOException if an input or output error occurs during the request processing
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String newUserLastName = request.getParameter("newUserLastName");
@@ -39,6 +67,7 @@ public class UserCreationServlet extends HttpServlet {
         String newUserBirthdate = request.getParameter("newUserBirthdate");
         String newUserRole = request.getParameter("newUserRole");
 
+        // Validate user input
         if((newUserLastName == null || newUserLastName.isEmpty()) || (newUserName == null || newUserName.isEmpty()) || (newUserEmail == null || newUserEmail.isEmpty())
         || (newUserPassword == null || newUserPassword.isEmpty()) || (newUserBirthdate == null || newUserBirthdate.isEmpty()) || (newUserRole == null || newUserRole.isEmpty())) {
                 request.setAttribute("erreur", "Erreur : Veuillez remplir tous les champs.");
@@ -46,6 +75,7 @@ public class UserCreationServlet extends HttpServlet {
                 return;
         }
 
+        // Create the user object
         Users user = new Users();
         user.setUserLastName(newUserLastName);
         user.setUserName(newUserName);
@@ -54,6 +84,7 @@ public class UserCreationServlet extends HttpServlet {
         user.setUserBirthdate(newUserBirthdate);
         user.setUserRole(Role.valueOf(newUserRole));
 
+        // Add user to the database
         String error = UserDAO.addUserInTable(user);
         if(error != null) {
             request.setAttribute("erreur", error);
@@ -63,6 +94,7 @@ public class UserCreationServlet extends HttpServlet {
 
         user = UserDAO.getUserByEmail(newUserEmail);
 
+        // Handle user based on role (student, teacher, administrator)
         switch (user.getUserRole()) {
             case student:
                 Student student = new Student();
@@ -96,6 +128,7 @@ public class UserCreationServlet extends HttpServlet {
                 Teacher teacher = new Teacher();
                 teacher.setTeacherId(user.getUserId());
 
+                // Add teacher to the database
                 if(TeacherDAO.addTeacherInTable(teacher) == false) {
                     request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de l'utilisateur en tant que " + Role.teacher);
                     doGet(request, response);
@@ -106,6 +139,7 @@ public class UserCreationServlet extends HttpServlet {
                 Administrator administrator = new Administrator();
                 administrator.setAdministratorId(user.getUserId());
 
+                // Add administrator to the database
                 if(AdminDAO.addAdminInTable(administrator) == false) {
                     request.setAttribute("erreur", "Erreur : Erreur lors de l'ajout de l'utilisateur en tant que " + Role.administrator);
                     doGet(request, response);

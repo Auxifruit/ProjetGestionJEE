@@ -148,7 +148,14 @@
         <%
             if(roleFilter != null && roleFilter.equals(Role.student)) {
         %>
-        <button type="submit" formaction="student-grade-report-servlet">Voir les notes de l'utilisateur</button>
+        <button type="submit" formaction="student-grade-report-servlet">Voir les notes de l'étudiant</button>
+        <%
+            }
+        %>
+        <%
+            if(roleFilter != null && roleFilter.equals(Role.teacher)) {
+        %>
+        <button type="submit" formaction="teacherGrade-servlet">Voir les notes sasies pas l'enseignant</button>
         <%
             }
         %>

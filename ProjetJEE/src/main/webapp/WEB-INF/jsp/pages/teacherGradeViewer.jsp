@@ -22,18 +22,32 @@
 </head>
 <body>
 <%
+  String userIdForm = request.getAttribute("userIdForm").toString();
   Integer userId = (Integer) session.getAttribute("user");
-  if (userId == null) {
+  if (userIdForm == null || userIdForm.isEmpty() || userId == null) {
     response.sendRedirect("index.jsp");
     return;
   }
+
+  Users user = UserDAO.getUserById(Integer.parseInt(userIdForm));
 
   Map<Course, Map<Classes, List<Grade>>> courseClassGradeMap = (Map<Course, Map<Classes, List<Grade>>>) request.getAttribute("courseClassGradeMap");
 %>
 <jsp:include page="/elements/sidebar.jsp" />
 
 <div>
-  <h1>Note saisies</h1>
+  <h1>Note saisies
+    <%
+      String userLastName= user.getUserLastName();
+      String userName= user.getUserName();
+
+      if((userLastName != null && !userLastName.isEmpty()) && (userName != null && !userName.isEmpty())) {
+    %>
+    par <%= userName + " " + userLastName %>
+    <%
+      }
+    %>
+     :</h1>
     <%
       if (courseClassGradeMap != null && !courseClassGradeMap.isEmpty()) {
     %>

@@ -36,6 +36,11 @@ public class TeacherGradeServlet extends HttpServlet {
             return;
         }
 
+        String userIdForm = request.getParameter("userId");
+        if(userIdForm != null) {
+            teacherId = Integer.parseInt(userIdForm);
+        }
+
         List<Course> courseList = CourseDAO.getAllCourses();
         List<Grade> teacherGradeList = GradeDAO.getGradeByTeacherId(teacherId);
 
@@ -76,7 +81,7 @@ public class TeacherGradeServlet extends HttpServlet {
             }
         }
 
-
+        request.setAttribute("userIdForm", teacherId);
         request.setAttribute("courseClassGradeMap", courseClassGradeMap);
         request.getRequestDispatcher("WEB-INF/jsp/pages/teacherGradeViewer.jsp").forward(request, response);
     }

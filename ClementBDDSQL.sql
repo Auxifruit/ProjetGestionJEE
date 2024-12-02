@@ -228,7 +228,7 @@ INSERT INTO teacher VALUES(27);
 INSERT INTO teacher VALUES(28);
 
 # Données admin
-INSERT INTO administrator VALUES(33);
+INSERT INTO administrator VALUES(29);
 
 # Données cours-matière-UE
 INSERT INTO course VALUES (1, "Statistiques", 1); 

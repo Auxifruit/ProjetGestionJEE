@@ -4,7 +4,7 @@
 
 ## Table des matières
 1. [DESCRIPTION](#description)
-2. [FONCTIONNALITES](#fonctionnalités)
+2. [FONCTIONNALITÉS](#fonctionnalités)
 3. [TECHNOLOGIES](#technologies)
 4. [UTILISATION](#utilisation)
 5. [CONTRIBUTEURS](#contributeurs)

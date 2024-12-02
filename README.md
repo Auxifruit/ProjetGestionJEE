@@ -66,10 +66,15 @@ Lorsqu'une note est ajoutée ou modifiée, lorsqu'une séance est modifiée ou a
 Ce projet a été réalisé par :
 
 Amine AIT MOUSSA (4M1NESan)
+
 Guillaume BARRÉ (Auxifruit)
+
 Siham DAANOUNI (SihamDaanouni)
+
 Clément DURÉCU (shxclem)
+
 Amaury PROVENT (Amaury75)
+
 Hicham BETTAHAR (Poupouski)
 
 Étudiants en ING2 GSI.

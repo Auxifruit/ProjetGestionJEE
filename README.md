@@ -1,7 +1,6 @@
 # Projet de Gestion de Scolarité - **CyEase**
 
-![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/blob/main/webapp/css/logo.png)
-
+![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/ProjetJEE\src\main\webapp\css/logo.png)
 
 ## Table des matières
 1. [DESCRIPTION](#description)
@@ -25,7 +24,7 @@ Envoi de notifications par email lors de la mise à jour des notes, la modificat
 
 1. **Gestion des utilisateurs**  
    _Administrateurs :_ Ajout, suppression et gestion des utilisateurs, gestion des classes.  
-   _Enseignants :_ Saisie et modification des notes des étudiants. Ils peuvent également générer des rapports PDF détaillant les notes des étudiants.  
+   _Enseignants :_ Saisie et modification des notes des étudiants. Générer des rapports PDF détaillant les notes des étudiants.  
    _Étudiants :_ Consultation de leurs notes et génération des rapports PDF par email.  
 2. **Gestion des notes**
    Permet aux enseignants d'ajouter, modifier ou supprimer les notes des étudiants.  

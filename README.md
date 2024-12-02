@@ -22,16 +22,16 @@ Envoi de notifications par email lors de la mise à jour des notes, la modificat
 
 ## FONCTIONNALITÉS
 
-1. **Gestion des utilisateurs**
-   _Administrateurs :_ Ajout, suppression et gestion des utilisateurs, des classes, 
-   _Enseignants :_ Saisie et modification des notes des étudiants. Ils peuvent également générer des rapports PDF détaillant les notes des étudiants.
-   _Étudiants :_ Consultation de leurs notes et génération des rapports PDF par email.
+1. **Gestion des utilisateurs**  
+   _Administrateurs :_ Ajout, suppression et gestion des utilisateurs, gestion des classes.  
+   _Enseignants :_ Saisie et modification des notes des étudiants. Ils peuvent également générer des rapports PDF détaillant les notes des étudiants.  
+   _Étudiants :_ Consultation de leurs notes et génération des rapports PDF par email.  
 2. **Gestion des notes**
-   Permet aux enseignants d'ajouter, modifier ou supprimer les notes des étudiants.
-   Les notes sont associées à des matières et des cours, avec des coefficients pour chaque note.
+   Permet aux enseignants d'ajouter, modifier ou supprimer les notes des étudiants.  
+   Les notes sont associées à des matières et des cours, avec des coefficients pour chaque note.  
 3. **Génération de rapports PDF**
-   Les administrateurs, enseignants et étudiants peuvent générer un rapport détaillé des notes des étudiants, incluant la moyenne par matière et la moyenne générale.
-   Le rapport est généré en format PDF et peut être téléchargé.
+   Les administrateurs, enseignants et étudiants peuvent générer un rapport détaillé des notes des étudiants, incluant la moyenne par matière et la moyenne générale.  
+   Le rapport est généré en format PDF et peut être téléchargé.  
 4. **Notifications par email**
    Lorsqu'une note est ajoutée ou modifiée, un séance est modifiée, inscription en attente de validation, un email de bienvenue quand l'inscription est validée par un admin : un mail de notification est automatiquement envoyé à l'étudiant concerné. Cette fonctionnalité utilise l'API Gmail pour l'envoi des emails en utilisant OAuth2.
 

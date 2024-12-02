@@ -21,7 +21,7 @@ Ajout, modification et suppression des notes des étudiants.
 Génération de rapports détaillés en PDF sur les performances des étudiants.
 Envoi de notifications par email lors de la mise à jour des notes, la modification de l'emploi du temps, l'inscription etc.
 
-## FONCTIONNALITES
+## FONCTIONNALITÉS
 
 1. **Gestion des utilisateurs**
    _Administrateurs :_ Ajout, suppression et gestion des utilisateurs, des classes, 
@@ -62,7 +62,7 @@ Les enseignants peuvent saisir, modifier et supprimer les notes des étudiants p
 Notifications par email
 Lorsqu'une note est ajoutée ou modifiée, lorsqu'une séance est modifiée ou ajoutée, pour confirmer les inscriptions et les affectations à une classe : une notification par email est envoyée automatiquement à l'étudiant concerné. Cela permet à l'étudiant d'être informé en temps réel de toute mise à jour concernant ses informations académiques.
 
-#### CONTRIBUTEURS
+## CONTRIBUTEURS
 Ce projet a été réalisé par :
 
 Amine AIT MOUSSA (4M1NESan)

@@ -161,39 +161,39 @@ INSERT INTO subjects VALUES (1, "Mathématiques");
 INSERT INTO subjects VALUES (2, "Informatique");
 
 # Données élèves
-INSERT INTO users VALUES (1, "password", "DURÉCU", "Clément", "clement.shoddox@gmail.com", "2003-07-17", "student");
-INSERT INTO users VALUES (2, "password", "DAANOUNI", "Siham", "axel@gmail.com", "2001-08-18", "student");
-INSERT INTO users VALUES (3, "password", "PROVENT", "Amaury", "jude@gmail.com", "2002-09-19", "student");
-INSERT INTO users VALUES (4, "password", "LEBIGH", "Hicham", "ondine@gmail.com", "2003-10-20", "student");
-INSERT INTO users VALUES (5, "password", "AIT MOUSSA", "Amine", "pierre@gmail.com", "2003-11-21", "student");
-INSERT INTO users VALUES (6, "password", "BARRÉ", "Guillaume", "bege@gmail.com", "2002-12-22", "student");
-INSERT INTO users VALUES (7, "password", "DONATI", "Adrien", "adrien-donati@gmail.com", "2001-01-23", "student");
-INSERT INTO users VALUES (8, "password", "MONTALBAN", "César", "cesar-montal@gmail.com", "2000-02-24", "student");
-INSERT INTO users VALUES (9, "password", "DASSIER", "Maxime", "maxime-dassier@gmail.com", "2004-03-25", "student");
-INSERT INTO users VALUES (10, "password", "EISNER", "Valentin", "valentin-eis@gmail.com", "2004-04-26", "student");
-INSERT INTO users VALUES (11, "password", "BLAZE", "Axel", "axel-blaze@gmail.com", "2003-05-27", "student");
-INSERT INTO users VALUES (12, "password", "PION", "Oscar", "oscar-pion@gmail.com", "2003-06-28", "student");
-INSERT INTO users VALUES (13, "password", "TORRES", "Luna", "antoine-valls@gmail.com", "2003-10-29", "student");
-INSERT INTO users VALUES (14, "password", "CORCEL", "Killian", "killian-corcel@gmail.com", "2002-08-10", "student");
-INSERT INTO users VALUES (15, "password", "VIDAL", "Romain", "romain-vidal@gmail.com", "2003-06-15", "student");
-INSERT INTO users VALUES (16, "password", "MARCI", "Thomas", "thomas-marci@gmail.com", "2004-01-12", "student");
-INSERT INTO users VALUES (17, "password", "CANTOREL", "Estelle", "estelle-cantorel@gmail.com", "2002-11-11", "student");
-INSERT INTO users VALUES (18, "password", "BARREL", "Nicolas", "nicolas-barrel@gmail.com", "2003-12-10", "student");
-INSERT INTO users VALUES (19, "password", "RIVA", "Gabriel", "gabriel-riva@gmail.com", "2001-10-09", "student");
-INSERT INTO users VALUES (20, "password", "CHAUME", "Vincent", "vincent-chaume@gmail.com", "2003-08-16", "student");
-INSERT INTO users VALUES (21, "password", "POUSSIN", "Élise", "elise-poussin@gmail.com", "2003-07-01", "student");
-INSERT INTO users VALUES (22, "password", "LEROUX", "Émilie", "emilie-leroux@gmail.com", "2003-03-08", "student");
-INSERT INTO users VALUES (23, "password", "CASSAGNE", "Raphaël", "raphael-cassa@gmail.com", "2002-02-20", "student");
-INSERT INTO users VALUES (24, "password", "BERGER", "Nicolas", "nicolas-berger@gmail.com", "2003-08-19", "student");
+INSERT INTO users VALUES (1, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "DURÉCU", "Clément", "clement.shoddox@gmail.com", "2003-07-17", "student");
+INSERT INTO users VALUES (2, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "DAANOUNI", "Siham", "axel@gmail.com", "2001-08-18", "student");
+INSERT INTO users VALUES (3, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "PROVENT", "Amaury", "jude@gmail.com", "2002-09-19", "student");
+INSERT INTO users VALUES (4, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "LEBIGH", "Hicham", "ondine@gmail.com", "2003-10-20", "student");
+INSERT INTO users VALUES (5, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "AIT MOUSSA", "Amine", "pierre@gmail.com", "2003-11-21", "student");
+INSERT INTO users VALUES (6, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "BARRÉ", "Guillaume", "bege@gmail.com", "2002-12-22", "student");
+INSERT INTO users VALUES (7, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "DONATI", "Adrien", "adrien-donati@gmail.com", "2001-01-23", "student");
+INSERT INTO users VALUES (8, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "MONTALBAN", "César", "cesar-montal@gmail.com", "2000-02-24", "student");
+INSERT INTO users VALUES (9, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "DASSIER", "Maxime", "maxime-dassier@gmail.com", "2004-03-25", "student");
+INSERT INTO users VALUES (10, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "EISNER", "Valentin", "valentin-eis@gmail.com", "2004-04-26", "student");
+INSERT INTO users VALUES (11, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "BLAZE", "Axel", "axel-blaze@gmail.com", "2003-05-27", "student");
+INSERT INTO users VALUES (12, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "PION", "Oscar", "oscar-pion@gmail.com", "2003-06-28", "student");
+INSERT INTO users VALUES (13, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "TORRES", "Luna", "antoine-valls@gmail.com", "2003-10-29", "student");
+INSERT INTO users VALUES (14, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "CORCEL", "Killian", "killian-corcel@gmail.com", "2002-08-10", "student");
+INSERT INTO users VALUES (15, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "VIDAL", "Romain", "romain-vidal@gmail.com", "2003-06-15", "student");
+INSERT INTO users VALUES (16, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "MARCI", "Thomas", "thomas-marci@gmail.com", "2004-01-12", "student");
+INSERT INTO users VALUES (17, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "CANTOREL", "Estelle", "estelle-cantorel@gmail.com", "2002-11-11", "student");
+INSERT INTO users VALUES (18, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "BARREL", "Nicolas", "nicolas-barrel@gmail.com", "2003-12-10", "student");
+INSERT INTO users VALUES (19, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "RIVA", "Gabriel", "gabriel-riva@gmail.com", "2001-10-09", "student");
+INSERT INTO users VALUES (20, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "CHAUME", "Vincent", "vincent-chaume@gmail.com", "2003-08-16", "student");
+INSERT INTO users VALUES (21, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "POUSSIN", "Élise", "elise-poussin@gmail.com", "2003-07-01", "student");
+INSERT INTO users VALUES (22, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "LEROUX", "Émilie", "emilie-leroux@gmail.com", "2003-03-08", "student");
+INSERT INTO users VALUES (23, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "CASSAGNE", "Raphaël", "raphael-cassa@gmail.com", "2002-02-20", "student");
+INSERT INTO users VALUES (24, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "BERGER", "Nicolas", "nicolas-berger@gmail.com", "2003-08-19", "student");
 
 # Données professeurs
-INSERT INTO users VALUES (25, "password", "CRANSAC", "Didier", "didier-cransac@gmail.com", "1985-02-20", "teacher");
-INSERT INTO users VALUES (26, "password", "TIREL", "Vincent", "vincent-tirel@gmail.com", "1974-01-16", "teacher");
-INSERT INTO users VALUES (27, "password", "MÉNIELLE", "Adrien", "adrien-menielle@gmail.com", "1990-06-15", "teacher");
-INSERT INTO users VALUES (28, "password", "COSTES", "Éléonore", "eleonore-costes@gmail.com", "1965-10-17", "teacher");
+INSERT INTO users VALUES (25, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "CRANSAC", "Didier", "didier-cransac@gmail.com", "1985-02-20", "teacher");
+INSERT INTO users VALUES (26, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "TIREL", "Vincent", "vincent-tirel@gmail.com", "1974-01-16", "teacher");
+INSERT INTO users VALUES (27, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "MÉNIELLE", "Adrien", "adrien-menielle@gmail.com", "1990-06-15", "teacher");
+INSERT INTO users VALUES (28, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "COSTES", "Éléonore", "eleonore-costes@gmail.com", "1965-10-17", "teacher");
 
 # Données admin
-INSERT INTO users VALUES (29, "admin", "ADMIN", "Admin", "admin@gmail.com", "1111-11-11", "administrator");
+INSERT INTO users VALUES (29, "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62", "ADMIN", "Admin", "admin@gmail.com", "1111-11-11", "administrator");
 
 # Données étudiant-classes-filières
 INSERT INTO student VALUES (1, 1, 1);

@@ -1,4 +1,4 @@
-# Projet de Gestion de Scolarité - **CyEase**
+# Projet de Gestion de Scolarité - **Cy-Ease**
 
 ![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/blob/main/logo.png) 
 

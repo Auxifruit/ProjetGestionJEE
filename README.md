@@ -1,6 +1,6 @@
 # Projet de Gestion de Scolarité - **CyEase**
 
-![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/ProjetJEE\src\main\webapp\css/logo.png)
+![alt_text](https://github.com/Auxifruit/ProjetGestionJEE/blob/main/banner.jpg)
 
 ## Table des matières
 1. [DESCRIPTION](#description)

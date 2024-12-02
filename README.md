@@ -40,12 +40,12 @@ Envoi de notifications par email lors de la mise à jour des notes, la modificat
 
 Le projet utilise plusieurs technologies pour assurer son bon fonctionnement :
 
-**Java :** Le langage de programmation principal utilisé pour le développement de l'application (version 17 ou supérieure).
-**JEE (Jakarta EE) :** Framework utilisé pour le développement d'applications web avec des Servlets et JSP pour la gestion de l'interface utilisateur.
-**Hibernate :** Framework ORM utilisé pour gérer l'accès à la base de données et la persistance des données.
-**MySQL :** Système de gestion de base de données relationnelle utilisé pour stocker les informations (utilisateurs, notes, matières, etc.).
-**iText PDF :** Bibliothèque utilisée pour générer des rapports PDF détaillant les performances académiques des étudiants.
-**API Gmail (OAuth2) :** Utilisé pour l'envoi de notifications par email, en utilisant un processus d'authentification sécurisé via OAuth2.
+**Java :** Le langage de programmation principal utilisé pour le développement de l'application (version 17 ou supérieure).  
+**JEE (Jakarta EE) :** Framework utilisé pour le développement d'applications web avec des Servlets et JSP pour la gestion de l'interface utilisateur.  
+**Hibernate :** Framework ORM utilisé pour gérer l'accès à la base de données et la persistance des données.  
+**MySQL :** Système de gestion de base de données relationnelle utilisé pour stocker les informations (utilisateurs, notes, matières, etc.).  
+**iText PDF :** Bibliothèque utilisée pour générer des rapports PDF détaillant les performances académiques des étudiants.  
+**API Gmail (OAuth2) :** Utilisé pour l'envoi de notifications par email, en utilisant un processus d'authentification sécurisé via OAuth2.  
 
 ## UTILISATION
 Authentification des administrateurs
@@ -65,16 +65,11 @@ Lorsqu'une note est ajoutée ou modifiée, lorsqu'une séance est modifiée ou a
 ## CONTRIBUTEURS
 Ce projet a été réalisé par :
 
-Amine AIT MOUSSA (4M1NESan)
-
-Guillaume BARRÉ (Auxifruit)
-
-Siham DAANOUNI (SihamDaanouni)
-
-Clément DURÉCU (shxclem)
-
-Amaury PROVENT (Amaury75)
-
+Amine AIT MOUSSA (4M1NESan)  
+Guillaume BARRÉ (Auxifruit)  
+Siham DAANOUNI (SihamDaanouni)  
+Clément DURÉCU (shxclem)  
+Amaury PROVENT (Amaury75)  
 Hicham BETTAHAR (Poupouski)
 
 Étudiants en ING2 GSI.

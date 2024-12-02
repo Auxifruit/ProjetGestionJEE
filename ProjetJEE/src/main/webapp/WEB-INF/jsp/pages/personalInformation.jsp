@@ -40,7 +40,7 @@
     .btn-cancel { background-color: #f44336; color: white; }
   </style>
   <script>
-    // Utilisation des données utilisateur dans JavaScript
+    // Stockage des valeurs initiales pour la gestion des modifications
     let originalValues = {
       email: "<%= user.getUserEmail() %>",
       nom: "<%= user.getUserLastName() %>",
@@ -74,11 +74,11 @@
 <jsp:include page="/elements/sidebar.jsp" />
 <div id="OldInfos">
   <form action="editInformations" method="post">
-  <%
-    if(user.getUserRole().equals(Role.student)) {
-      Integer classId = StudentDAO.getStudentById(userId).getClassId();
-      Integer majorId = StudentDAO.getStudentById(userId).getMajorId();
-  %>
+    <%
+      if(user.getUserRole().equals(Role.student)) {
+        Integer classId = StudentDAO.getStudentById(userId).getClassId();
+        Integer majorId = StudentDAO.getStudentById(userId).getMajorId();
+    %>
     <h1>Mes informations</h1>
     <h3>Informations étudiantes</h3>
     <p>Classe :
@@ -107,13 +107,15 @@
         }
       %>
     </p>
-  <%
-    }
-  %>
+    <%
+      }
+    %>
 
     <h3>Informations personnelles</h3>
     <!-- Champ caché pour l'ID utilisateur -->
     <input type="hidden" id="userId" name="userId" value="<%= user.getUserId() %>">
+    <!-- Champ caché pour l'ancien mot de passe -->
+    <input type="hidden" id="originalPassword" name="originalPassword" value="<%= user.getUserPassword() %>">
 
     <label>Email :</label>
     <input type="text" id="email" name="email" value="<%= user.getUserEmail() %>" readonly>
